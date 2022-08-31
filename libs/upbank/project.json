@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/upbank/upbank/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/upbank/upbank/**/*.ts"]
+      }
+    },
+    "download": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "curl https://raw.githubusercontent.com/up-banking/api/master/v1/openapi.json -o libs/upbank/openapi.json"
+        ]
+      }
+    },
+    "client-codegen": {
+      "executor": "@nrwl/workspace:run-commands",
+      "dependsOn": [{ "targets": "download", "projects": "dependencies" }],
+      "options": {
+        "commands": [
+          "go run github.com/deepmap/oapi-codegen/cmd/oapi-codegen -old-config-style -o libs/upbank/client/client.generated.go -package client -generate types,client libs/upbank/openapi.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
