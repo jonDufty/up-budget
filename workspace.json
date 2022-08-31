@@ -5,6 +5,6 @@
     "budget-app": "apps/budget-app",
     "budget-app-e2e": "apps/budget-app-e2e",
     "transactions": "apps/transactions",
-    "upbank-upbank": "libs/upbank/upbank"
+    "upbank": "libs/upbank"
   }
 }
