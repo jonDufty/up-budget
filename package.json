@@ -11,6 +11,9 @@
   "dependencies": {
     "@babel/core": "^7.8.0",
     "@nrwl/next": "14.5.10",
+    "@serverless-stack/cli": "^1.10.1",
+    "@serverless-stack/resources": "^1.10.1",
+    "constructs": "10.x",
     "core-js": "^3.6.5",
     "next": "12.2.3",
     "pnpm": "^7.9.5",
