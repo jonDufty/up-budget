@@ -1,12 +1,12 @@
 package models
 
 import (
-	"testing"
+	"time"
 )
 
-func TestModelsGo(t *testing.T) {
-	result := ModelsGo("works")
-	if result != "ModelsGo works" {
-		t.Error("Expected ModelsGo to append 'works'")
-	}
+type Transaction struct {
+	Id        int       `meddler:id,pk`
+	Amount    int       `meddler:amount`
+	CreatedAt time.Time `meddler:created_at`
+	Merchant  string    `meddler:merchat`
 }
