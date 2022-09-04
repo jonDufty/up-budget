@@ -39,5 +39,6 @@
       }
     }
   },
-  "defaultProject": "budget-app"
+  "defaultProject": "budget-app",
+  "plugins": ["@nx-go/nx-go"]
 }
