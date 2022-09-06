@@ -44,3 +44,4 @@ Thumbs.db
 # Serverless stack
 .build
 .sst
+.env*.local
