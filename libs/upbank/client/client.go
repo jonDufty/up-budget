@@ -9,8 +9,8 @@ import (
 )
 
 type UpbankClient struct {
-	client *ClientWithResponses
-	apiKey string
+	Client *ClientWithResponses
+	ApiKey string
 }
 
 type UpbankConfig struct {
@@ -25,13 +25,13 @@ func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
 	}
 
 	return &UpbankClient{
-		client: client,
-		apiKey: cfg.ApiKey,
+		Client: client,
+		ApiKey: cfg.ApiKey,
 	}
 }
 
 func (c *UpbankClient) addAuthHeader(ctx context.Context, req *http.Request) error {
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apiKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.ApiKey))
 	return nil
 }
 
@@ -56,7 +56,7 @@ func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from *
 		FilterUntil:  to,
 	}
 
-	resp, err := c.client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader)
+	resp, err := c.Client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching transactions, %w", err)
 	}
@@ -66,5 +66,6 @@ func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from *
 	}
 
 	transactions := resp.JSON200.Data
+
 	return transactions, nil
 }
