@@ -2,6 +2,8 @@ github.com/Masterminds/semver/v3 v3.1.1 h1:hLg3sBzpNErnxhQtUy/mmLR2I9foDujNK030I
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/aws/aws-cdk-go/awscdk/v2 v2.39.1 h1:D6owKDt3qaxqKVYFFAlJt3ImIj1qoXGGGEhv4vUxHAs=
 github.com/aws/aws-cdk-go/awscdk/v2 v2.39.1/go.mod h1:QuJB7fWSfPk9yDPzujt+H4i78Km1hSy4h7C6Q/RViFU=
+github.com/aws/aws-lambda-go v1.34.1 h1:M3a/uFYBjii+tDcOJ0wL/WyFi2550FHoECdPf27zvOs=
+github.com/aws/aws-lambda-go v1.34.1/go.mod h1:jwFe2KmMsHmffA1X2R09hH6lFzJQxzI8qK17ewzbQMM=
 github.com/aws/constructs-go/constructs/v10 v10.1.90/go.mod h1:7+5GjvX5buJY6vZZmMxd50Ke1+NXzjva8N2eL+3txQQ=
 github.com/aws/constructs-go/constructs/v10 v10.1.92 h1:i/G/b5QAWJzu6OWoMXevpfSjolchVojyFA+iJJOS7Bc=
 github.com/aws/constructs-go/constructs/v10 v10.1.92/go.mod h1:7CLTEuaARiHiS/xFiVQCgvCBumDwA3uSLtDdVEJlR/E=
@@ -54,6 +56,8 @@ github.com/josharian/intern v1.0.0 h1:vlS4z54oSdjm0bgjRigI+G1HpF+tI+9rE5LLzOg8Hm
 github.com/josharian/intern v1.0.0/go.mod h1:5DoeVV0s6jJacbCEi61lwdGj/aVlrQvzHFFd8Hwg//Y=
 github.com/json-iterator/go v1.1.9/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
+github.com/kelseyhightower/envconfig v1.4.0 h1:Im6hONhd3pLkfDFsbRgu68RDNkGF1r3dvMUtDTo2cv8=
+github.com/kelseyhightower/envconfig v1.4.0/go.mod h1:cccZRl6mQpaq41TPp5QxidR+Sa3axMbJDNb//FQX6Gg=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pretty v0.2.1/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
 github.com/kr/pretty v0.3.0 h1:WgNl7dwNpEZ6jJ9k1snq4pZsg7DOEN8hP9Xw0Tsjwk0=
