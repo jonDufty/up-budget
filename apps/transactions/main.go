@@ -1,11 +1,9 @@
 package main
 
 import (
-	"context"
 	"log"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	upclient "github.com/jonDufty/budget/libs/upbank/client"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -14,21 +12,17 @@ func Hello(name string) string {
 	return result
 }
 
-type TransactionHandlerConfig struct {
-	UpBank upclient.UpbankConfig `envconfig:"upbank"`
-}
-
 func main() {
 	cfg := MustLoadConfig()
 	log.Println(cfg)
-	client := upclient.NewUpbankClient(cfg.UpBank)
-	client.TestPing(context.Background())
+	client := NewTransactionClient(cfg)
+	client.MustPing()
 
 	lambda.Start(client.TransactionHandler)
 }
 
-func MustLoadConfig() TransactionHandlerConfig {
-	var cfg TransactionHandlerConfig
+func MustLoadConfig() Config {
+	var cfg Config
 	err := envconfig.Process("transaction", &cfg)
 	if err != nil {
 		log.Fatal(err.Error())

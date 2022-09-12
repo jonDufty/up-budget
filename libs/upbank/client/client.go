@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/aws/aws-lambda-go/events"
 )
 
 type UpbankClient struct {
@@ -32,17 +30,6 @@ func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
 	}
 }
 
-func (c *UpbankClient) TransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
-	transactions, err := c.GetTransactions(ctx, 2, time.Now().AddDate(-2, 0, 0), time.Now())
-	if err != nil {
-		return fmt.Errorf("transactions failed: %w", err)
-	}
-
-	log.Println(transactions[0])
-
-	return nil
-}
-
 func printReqInfo(ctx context.Context, req *http.Request) error {
 	fmt.Printf("Request Info:\nURL: %s\nMethod: %s\nHeaders: %v\n", req.URL, req.Method, req.Header)
 	return nil
@@ -65,9 +52,9 @@ func (c *UpbankClient) overideUrl(url string) func(context.Context, *http.Reques
 	}
 }
 
-func (c *UpbankClient) TestPing(ctx context.Context) error {
-	log.Println("Testing ping to client")
-	resp, err := c.Client.GetUtilPingWithResponse(ctx, c.addAuthHeader)
+func (c *UpbankClient) TestPing() error {
+	log.Println("Testing ping to Up API")
+	resp, err := c.Client.GetUtilPingWithResponse(context.Background(), c.addAuthHeader)
 	if err != nil {
 		return fmt.Errorf("ping failed. %w", err)
 	}
@@ -75,6 +62,7 @@ func (c *UpbankClient) TestPing(ctx context.Context) error {
 	if resp.StatusCode() != http.StatusOK {
 		return fmt.Errorf("failed to get response from Ping. %v", resp.JSON401.Errors[0])
 	}
+
 	return nil
 }
 
