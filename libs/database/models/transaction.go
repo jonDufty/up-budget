@@ -1,13 +1,16 @@
 package models
 
 import (
+	"context"
+	"database/sql"
 	"time"
 
 	"github.com/jonDufty/budget/libs/upbank/client"
+	"github.com/russross/meddler"
 )
 
 type Transaction struct {
-	Id        int       `meddler:id,pk`
+	Id        string    `meddler:id`
 	AccountId string    `meddler:account_id`
 	Amount    int       `meddler:amount`
 	CreatedAt time.Time `meddler:created_at`
@@ -16,6 +19,7 @@ type Transaction struct {
 
 func NewTransactionFromApi(r client.TransactionResource) *Transaction {
 	t := &Transaction{
+		Id:        r.Id,
 		Amount:    r.Attributes.Amount.ValueInBaseUnits,
 		AccountId: r.Relationships.Account.Data.Id,
 		CreatedAt: *r.Attributes.SettledAt,
@@ -23,4 +27,8 @@ func NewTransactionFromApi(r client.TransactionResource) *Transaction {
 	}
 
 	return t
+}
+
+func (t *Transaction) Insert(ctx context.Context, db *sql.DB) error {
+	return meddler.Insert(db, "transactions", t)
 }

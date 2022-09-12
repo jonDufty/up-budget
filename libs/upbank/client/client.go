@@ -9,13 +9,24 @@ import (
 )
 
 type UpbankClient struct {
-	Client *ClientWithResponses
-	ApiKey string
+	Client   *ClientWithResponses
+	ApiKey   string
+	Settings upbankSettings
+}
+
+type upbankSettings struct {
+	Limit    int
+	PageSize int
+	Paginate bool
+	TimeFrom time.Time
 }
 
 type UpbankConfig struct {
-	Endpoint string `envconfig:"endpoint"`
-	ApiKey   string `envconfig:"api_key"`
+	Endpoint         string `envconfig:"endpoint"`
+	ApiKey           string `envconfig:"api_key"`
+	PageSize         int    `envconfig:"page_size",defaul:"50"`
+	Paginate         bool   `envconfig:"paginate",defaul:"false"`
+	TransactionLimit int    `envconfig:"transaction_limit",defaul:"50"`
 }
 
 func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
@@ -27,6 +38,11 @@ func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
 	return &UpbankClient{
 		Client: client,
 		ApiKey: cfg.ApiKey,
+		Settings: upbankSettings{
+			Limit:    cfg.TransactionLimit,
+			PageSize: cfg.PageSize,
+			Paginate: cfg.Paginate,
+		},
 	}
 }
 
@@ -66,13 +82,15 @@ func (c *UpbankClient) TestPing() error {
 	return nil
 }
 
-func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from time.Time, to time.Time) ([]TransactionResource, error) {
+func (c *UpbankClient) GetTransactions(ctx context.Context) ([]TransactionResource, error) {
 	var status TransactionStatusEnum = "SETTLED"
+	timeUntil := time.Now()
+
 	params := &GetTransactionsParams{
-		PageSize:     &pageSize,
+		PageSize:     &c.Settings.PageSize,
 		FilterStatus: &status,
-		FilterSince:  &from,
-		FilterUntil:  &to,
+		FilterSince:  &c.Settings.TimeFrom,
+		FilterUntil:  &timeUntil,
 	}
 
 	resp, err := c.Client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader)
@@ -85,10 +103,18 @@ func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from t
 	}
 
 	transactions := resp.JSON200.Data
-	next := resp.JSON200.Links.Next
-	log.Println(transactions[0])
 
-	if next != nil {
+	if !c.Settings.Paginate {
+		return transactions, nil
+	}
+
+	nTrans := len(transactions)
+	for nTrans <= c.Settings.Limit {
+		next := resp.JSON200.Links.Next
+		if next == nil {
+			break
+		}
+
 		log.Println("Attempting pagination to", *next)
 		resp, err = c.Client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader, c.overideUrl(*next))
 		if err != nil {
@@ -98,9 +124,12 @@ func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from t
 		if resp == nil {
 			return nil, fmt.Errorf("response is empty")
 		}
+		transactions = append(transactions, resp.JSON200.Data...)
+		nTrans = len(transactions)
 	}
 
 	return transactions, nil
+
 }
 
 func (c *UpbankClient) PrintErrors(errors []ErrorObject) {

@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/jonDufty/budget/libs/database"
@@ -50,14 +49,23 @@ func (c *TransactionClient) MustPing() {
 }
 
 func (c *TransactionClient) TransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
-	transactions, err := c.Upbank.GetTransactions(ctx, 5, time.Now().AddDate(-7, 0, 0), time.Now())
+	transactions, err := c.Upbank.GetTransactions(ctx)
 	if err != nil {
-		return fmt.Errorf("transactions failed: %w", err)
+		return fmt.Errorf("get transactions failed: %w", err)
 	}
 
+	var failed error = nil
 	for _, t := range transactions {
 		trans := models.NewTransactionFromApi(t)
 		log.Println(trans)
+		err = trans.Insert(ctx, c.DB)
+		if err != nil {
+			failed = fmt.Errorf("transaction %s failed. %v. %w", trans.Id, err, failed)
+		}
+	}
+
+	if failed != nil {
+		return failed
 	}
 
 	return nil
