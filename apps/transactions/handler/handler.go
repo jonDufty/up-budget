@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/jonDufty/budget/libs/database"
@@ -50,12 +51,10 @@ func (c *TransactionClient) MustPing() {
 }
 
 func (c *TransactionClient) TransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
-	latestDate, err := query.GetLatestTransactionDate(ctx, c.DB)
-	if err != nil {
-		log.Println("Error getting latest date")
-	} else {
-		log.Println("Fetching results from", latestDate)
-		c.Upbank.Settings.TimeFrom = *latestDate
+	timeFrom := c.getTimeFrom(ctx)
+	c.Upbank.Settings.TimeFrom = timeFrom
+	if timeFrom != nil {
+		log.Println("Fetching transactions from", timeFrom)
 	}
 
 	transactions, err := c.Upbank.GetTransactions(ctx)
@@ -63,11 +62,40 @@ func (c *TransactionClient) TransactionHandler(ctx context.Context, event events
 		return fmt.Errorf("get transactions failed: %w", err)
 	}
 
+	err = c.insertTransactions(ctx, transactions)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *TransactionClient) BackfillTransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
+	c.Upbank.Settings.TimeFrom = &upclient.BackfillDate
+	timeUntil := upclient.BackfillDate.AddDate(0, 2, 0)
+	c.Upbank.Settings.TimeUntil = &timeUntil
+
+	log.Printf("Fetching transactions from %s to %s", upclient.BackfillDate, timeUntil)
+
+	transactions, err := c.Upbank.GetTransactions(ctx)
+	if err != nil {
+		return fmt.Errorf("get transactions failed: %w", err)
+	}
+
+	err = c.insertTransactions(ctx, transactions)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *TransactionClient) insertTransactions(ctx context.Context, transactions []upclient.TransactionResource) error {
 	var failed error = nil
 
 	for _, t := range transactions {
 		trans := models.NewTransactionFromApi(t)
-		err = trans.Insert(ctx, c.DB)
+		err := trans.Insert(ctx, c.DB)
 		if err != nil {
 			failed = fmt.Errorf("transaction %s failed. %v. %w", trans.Id, err, failed)
 		}
@@ -79,11 +107,7 @@ func (c *TransactionClient) TransactionHandler(ctx context.Context, event events
 		}
 	}
 
-	if failed != nil {
-		return failed
-	}
-
-	return nil
+	return failed
 }
 
 func (c *TransactionClient) addTransactionMerchant(ctx context.Context, merchant *models.Merchant) error {
@@ -104,4 +128,17 @@ func (c *TransactionClient) addTransactionMerchant(ctx context.Context, merchant
 	}
 
 	return nil
+}
+
+func (c *TransactionClient) getTimeFrom(ctx context.Context) *time.Time {
+
+	latestDate, err := query.GetLatestTransactionDate(ctx, c.DB)
+	if err != nil {
+		log.Println("Error getting latest date")
+		return nil
+	}
+
+	timeFrom := latestDate.Add(time.Second * 1)
+
+	return &timeFrom
 }
