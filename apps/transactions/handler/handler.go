@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"context"
@@ -55,9 +55,9 @@ func (c *TransactionClient) TransactionHandler(ctx context.Context, event events
 	}
 
 	var failed error = nil
+
 	for _, t := range transactions {
 		trans := models.NewTransactionFromApi(t)
-		log.Println(trans)
 		err = trans.Insert(ctx, c.DB)
 		if err != nil {
 			failed = fmt.Errorf("transaction %s failed. %v. %w", trans.Id, err, failed)

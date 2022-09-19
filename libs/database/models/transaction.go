@@ -10,11 +10,11 @@ import (
 )
 
 type Transaction struct {
-	Id        string    `meddler:id`
-	AccountId string    `meddler:account_id`
-	Amount    int       `meddler:amount`
-	CreatedAt time.Time `meddler:created_at`
-	Merchant  string    `meddler:merchant`
+	Id        string    `meddler:"id"`
+	AccountId string    `meddler:"account_id"`
+	Amount    int       `meddler:"amount"`
+	CreatedAt time.Time `meddler:"created_at"`
+	Merchant  string    `meddler:"merchant"`
 }
 
 func NewTransactionFromApi(r client.TransactionResource) *Transaction {

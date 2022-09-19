@@ -24,9 +24,9 @@ type upbankSettings struct {
 type UpbankConfig struct {
 	Endpoint         string `envconfig:"endpoint"`
 	ApiKey           string `envconfig:"api_key"`
-	PageSize         int    `envconfig:"page_size",defaul:"50"`
-	Paginate         bool   `envconfig:"paginate",defaul:"false"`
-	TransactionLimit int    `envconfig:"transaction_limit",defaul:"50"`
+	PageSize         int    `envconfig:"page_size" default:"20"`
+	Paginate         bool   `envconfig:"paginate" default:"false"`
+	TransactionLimit int    `envconfig:"transaction_limit" default:"50"`
 }
 
 func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
