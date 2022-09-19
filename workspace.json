@@ -4,7 +4,7 @@
   "projects": {
     "budget-app": "apps/budget-app",
     "budget-app-e2e": "apps/budget-app-e2e",
-    "database-models": "libs/database/models",
+    "database": "libs/database",
     "transactions": "apps/transactions",
     "upbank": "libs/upbank"
   }

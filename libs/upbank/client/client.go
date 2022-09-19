@@ -6,18 +6,27 @@ import (
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/aws/aws-lambda-go/events"
 )
 
 type UpbankClient struct {
-	Client *ClientWithResponses
-	ApiKey string
+	Client   *ClientWithResponses
+	ApiKey   string
+	Settings upbankSettings
+}
+
+type upbankSettings struct {
+	Limit    int
+	PageSize int
+	Paginate bool
+	TimeFrom time.Time
 }
 
 type UpbankConfig struct {
-	Endpoint string `envconfig:"endpoint"`
-	ApiKey   string `envconfig:"api_key"`
+	Endpoint         string `envconfig:"endpoint"`
+	ApiKey           string `envconfig:"api_key"`
+	PageSize         int    `envconfig:"page_size" default:"20"`
+	Paginate         bool   `envconfig:"paginate" default:"false"`
+	TransactionLimit int    `envconfig:"transaction_limit" default:"50"`
 }
 
 func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
@@ -29,18 +38,12 @@ func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
 	return &UpbankClient{
 		Client: client,
 		ApiKey: cfg.ApiKey,
+		Settings: upbankSettings{
+			Limit:    cfg.TransactionLimit,
+			PageSize: cfg.PageSize,
+			Paginate: cfg.Paginate,
+		},
 	}
-}
-
-func (c *UpbankClient) TransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
-	transactions, err := c.GetTransactions(ctx, 2, time.Now().AddDate(-2, 0, 0), time.Now())
-	if err != nil {
-		return fmt.Errorf("transactions failed: %w", err)
-	}
-
-	log.Println(transactions[0])
-
-	return nil
 }
 
 func printReqInfo(ctx context.Context, req *http.Request) error {
@@ -65,9 +68,9 @@ func (c *UpbankClient) overideUrl(url string) func(context.Context, *http.Reques
 	}
 }
 
-func (c *UpbankClient) TestPing(ctx context.Context) error {
-	log.Println("Testing ping to client")
-	resp, err := c.Client.GetUtilPingWithResponse(ctx, c.addAuthHeader)
+func (c *UpbankClient) TestPing() error {
+	log.Println("Testing ping to Up API")
+	resp, err := c.Client.GetUtilPingWithResponse(context.Background(), c.addAuthHeader)
 	if err != nil {
 		return fmt.Errorf("ping failed. %w", err)
 	}
@@ -75,16 +78,19 @@ func (c *UpbankClient) TestPing(ctx context.Context) error {
 	if resp.StatusCode() != http.StatusOK {
 		return fmt.Errorf("failed to get response from Ping. %v", resp.JSON401.Errors[0])
 	}
+
 	return nil
 }
 
-func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from time.Time, to time.Time) ([]TransactionResource, error) {
+func (c *UpbankClient) GetTransactions(ctx context.Context) ([]TransactionResource, error) {
 	var status TransactionStatusEnum = "SETTLED"
+	timeUntil := time.Now()
+
 	params := &GetTransactionsParams{
-		PageSize:     &pageSize,
+		PageSize:     &c.Settings.PageSize,
 		FilterStatus: &status,
-		FilterSince:  &from,
-		FilterUntil:  &to,
+		FilterSince:  &c.Settings.TimeFrom,
+		FilterUntil:  &timeUntil,
 	}
 
 	resp, err := c.Client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader)
@@ -97,10 +103,18 @@ func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from t
 	}
 
 	transactions := resp.JSON200.Data
-	next := resp.JSON200.Links.Next
-	log.Println(transactions[0])
 
-	if next != nil {
+	if !c.Settings.Paginate {
+		return transactions, nil
+	}
+
+	nTrans := len(transactions)
+	for nTrans <= c.Settings.Limit {
+		next := resp.JSON200.Links.Next
+		if next == nil {
+			break
+		}
+
 		log.Println("Attempting pagination to", *next)
 		resp, err = c.Client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader, c.overideUrl(*next))
 		if err != nil {
@@ -110,9 +124,12 @@ func (c *UpbankClient) GetTransactions(ctx context.Context, pageSize int, from t
 		if resp == nil {
 			return nil, fmt.Errorf("response is empty")
 		}
+		transactions = append(transactions, resp.JSON200.Data...)
+		nTrans = len(transactions)
 	}
 
 	return transactions, nil
+
 }
 
 func (c *UpbankClient) PrintErrors(errors []ErrorObject) {
