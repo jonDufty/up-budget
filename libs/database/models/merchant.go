@@ -1,6 +1,12 @@
 package models
 
-import "github.com/jonDufty/budget/libs/upbank/client"
+import (
+	"context"
+	"database/sql"
+
+	"github.com/jonDufty/budget/libs/upbank/client"
+	"github.com/russross/meddler"
+)
 
 type Merchant struct {
 	Name       string `meddler:"name"`
@@ -15,4 +21,8 @@ func NewMerchantFromApi(r client.TransactionResource) *Merchant {
 	}
 
 	return m
+}
+
+func (m *Merchant) Insert(ctx context.Context, db *sql.DB) error {
+	return meddler.Insert(db, "merchants", m)
 }
