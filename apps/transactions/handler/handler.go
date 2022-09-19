@@ -71,10 +71,36 @@ func (c *TransactionClient) TransactionHandler(ctx context.Context, event events
 		if err != nil {
 			failed = fmt.Errorf("transaction %s failed. %v. %w", trans.Id, err, failed)
 		}
+
+		merchant := models.NewMerchantFromApi(t)
+		err = c.addTransactionMerchant(ctx, merchant)
+		if err != nil {
+			failed = fmt.Errorf("%v. %w", err, failed)
+		}
 	}
 
 	if failed != nil {
 		return failed
+	}
+
+	return nil
+}
+
+func (c *TransactionClient) addTransactionMerchant(ctx context.Context, merchant *models.Merchant) error {
+	exists, err := query.MerchantExists(ctx, c.DB, merchant.Name)
+
+	if err != nil {
+		return fmt.Errorf("error looking up merchant table. %w", err)
+	}
+
+	if exists {
+		log.Printf("Merchant %s already exists in table", merchant.Name)
+		return nil
+	}
+
+	err = merchant.Insert(ctx, c.DB)
+	if err != nil {
+		return fmt.Errorf("error fetching merchant %s. %v", merchant.Name, err)
 	}
 
 	return nil
