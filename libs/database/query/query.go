@@ -4,14 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"time"
-
-	"github.com/russross/meddler"
 )
 
 func GetLatestTransactionDate(ctx context.Context, db *sql.DB) (*time.Time, error) {
 	var result time.Time
-	query := `SELECT max(created_at) FROM transactions`
-	err := meddler.QueryRow(db, &result, query)
+	query := "SELECT MAX(created_at) FROM transactions"
+	err := db.QueryRow(query).Scan(&result)
 	if err != nil {
 		return nil, err
 	}

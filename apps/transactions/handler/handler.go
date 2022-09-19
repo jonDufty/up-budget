@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/jonDufty/budget/libs/database"
 	"github.com/jonDufty/budget/libs/database/models"
+	"github.com/jonDufty/budget/libs/database/query"
 	upclient "github.com/jonDufty/budget/libs/upbank/client"
 )
 
@@ -49,6 +50,14 @@ func (c *TransactionClient) MustPing() {
 }
 
 func (c *TransactionClient) TransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
+	latestDate, err := query.GetLatestTransactionDate(ctx, c.DB)
+	if err != nil {
+		log.Println("Error getting latest date")
+	} else {
+		log.Println("Fetching results from", latestDate)
+		c.Upbank.Settings.TimeFrom = *latestDate
+	}
+
 	transactions, err := c.Upbank.GetTransactions(ctx)
 	if err != nil {
 		return fmt.Errorf("get transactions failed: %w", err)
