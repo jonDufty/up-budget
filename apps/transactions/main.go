@@ -15,7 +15,6 @@ func Hello(name string) string {
 
 func main() {
 	cfg := MustLoadConfig()
-	log.Println(cfg)
 	client := handler.NewTransactionClient(cfg)
 	client.MustPing()
 
