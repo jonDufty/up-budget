@@ -1,5 +1,5 @@
 import { App } from '@serverless-stack/resources';
-import { TransactionStack } from './TransactionStack';
+import { TransactionStack, BackfillStack } from './TransactionStack';
 
 export default function (app: App) {
   app.setDefaultFunctionProps({
@@ -8,5 +8,5 @@ export default function (app: App) {
     timeout: app.local ? '45 seconds': '10 seconds'
   });
 
-  app.stack(TransactionStack);
+  app.stack(TransactionStack).stack(BackfillStack);
 }

@@ -18,6 +18,10 @@ func main() {
 	client := handler.NewTransactionClient(cfg)
 	client.MustPing()
 
+	if cfg.UpBank.BackfillData {
+		lambda.Start(client.BackfillTransactionHandler)
+	}
+
 	lambda.Start(client.TransactionHandler)
 }
 

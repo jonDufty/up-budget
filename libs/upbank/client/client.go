@@ -15,10 +15,12 @@ type UpbankClient struct {
 }
 
 type upbankSettings struct {
-	Limit    int
-	PageSize int
-	Paginate bool
-	TimeFrom time.Time
+	Limit        int
+	PageSize     int
+	Paginate     bool
+	BackfillData bool
+	TimeFrom     *time.Time
+	TimeUntil    *time.Time
 }
 
 type UpbankConfig struct {
@@ -27,7 +29,10 @@ type UpbankConfig struct {
 	PageSize         int    `envconfig:"page_size" default:"20"`
 	Paginate         bool   `envconfig:"paginate" default:"false"`
 	TransactionLimit int    `envconfig:"transaction_limit" default:"50"`
+	BackfillData     bool   `envconfig:"backfill_data" default:"false"`
 }
+
+var BackfillDate = time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 
 func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
 	client, err := NewClientWithResponses(cfg.Endpoint)
@@ -39,9 +44,10 @@ func NewUpbankClient(cfg UpbankConfig) *UpbankClient {
 		Client: client,
 		ApiKey: cfg.ApiKey,
 		Settings: upbankSettings{
-			Limit:    cfg.TransactionLimit,
-			PageSize: cfg.PageSize,
-			Paginate: cfg.Paginate,
+			Limit:        cfg.TransactionLimit,
+			PageSize:     cfg.PageSize,
+			Paginate:     cfg.Paginate,
+			BackfillData: cfg.BackfillData,
 		},
 	}
 }
@@ -84,14 +90,24 @@ func (c *UpbankClient) TestPing() error {
 
 func (c *UpbankClient) GetTransactions(ctx context.Context) ([]TransactionResource, error) {
 	var status TransactionStatusEnum = "SETTLED"
-	timeUntil := time.Now()
+	if c.Settings.TimeUntil == nil {
+		timeUntil := time.Now()
+		c.Settings.TimeUntil = &timeUntil
+	}
+
+	if c.Settings.TimeFrom == nil {
+		timeFrom := c.Settings.TimeUntil.AddDate(0, 0, -1)
+		c.Settings.TimeFrom = &timeFrom
+	}
 
 	params := &GetTransactionsParams{
 		PageSize:     &c.Settings.PageSize,
 		FilterStatus: &status,
-		FilterSince:  &c.Settings.TimeFrom,
-		FilterUntil:  &timeUntil,
+		FilterSince:  c.Settings.TimeFrom,
+		FilterUntil:  c.Settings.TimeUntil,
 	}
+
+	log.Println(*params.FilterSince, *params.FilterUntil)
 
 	resp, err := c.Client.GetTransactionsWithResponse(ctx, params, c.addAuthHeader)
 	if err != nil {
@@ -136,4 +152,8 @@ func (c *UpbankClient) PrintErrors(errors []ErrorObject) {
 	for _, err := range errors {
 		log.Printf("%s: %s\n", err.Title, err.Detail)
 	}
+}
+
+func (c *UpbankClient) IsInternalTransfer(t TransactionResource) bool {
+	return t.Relationships.TransferAccount.Data != nil
 }
