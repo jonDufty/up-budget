@@ -1,4 +1,4 @@
-import { Cron, Function, StackContext } from '@serverless-stack/resources';
+import { Api, Cron, Function, StackContext } from '@serverless-stack/resources';
 
 export function TransactionStack({ app, stack }: StackContext) {
   const cron = new Cron(stack, 'ScheduledTransactionLambda', {
@@ -26,27 +26,32 @@ export function TransactionStack({ app, stack }: StackContext) {
     },
   });
 
-  const backfill = new Cron(stack, 'BackfillHandler', {
-    schedule: 'cron(0 0 * * ? *)',
-    enabled: app.local ? false : true,
-    job: {
-      function: {
-        handler: 'transactions/main.go',
-        environment: {
-          TRANSACTION_UPBANK_API_KEY: process.env.UP_API_KEY!,
-          TRANSACTION_UPBANK_ENDPOINT: 'https://api.up.com.au/api/v1',
-          TRANSACTION_UPBANK_PAGE_SIZE: '100',
-          TRANSACTION_UPBANK_PAGINATE: process.env.TRANSACTION_UPBANK_PAGINATE!,
-          TRANSACTION_UPBANK_TRANSACTION_LIMIT: '1000',
-          TRANSACTION_UPBANK_BACKFILL_DATA: 'true',
-          TRANSACTION_DATABASE_NAME: process.env.TRANSACTION_DATABASE_NAME!,
-          TRANSACTION_DATABASE_USERNAME:
+}
+
+export function BackfillStack({ app, stack }: StackContext) {
+
+  const backfillApi = new Api(stack, 'BackfillApi', {
+    routes: {
+      "GET /backfill": {
+        function: {
+          timeout: 90,
+          handler: 'transactions/main.go',
+          environment: {
+            TRANSACTION_UPBANK_API_KEY: process.env.UP_API_KEY!,
+            TRANSACTION_UPBANK_ENDPOINT: 'https://api.up.com.au/api/v1',
+            TRANSACTION_UPBANK_PAGE_SIZE: '100',
+            TRANSACTION_UPBANK_PAGINATE: process.env.TRANSACTION_UPBANK_PAGINATE!,
+            TRANSACTION_UPBANK_TRANSACTION_LIMIT: app.stage == "prod" ? '1000' : '100',
+            TRANSACTION_UPBANK_BACKFILL_DATA: 'true',
+            TRANSACTION_DATABASE_NAME: process.env.TRANSACTION_DATABASE_NAME!,
+            TRANSACTION_DATABASE_USERNAME:
             process.env.TRANSACTION_DATABASE_USERNAME!,
-          TRANSACTION_DATABASE_HOST: process.env.TRANSACTION_DATABASE_HOST!,
-          TRANSACTION_DATABASE_PASSWORD:
+            TRANSACTION_DATABASE_HOST: process.env.TRANSACTION_DATABASE_HOST!,
+            TRANSACTION_DATABASE_PASSWORD:
             process.env.TRANSACTION_DATABASE_PASSWORD!,
+          },
         },
-      },
-    },
-  });
+      }
+    }
+  })
 }

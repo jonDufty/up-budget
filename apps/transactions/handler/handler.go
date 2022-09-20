@@ -89,6 +89,8 @@ func (c *TransactionClient) BackfillTransactionHandler(ctx context.Context, even
 		return err
 	}
 
+	log.Println("Backfill Complete!!")
+
 	return nil
 }
 
@@ -150,7 +152,7 @@ func (c *TransactionClient) getTimeFrom(ctx context.Context) *time.Time {
 }
 
 func getBackfillFromQuery(queryParams map[string]string) time.Time {
-	backfillMonths, ok := queryParams["backfill_monts"]
+	backfillMonths, ok := queryParams["backfill_months"]
 	var month int
 	if ok {
 		backfillMonths, err := strconv.Atoi(backfillMonths)
