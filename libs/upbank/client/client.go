@@ -95,6 +95,11 @@ func (c *UpbankClient) GetTransactions(ctx context.Context) ([]TransactionResour
 		c.Settings.TimeUntil = &timeUntil
 	}
 
+	if c.Settings.TimeFrom == nil {
+		timeFrom := c.Settings.TimeUntil.AddDate(0, 0, -1)
+		c.Settings.TimeFrom = &timeFrom
+	}
+
 	params := &GetTransactionsParams{
 		PageSize:     &c.Settings.PageSize,
 		FilterStatus: &status,
@@ -147,4 +152,8 @@ func (c *UpbankClient) PrintErrors(errors []ErrorObject) {
 	for _, err := range errors {
 		log.Printf("%s: %s\n", err.Title, err.Detail)
 	}
+}
+
+func (c *UpbankClient) IsInternalTransfer(t TransactionResource) bool {
+	return t.Relationships.TransferAccount.Data != nil
 }

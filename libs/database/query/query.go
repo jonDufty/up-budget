@@ -3,6 +3,7 @@ package query
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -15,6 +16,24 @@ func GetLatestTransactionDate(ctx context.Context, db *sql.DB) (*time.Time, erro
 	}
 
 	return &result, nil
+}
+
+func InsertIgnoreTransaction(ctx context.Context, db *sql.DB, args ...any) error {
+	query := `
+  INSERT IGNORE INTO transactions (id, amount, account_id, created_at, merchant)
+  VALUES (?, ?, ?, ?, ?);
+  `
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return fmt.Errorf("failed to prepare insert statement. %w", err)
+	}
+
+	_, err = stmt.Exec(args...)
+	if err != nil {
+		return fmt.Errorf("failed to insert transaction. %w", err)
+	}
+
+	return nil
 }
 
 func MerchantExists(ctx context.Context, db *sql.DB, name string) (bool, error) {

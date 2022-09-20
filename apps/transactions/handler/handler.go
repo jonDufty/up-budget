@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -70,10 +71,11 @@ func (c *TransactionClient) TransactionHandler(ctx context.Context, event events
 	return nil
 }
 
-func (c *TransactionClient) BackfillTransactionHandler(ctx context.Context, event events.CloudWatchEvent) error {
-	c.Upbank.Settings.TimeFrom = &upclient.BackfillDate
-	timeUntil := upclient.BackfillDate.AddDate(0, 2, 0)
+func (c *TransactionClient) BackfillTransactionHandler(ctx context.Context, event events.APIGatewayProxyRequest) error {
+
+	timeUntil := getBackfillFromQuery(event.QueryStringParameters)
 	c.Upbank.Settings.TimeUntil = &timeUntil
+	c.Upbank.Settings.TimeFrom = &upclient.BackfillDate
 
 	log.Printf("Fetching transactions from %s to %s", upclient.BackfillDate, timeUntil)
 
@@ -94,8 +96,12 @@ func (c *TransactionClient) insertTransactions(ctx context.Context, transactions
 	var failed error = nil
 
 	for _, t := range transactions {
+		if c.Upbank.IsInternalTransfer(t) {
+			log.Printf("Merchant: %s. Internal transfer... skipping\n", t.Attributes.Description)
+			continue
+		}
 		trans := models.NewTransactionFromApi(t)
-		err := trans.Insert(ctx, c.DB)
+		err := trans.InsertIgnore(ctx, c.DB)
 		if err != nil {
 			failed = fmt.Errorf("transaction %s failed. %v. %w", trans.Id, err, failed)
 		}
@@ -141,4 +147,20 @@ func (c *TransactionClient) getTimeFrom(ctx context.Context) *time.Time {
 	timeFrom := latestDate.Add(time.Second * 1)
 
 	return &timeFrom
+}
+
+func getBackfillFromQuery(queryParams map[string]string) time.Time {
+	backfillMonths, ok := queryParams["backfill_monts"]
+	var month int
+	if ok {
+		backfillMonths, err := strconv.Atoi(backfillMonths)
+		if err == nil {
+			month = backfillMonths
+		}
+	} else {
+		month = 6
+	}
+
+	timeUntil := upclient.BackfillDate.AddDate(0, month, 0)
+	return timeUntil
 }

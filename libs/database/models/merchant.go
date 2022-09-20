@@ -15,9 +15,14 @@ type Merchant struct {
 }
 
 func NewMerchantFromApi(r client.TransactionResource) *Merchant {
+	var category string = ""
+	if r.Relationships.Category.Data != nil {
+		category = r.Relationships.Category.Data.Id
+	}
+
 	m := &Merchant{
 		Name:       r.Attributes.Description,
-		UpCategory: r.Relationships.Category.Data.Id,
+		UpCategory: category,
 	}
 
 	return m
