@@ -1,4 +1,3 @@
-export * from './Menu/MenuItem';
-export * from './lib/menu/menu';
-export * from './lib/menu/menu';
+export * from './lib/Menu/Menu';
+export * from './lib/Menu/MenuItem';
 export * from './lib/Ui';
