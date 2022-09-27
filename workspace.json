@@ -6,6 +6,7 @@
     "budget-app-e2e": "apps/budget-app-e2e",
     "database": "libs/database",
     "transactions": "apps/transactions",
+    "ui": "libs/ui",
     "upbank": "libs/upbank"
   }
 }
