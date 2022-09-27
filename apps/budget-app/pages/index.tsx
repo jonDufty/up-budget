@@ -18,9 +18,7 @@ const MenuItems = [
 ];
 export function Index() {
   return (
-    <Box>
-      <Menu items={MenuItems}></Menu>
-    </Box>
+    <h1>Home Page</h1>
   );
 }
 
