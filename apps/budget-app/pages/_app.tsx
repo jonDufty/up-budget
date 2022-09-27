@@ -1,9 +1,10 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Menu } from '@up-budget/ui';
+import { Menu, NavBar } from '@up-budget/ui';
 import { Box } from '@mui/system';
 import './styles.css';
 import { styled } from '@mui/material/styles';
+import AppMenu from '../components/AppMenu/AppMenu';
 
 const MenuItems = [
   {
@@ -20,25 +21,25 @@ const MenuItems = [
   },
 ];
 
-const drawerWidth = 200;
+const drawerWidth = 400;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(1),
-  transition: theme.transitions.create("margin", {
+  transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
+    duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${drawerWidth}px`,
   ...(open && {
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: drawerWidth
-  })
+    marginLeft: drawerWidth,
+  }),
 }));
 
 function CustomApp({ Component, pageProps }: AppProps) {
@@ -49,11 +50,12 @@ function CustomApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <Box>
-        <Menu items={MenuItems}></Menu>
+        <AppMenu menuItems={MenuItems}>
+          <Main open={false}>
+            <Component {...pageProps} />
+          </Main>
+        </AppMenu>
       </Box>
-      <Main open={true}>
-      <Component {...pageProps} />
-      </Main>
     </>
   );
 }

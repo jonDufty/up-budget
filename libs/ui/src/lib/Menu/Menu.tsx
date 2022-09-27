@@ -1,8 +1,8 @@
-import styled from '@emotion/styled';
 import {
   AppBar,
   Box,
   Drawer,
+  DrawerProps,
   IconButton,
   List,
   ListItem,
@@ -16,35 +16,38 @@ import * as React from 'react';
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { MenuItem, MenuItemProps } from './MenuItem';
+import { styled, useTheme } from '@mui/material/styles';
 
-/* eslint-disable-next-line */
 export interface MenuProps {
   items: MenuItemProps[];
+  open: boolean
+  drawerWidth: number
 }
 
-const StyledMenu = styled.div`
-  color: pink;
-`;
+interface StyledDrawerProps extends DrawerProps{
+  drawerWidth: number
+}
 
-export function Menu({ items }: MenuProps) {
-  const [open, setOpen] = React.useState(false);
+const StyledDrawer = styled(Drawer, {})<StyledDrawerProps>(({ drawerWidth }) => ({
+  width: drawerWidth,
+  marginLeft: `${drawerWidth}px`,
+  flexShrink: 0,
+  '& .MuiDrawer-paper': {
+    width: drawerWidth,
+    boxSizing: 'border-box',
+  },
+}));
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+export function Menu({ items, open, drawerWidth }: MenuProps) {
 
   return (
-    <Drawer open={true} anchor="left" variant="persistent">
+    <StyledDrawer drawerWidth={drawerWidth} open={open} anchor="left" variant="persistent">
       <List>
         {items.map((item: MenuItemProps) => {
           return <MenuItem {...item} />;
         })}
       </List>
-    </Drawer>
+    </StyledDrawer>
   );
 }
 
