@@ -17,7 +17,9 @@ interface StyledDrawerProps extends DrawerProps{
   drawerWidth: number
 }
 
-const StyledDrawer = styled(Drawer, {})<StyledDrawerProps>(({ drawerWidth }) => ({
+const StyledDrawer = styled(Drawer, {
+  shouldForwardProp: (prop) => prop !== "drawerWidth",
+})<StyledDrawerProps>(({ drawerWidth }) => ({
   width: drawerWidth,
   marginLeft: `${drawerWidth}px`,
   flexShrink: 0,
@@ -33,7 +35,7 @@ export function Menu({ items, open, drawerWidth }: MenuProps) {
     <StyledDrawer drawerWidth={drawerWidth} open={open} anchor="left" variant="persistent">
       <List>
         {items.map((item: MenuItemProps) => {
-          return <MenuItem {...item} />;
+          return <MenuItem key={item.name} {...item} />;
         })}
       </List>
     </StyledDrawer>
