@@ -1,5 +1,5 @@
 import { createTheme, ThemeOptions } from '@mui/material/styles';
-
+import "@fontsource/open-sans"
 
 export const themeOptions: ThemeOptions = {
   palette: {
@@ -15,7 +15,7 @@ export const themeOptions: ThemeOptions = {
   },
   appMenu: {
     drawerWidth: 240,
-    navBarHeight: 50,
+    navBarHeight: 70,
   }
 };
 
