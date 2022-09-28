@@ -1,22 +1,11 @@
 import {
-  AppBar,
-  Box,
   Drawer,
   DrawerProps,
-  IconButton,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
 } from '@mui/material';
 import * as React from 'react';
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { MenuItem, MenuItemProps } from './MenuItem';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 export interface MenuProps {
   items: MenuItemProps[];

@@ -9,7 +9,7 @@ export interface AppMenuProps {
 }
 
 const Main = styled('main', {
-  shouldForwardProp: (prop) => prop !== 'open'
+  shouldForwardProp: (prop) => prop !== 'open',
 })<{  open?: boolean; }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(1),
