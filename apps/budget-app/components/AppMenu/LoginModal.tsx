@@ -15,6 +15,7 @@ import {
   LiteralUnion,
   signIn,
 } from 'next-auth/react';
+import { GithubLoginButton } from './GithubLoginButton';
 import { useEffect, useState } from 'react';
 
 interface LoginModalProps {
@@ -53,9 +54,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         {providers && Object.values(providers).map((provider) => {
           return (
             <div key={provider.name}>
-              <Button onClick={() => signIn(provider.id)}>
-                Sign in with {provider.name}
-              </Button>
+              <GithubLoginButton onClick={() => signIn(provider.id)}/>
             </div>
           );
         })}
