@@ -1,8 +1,8 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Menu, NavBar } from '@up-budget/ui';
+import { Menu, NavBar, DefaultTheme} from '@up-budget/ui';
 import { Box } from '@mui/system';
-import { styled } from '@mui/material/styles';
+import { styled, ThemeProvider } from '@mui/material/styles';
 import AppMenu from '../components/AppMenu/AppMenu';
 
 const MenuItems = [
@@ -26,12 +26,14 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to budget-app!</title>
       </Head>
-
+      <ThemeProvider theme={DefaultTheme}>
       <Box>
+
         <AppMenu menuItems={MenuItems}>
           <Component {...pageProps} />
         </AppMenu>
       </Box>
+      </ThemeProvider>
     </>
   );
 }

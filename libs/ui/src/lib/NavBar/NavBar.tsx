@@ -2,14 +2,6 @@ import * as React from 'react';
 import { AppBar, AppBarProps, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
-// import styled from 'styled-components';
-
-// const drawerWidth = 240;
-
-// const StyledAppBar = styled(AppBar)`
-//   width: 600,
-//   marginLeft: ${drawerWidth}
-// `;
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -31,7 +23,7 @@ const StyledAppBar = styled(AppBar, {
 export interface NavBarProps extends AppBarProps{
   handleClick: React.MouseEventHandler;
   open: boolean
-  drawerWidth: number
+  drawerWidth?: number
 }
 
 interface StyledAppBarProps extends AppBarProps {
@@ -40,8 +32,10 @@ interface StyledAppBarProps extends AppBarProps {
 }
 
 export function NavBar({ handleClick, position, open, drawerWidth }: NavBarProps) {
+  const theme = useTheme()
+
   return (
-    <StyledAppBar position={position} open={open} drawerWidth={drawerWidth}>
+    <StyledAppBar position={position} open={open} drawerWidth={theme.appMenu.drawerWidth}>
       <Toolbar>
         <IconButton onClick={handleClick}>
           <MenuIcon />
