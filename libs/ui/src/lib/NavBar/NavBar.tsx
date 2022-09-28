@@ -50,7 +50,7 @@ export function NavBar({ handleClick, position, open, drawerWidth, handleModal }
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" component="div" sx={{flexGrow: 1,padding:'1rem'}}>
-          Hello There
+          Up Budget
         </Typography>
         <Button color="inherit" onClick={onClick}>{session ? "Logout" : "Login"}</Button>
       </Toolbar>
