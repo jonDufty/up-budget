@@ -32,7 +32,13 @@ export default class CustomDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>{this.props.styles}</Head>
+        <Head>
+          {this.props.styles}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans&display=optional"
+            rel="stylesheet"
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />

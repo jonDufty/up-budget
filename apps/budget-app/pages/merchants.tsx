@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 export interface MerchantsProps {}
 
 const StyledMerchants = styled.div`
-  color: pink;
+  color: red;
 `;
 
 export function Merchants(props: MerchantsProps) {

@@ -1,9 +1,9 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Menu } from '@up-budget/ui';
+import { Menu, NavBar, DefaultTheme} from '@up-budget/ui';
 import { Box } from '@mui/system';
-import './styles.css';
-import { styled } from '@mui/material/styles';
+import { styled, ThemeProvider } from '@mui/material/styles';
+import AppMenu from '../components/AppMenu/AppMenu';
 
 const MenuItems = [
   {
@@ -20,40 +20,20 @@ const MenuItems = [
   },
 ];
 
-const drawerWidth = 200;
-
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
-  open?: boolean;
-}>(({ theme, open }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(1),
-  transition: theme.transitions.create("margin", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
-  }),
-  marginLeft: `-${drawerWidth}px`,
-  ...(open && {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: drawerWidth
-  })
-}));
-
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
         <title>Welcome to budget-app!</title>
       </Head>
-
+      <ThemeProvider theme={DefaultTheme}>
       <Box>
-        <Menu items={MenuItems}></Menu>
+
+        <AppMenu menuItems={MenuItems}>
+          <Component {...pageProps} />
+        </AppMenu>
       </Box>
-      <Main open={true}>
-      <Component {...pageProps} />
-      </Main>
+      </ThemeProvider>
     </>
   );
 }
