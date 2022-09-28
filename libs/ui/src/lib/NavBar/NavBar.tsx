@@ -27,7 +27,7 @@ export interface NavBarProps extends AppBarProps{
   handleClick: React.MouseEventHandler;
   open: boolean
   drawerWidth: number
-  handleModal?: React.MouseEventHandler
+  handleModal: React.MouseEventHandler
 }
 
 interface StyledAppBarProps extends AppBarProps {
@@ -41,7 +41,7 @@ export function NavBar({ handleClick, position, open, drawerWidth, handleModal }
 
   const onClick = session ?
     () => signOut() :
-    () => signIn()
+    handleModal
 
   return (
     <StyledAppBar position={position} open={open} drawerWidth={drawerWidth}>
@@ -53,8 +53,6 @@ export function NavBar({ handleClick, position, open, drawerWidth, handleModal }
           Hello There
         </Typography>
         <Button color="inherit" onClick={onClick}>{session ? "Logout" : "Login"}</Button>
-
-        {handleModal && <Button color="inherit" onClick={handleModal}>{"Launch Modal"}</Button>}
       </Toolbar>
     </StyledAppBar>
   );

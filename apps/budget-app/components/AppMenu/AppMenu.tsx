@@ -64,7 +64,7 @@ export function AppMenu({ menuItems, children }: AppMenuProps) {
       <Main open={open}>
         {children}
       </Main>
-      {!session && <LoginModal open={openModal} onClose={handleModalClose} />}
+      <LoginModal open={openModal} onClose={handleModalClose} />
     </Box>
   );
 }
