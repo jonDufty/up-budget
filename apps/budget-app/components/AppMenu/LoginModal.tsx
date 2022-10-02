@@ -43,7 +43,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     }
     oauthProviders();
   }, []);
-
+  console.log(process.env.NEXTAUTH_URL)
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Login Modal</DialogTitle>
