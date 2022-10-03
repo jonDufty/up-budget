@@ -33,7 +33,7 @@ const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth',
 })<StyledListProps>(({theme}) => ({
   flexGrow: 1,
-  padding: '0.2em',
+  padding: '0.2rem',
 
 
 }));
@@ -59,15 +59,16 @@ export function CategoryBarItem({
   categories,
 }: CategoryBarItemProps) {
   const [selected, setSelected] = useState(merchant.category);
+  const theme = useTheme()
 
   return (
     <ListItem key={merchant.name}>
-      <Grid container spacing={2} justifyItems={'center'}>
+      <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
         <Grid xs={3}>
           <Typography display="inline">{merchant.name}</Typography>
         </Grid>
 
-        <Grid xs={6}>
+        <Grid xs={6} textAlign={'center'}>
           <Select
             fullWidth
             id={`${merchant.name}-selection`}
@@ -85,10 +86,10 @@ export function CategoryBarItem({
             <MenuItem value={undefined}></MenuItem>
           </Select>
         </Grid>
-        <Grid xs={3}>
+        <Grid xs={3} textAlign={'center'}>
             <Button
               variant="outlined"
-              disabled={selected === merchant.category}
+            disabled={selected === merchant.category}
             >
               Update
             </Button>
