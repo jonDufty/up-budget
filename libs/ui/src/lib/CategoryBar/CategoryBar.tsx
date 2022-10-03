@@ -59,7 +59,6 @@ export function CategoryBarItem({
   categories,
 }: CategoryBarItemProps) {
   const [selected, setSelected] = useState(merchant.category);
-  const theme = useTheme()
 
   return (
     <ListItem key={merchant.name}>
