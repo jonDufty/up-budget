@@ -5,6 +5,7 @@ import { Box } from '@mui/system';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import { getCsrfToken, getProviders, SessionProvider } from 'next-auth/react';
 import { AppMenu } from '../components/AppMenu/AppMenu';
+import { Session } from 'next-auth';
 
 const MenuItems = [
   {
@@ -21,13 +22,13 @@ const MenuItems = [
   },
 ];
 
-function CustomApp({ Component, pageProps:{session, ...pageProps} }: AppProps) {
+function CustomApp({ Component, pageProps }: AppProps<{session: Session}>) {
   return (
     <>
       <Head>
         <title>Welcome to budget-app!</title>
       </Head>
-      <SessionProvider session={session}>
+      <SessionProvider session={pageProps.session}>
         <ThemeProvider theme={DefaultTheme}>
           <Box>
             <AppMenu menuItems={MenuItems}>
