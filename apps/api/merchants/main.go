@@ -1,20 +1,29 @@
 package main
 
 import (
-	"context"
 	"log"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/jonDufty/budget/apps/api/handlers"
+	"github.com/jonDufty/budget/libs/database"
+	"github.com/kelseyhightower/envconfig"
 )
 
 func main() {
-
-	lambda.Start(handler)
+	cfg := MustLoadConfig()
+	c := handlers.NewApiClient(cfg)
+	err := database.TestPing(c.DB)
+	if err != nil {
+		log.Fatalf("Failed to connect to DB. %v", err)
+	}
+	lambda.Start(c.GetMerchantHandler)
 }
 
-func handler(ctx context.Context, event events.APIGatewayProxyRequest) error {
-	log.Println("Hello there")
-	log.Println("id", event.PathParameters["id"])
-	return nil
+func MustLoadConfig() handlers.Config {
+	var cfg handlers.Config
+	err := envconfig.Process("merchants", &cfg)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return cfg
 }

@@ -5,6 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 	"time"
+
+	"github.com/jonDufty/budget/libs/database/models"
+	"github.com/russross/meddler"
 )
 
 func GetLatestTransactionDate(ctx context.Context, db *sql.DB) (*time.Time, error) {
@@ -46,3 +49,28 @@ func MerchantExists(ctx context.Context, db *sql.DB, name string) (bool, error) 
 
 	return result > 0, nil
 }
+
+func GetAllMerchants(ctx context.Context, db *sql.DB) ([]*models.Merchant, error) {
+	var merchants []*models.Merchant
+	query := "SELECT * FROM merchants"
+
+	err := meddler.QueryAll(db, &merchants, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query merchants. %w", err)
+	}
+	return merchants, nil
+}
+
+func GetAllBudgets(ctx context.Context, db *sql.DB) ([]*models.Budget, error) {
+	var budgets []*models.Budget
+	query := "SELECT * FROM budgets"
+
+	err := meddler.QueryAll(db, &budgets, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query budgets. %w", err)
+	}
+	return budgets, nil
+}
+
+// INSERT INTO table (id, name, age) VALUES(1, "A", 19) ON DUPLICATE KEY UPDATE
+// name="A", age=19

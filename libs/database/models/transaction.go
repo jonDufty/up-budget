@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/jonDufty/budget/libs/database/query"
 	"github.com/jonDufty/budget/libs/upbank/client"
 	"github.com/russross/meddler"
 )
@@ -32,8 +31,4 @@ func NewTransactionFromApi(r client.TransactionResource) *Transaction {
 
 func (t *Transaction) Insert(ctx context.Context, db *sql.DB) error {
 	return meddler.Insert(db, "transactions", t)
-}
-
-func (t *Transaction) InsertIgnore(ctx context.Context, db *sql.DB) error {
-	return query.InsertIgnoreTransaction(ctx, db, t.Id, t.Amount, t.AccountId, t.CreatedAt, t.Merchant)
 }

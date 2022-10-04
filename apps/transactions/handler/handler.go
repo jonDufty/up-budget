@@ -103,7 +103,7 @@ func (c *TransactionClient) insertTransactions(ctx context.Context, transactions
 			continue
 		}
 		trans := models.NewTransactionFromApi(t)
-		err := trans.InsertIgnore(ctx, c.DB)
+		err := query.InsertIgnoreTransaction(ctx, c.DB, trans.Id, trans.Amount, trans.AccountId, trans.CreatedAt, trans.Merchant)
 		if err != nil {
 			failed = fmt.Errorf("transaction %s failed. %v. %w", trans.Id, err, failed)
 		}
