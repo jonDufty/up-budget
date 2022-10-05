@@ -61,6 +61,17 @@ func GetAllMerchants(ctx context.Context, db *sql.DB) ([]*models.Merchant, error
 	return merchants, nil
 }
 
+func GetUncategorisedMerchants(ctx context.Context, db *sql.DB) ([]*models.Merchant, error) {
+	var merchants []*models.Merchant
+	query := "SELECT * FROM merchants WHERE category = ?"
+
+	err := meddler.QueryAll(db, &merchants, query, "")
+	if err != nil {
+		return nil, fmt.Errorf("failed to query merchants. %w", err)
+	}
+	return merchants, nil
+}
+
 func GetAllBudgets(ctx context.Context, db *sql.DB) ([]*models.Budget, error) {
 	var budgets []*models.Budget
 	query := "SELECT * FROM budgets"
