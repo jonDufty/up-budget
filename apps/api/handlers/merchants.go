@@ -41,43 +41,34 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 }
 
 type UpdateMerchantBody struct {
-	merchants []models.Merchant `json:"merchants"`
+	Merchants []models.Merchant `json:"merchants"`
 }
 
 func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var body UpdateMerchantBody
-	err := json.Unmarshal([]byte(event.Body), body)
+	err := json.Unmarshal([]byte(event.Body), &body)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "Invalid body type",
-		}, err
+		}, fmt.Errorf("invalid body. %w", err)
 	}
 
-	log.Println("")
-
-	tx, err := c.DB.BeginTx(ctx, nil)
-	if err != nil {
-		log.Printf("failed to create transaction. %v", err)
+	if len(body.Merchants) == 0 {
 		return events.APIGatewayProxyResponse{
-			StatusCode: 500,
-		}, err
+			StatusCode: 400,
+			Body:       "Invalid body type",
+		}, fmt.Errorf("no merchant field or array is empty")
 	}
 
-	for _, m := range body.merchants {
-		err = m.UpdateTx(ctx, tx)
-
+	for _, m := range body.Merchants {
+		log.Println(m)
+		err = query.UpdateMerchant(ctx, c.DB, m)
 		if err != nil {
-			log.Println(err, tx.Rollback().Error())
+			return events.APIGatewayProxyResponse{
+				StatusCode: 500,
+			}, fmt.Errorf("failed to update merchant %s. %w", m.Name, err)
 		}
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		log.Printf("failed to commit transaction. %v", err)
-		return events.APIGatewayProxyResponse{
-			StatusCode: 500,
-		}, err
 	}
 
 	return events.APIGatewayProxyResponse{

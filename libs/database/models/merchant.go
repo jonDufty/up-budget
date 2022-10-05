@@ -31,11 +31,3 @@ func NewMerchantFromApi(r client.TransactionResource) *Merchant {
 func (m *Merchant) Insert(ctx context.Context, db *sql.DB) error {
 	return meddler.Insert(db, "merchants", m)
 }
-
-func (m *Merchant) Update(ctx context.Context, db *sql.DB) error {
-	return meddler.Update(db, "merchants", m)
-}
-
-func (m *Merchant) UpdateTx(ctx context.Context, db *sql.Tx) error {
-	return meddler.Update(db, "merchants", m)
-}

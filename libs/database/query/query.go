@@ -21,6 +21,21 @@ func GetLatestTransactionDate(ctx context.Context, db *sql.DB) (*time.Time, erro
 	return &result, nil
 }
 
+func ExecInsert(ctx context.Context, db *sql.DB, action string, query string, args ...any) error {
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return fmt.Errorf("failed to prepare %s statement. %w", action, err)
+	}
+
+	_, err = stmt.Exec(args...)
+	if err != nil {
+		return fmt.Errorf("failed to %s. %w", action, err)
+	}
+
+	return nil
+}
+
 func InsertIgnoreTransaction(ctx context.Context, db *sql.DB, args ...any) error {
 	query := `
   INSERT IGNORE INTO transactions (id, amount, account_id, created_at, merchant)
@@ -37,6 +52,15 @@ func InsertIgnoreTransaction(ctx context.Context, db *sql.DB, args ...any) error
 	}
 
 	return nil
+}
+
+func UpdateMerchant(ctx context.Context, db *sql.DB, merchant models.Merchant) error {
+	query := `
+  UPDATE merchants
+  SET category = ?
+  WHERE name = ?
+  `
+	return ExecInsert(ctx, db, "update merchant", query, merchant.Category, merchant.Name)
 }
 
 func MerchantExists(ctx context.Context, db *sql.DB, name string) (bool, error) {
