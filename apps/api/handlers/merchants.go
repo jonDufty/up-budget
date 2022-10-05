@@ -16,7 +16,7 @@ const filterUncategorisedKey = "filterUncategorised"
 
 type queryFunc = func(context.Context, *sql.DB) ([]*models.Merchant, error)
 
-func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) error {
+func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	filter, ok := event.QueryStringParameters[filterUncategorisedKey]
 	var merchants []*models.Merchant
 	var q queryFunc
@@ -28,16 +28,28 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 
 	merchants, err := q(ctx, c.DB)
 	if err != nil {
-		return fmt.Errorf("failed to fetch merchants. %w", err)
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, fmt.Errorf("failed to fetch merchants. %w", err)
 	}
 
-	for i, m := range merchants {
-		fmt.Println(m.Name, m.UpCategory)
-		if i >= 10 {
-			break
-		}
+	if len(merchants) > 10 {
+		merchants = merchants[0:10]
 	}
-	return nil
+
+	body, err := json.Marshal(merchants)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, fmt.Errorf("failed to marshal JSON. %w", err)
+	}
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Headers: map[string]string{
+			"Content-Type": "application/json",
+		},
+		Body: string(body),
+	}, nil
 }
 
 type UpdateMerchantBody struct {

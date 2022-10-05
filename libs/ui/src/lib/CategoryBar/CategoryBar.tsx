@@ -11,6 +11,7 @@ import {
 import { Container } from '@mui/system';
 import { styled, useTheme } from '@mui/material/styles';
 import { useState } from 'react';
+import useSWR, { Fetcher } from 'swr'
 
 /* eslint-disable-next-line */
 export interface CategoryBarProps {
@@ -20,7 +21,7 @@ export interface CategoryBarProps {
 
 export type MerchantInfo = {
   name: string;
-  upCategory: string;
+  up_category: string;
   category: string | null;
 };
 
@@ -28,6 +29,17 @@ interface CategoryBarItemProps {
   merchant: MerchantInfo;
   categories: string[];
 }
+
+const API_URL = "https://api.budget-dev.jdufty.com/merchants"
+
+const fetcher: Fetcher<MerchantInfo[]> = async (url: string) => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error('Error fetching data')
+  }
+  const data = await res.json() as MerchantInfo[]
+  return data
+};
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth',
@@ -45,9 +57,14 @@ interface StyledListProps {
 export function CategoryBar({ merchants, categories }: CategoryBarProps) {
   const theme = useTheme()
 
+  const { data, error } = useSWR(API_URL, fetcher);
+
+  if (error) return <h1>An error has occurred</h1>
+  if (!data) return <h4>Loading...;</h4>
+
   return (
     <StyledList theme={theme}>
-      {merchants.map((m: MerchantInfo) => {
+      {data.map((m: MerchantInfo) => {
         return <CategoryBarItem merchant={m} categories={categories} />;
       })}
     </StyledList>

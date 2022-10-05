@@ -5,27 +5,27 @@ import { GetServerSideProps } from 'next';
 const MERCHANTS: MerchantInfo[] = [
   {
     name: "Bunnings",
-    upCategory: 'home-and-stuff',
+    up_category: 'home-and-stuff',
     category: null
   },
   {
     name: "Coles",
-    upCategory: 'home-and-stuff',
+    up_category: 'home-and-stuff',
     category: null
   },
   {
     name: "Pub 1 defined",
-    upCategory: 'bar-and-restaurant',
+    up_category: 'bar-and-restaurant',
     category: 'drinks'
   },
   {
     name: "Pub 2",
-    upCategory: 'bar-and-restaurant',
+    up_category: 'bar-and-restaurant',
     category: null
   },
   {
     name: "Pub 3",
-    upCategory: 'bar-and-restaurant',
+    up_category: 'bar-and-restaurant',
     category: null
   },
 ]
@@ -41,10 +41,6 @@ export interface MerchantsProps {
   merchants: MerchantInfo[]
   categories: string[]
 }
-
-const StyledMerchants = styled.div`
-  color: red;
-`;
 
 export function Merchants({merchants, categories}: MerchantsProps) {
   return (
