@@ -10,7 +10,7 @@ import (
 )
 
 type Merchant struct {
-	Id         int    `meddler:"id" json:"id"`
+	Id         int    `meddler:"id,pk" json:"id"`
 	Name       string `meddler:"name" json:"name"`
 	Category   string `meddler:"category" json:"category"`
 	UpCategory string `meddler:"up_category" json:"up_category"`
@@ -43,6 +43,7 @@ func FindMerchantById(ctx context.Context, db *sql.DB, id int) *Merchant {
 	err := meddler.QueryRow(db, m, "SELECT * from merchants WHERE id = ?", id)
 	if err != nil {
 		log.Printf("Couldn't find merchant with id %d", id)
+		return nil
 	}
 
 	return m
@@ -53,6 +54,7 @@ func FindMerchantByName(ctx context.Context, db *sql.DB, name string) *Merchant 
 	err := meddler.QueryRow(db, m, "SELECT * from merchants WHERE name = ?", name)
 	if err != nil {
 		log.Printf("Couldn't find merchant with name %s", name)
+		return nil
 	}
 
 	return m

@@ -50,7 +50,7 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
-		}, fmt.Errorf("failed to fetch merchants. %w", err)
+		}, fmt.Errorf("failed to fetch merchants. query: GetAllMerchants. %w", err)
 	}
 
 	body, err := json.Marshal(merchants)
@@ -87,7 +87,7 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "Missing field id",
-		}, fmt.Errorf("No merchant id provided")
+		}, fmt.Errorf("no merchant id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
 	m := models.FindMerchantById(ctx, c.DB, id)
@@ -95,7 +95,7 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "Bad Request",
-		}, fmt.Errorf("No merchant found with id %s", queryId)
+		}, fmt.Errorf("no merchant found with id %s", queryId)
 	}
 
 	err = m.Update(ctx, c.DB)

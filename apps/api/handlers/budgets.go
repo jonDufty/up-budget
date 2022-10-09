@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -19,6 +20,8 @@ func (c *ApiClient) GetBudgetHandler(ctx context.Context, event events.APIGatewa
 			StatusCode: 500,
 		}, fmt.Errorf("failed to fetch budgets. %w", err)
 	}
+
+	log.Println(budgets)
 
 	body, err := json.Marshal(budgets)
 	if err != nil {
@@ -60,11 +63,12 @@ func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGat
 	}
 	id, _ := strconv.Atoi(queryId)
 	b := models.FindBudgetById(ctx, c.DB, id)
+	log.Println(b)
 	if b == nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "Bad Request",
-		}, fmt.Errorf("No merchant found with id %s", queryId)
+		}, fmt.Errorf("No budget found with id %s", queryId)
 	}
 
 	if body.Category != "" {

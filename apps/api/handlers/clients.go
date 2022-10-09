@@ -30,5 +30,9 @@ func NewApiClient(cfg Config) *ApiClient {
 
 	return &ApiClient{
 		DB: db,
+		Settings: Settings{
+			PageSize:    25,
+			DefaultPage: 1,
+		},
 	}
 }

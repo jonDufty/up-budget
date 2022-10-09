@@ -9,9 +9,9 @@ import (
 )
 
 type Budget struct {
-	Id       int    `meddler:"id" json:"id"`
+	Id       int    `meddler:"id,pk" json:"id"`
 	Category string `meddler:"category" json:"category"`
-	Limit    int    `meddler:"limit" json:"category"`
+	Limit    int    `meddler:"limit" json:"limit"`
 }
 
 func (b *Budget) Insert(ctx context.Context, db *sql.DB) error {
@@ -27,6 +27,7 @@ func FindBudgetById(ctx context.Context, db *sql.DB, id int) *Budget {
 	err := meddler.QueryRow(db, b, "SELECT * from budgets WHERE id = ?", id)
 	if err != nil {
 		log.Printf("Couldn't find category with id %d", id)
+		return nil
 	}
 
 	return b
@@ -37,6 +38,7 @@ func FindBudgetByCategory(ctx context.Context, db *sql.DB, cat string) *Budget {
 	err := meddler.QueryRow(db, b, "SELECT * from budgets WHERE category = ?", cat)
 	if err != nil {
 		log.Printf("Couldn't find category with id %s", cat)
+		return nil
 	}
 
 	return b

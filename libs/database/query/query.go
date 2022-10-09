@@ -77,7 +77,7 @@ func MerchantExists(ctx context.Context, db *sql.DB, name string) (bool, error) 
 func GetAllMerchants(ctx context.Context, db *sql.DB, page int, pageSize int) ([]*models.Merchant, error) {
 	var merchants []*models.Merchant
 	cursor := pageSize * (page - 1)
-	query := "SELECT * FROM merchants LIMIT ?,? ORDER BY name"
+	query := "SELECT * FROM merchants ORDER BY name LIMIT ?,?"
 
 	err := meddler.QueryAll(db, &merchants, query, cursor, cursor+pageSize)
 	if err != nil {
@@ -89,7 +89,7 @@ func GetAllMerchants(ctx context.Context, db *sql.DB, page int, pageSize int) ([
 func GetUncategorisedMerchants(ctx context.Context, db *sql.DB, page int, pageSize int) ([]*models.Merchant, error) {
 	var merchants []*models.Merchant
 	cursor := pageSize * (page - 1)
-	query := "SELECT * FROM merchants WHERE category = ? LIMIT ?,? ORDER BY name"
+	query := "SELECT * FROM merchants WHERE category = ? ORDER BY name LIMIT ?,?"
 
 	err := meddler.QueryAll(db, &merchants, query, "", cursor, cursor+pageSize)
 	if err != nil {

@@ -27,6 +27,7 @@ export function BackendApiStack({ app, stack }: StackContext) {
 
   new Api(stack, 'BackendApi', {
     routes: {
+      // merchant routes
       'GET /merchants': 'api/merchants/main.go',
       // 'POST /merchants': 'api/update-merchants/main.go',
       'POST /merchants/{id}': 'api/update-merchants/main.go',
