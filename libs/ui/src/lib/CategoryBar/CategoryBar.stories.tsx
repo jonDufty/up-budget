@@ -15,12 +15,12 @@ Primary.args = {
   merchants: [
     {
       name: "Bunnings",
-      upCategory: "home stuff",
+      up_category: "home stuff",
       category: null
     },
     {
       name: "Woolies",
-      upCategory: "groceries",
+      up_category: "groceries",
       category: "food"
     },
   ],

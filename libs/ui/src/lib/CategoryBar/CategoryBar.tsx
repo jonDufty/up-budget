@@ -28,26 +28,14 @@ export type MerchantInfo = {
 interface CategoryBarItemProps {
   merchant: MerchantInfo;
   categories: string[];
+  key?: string
 }
-
-const API_URL = "https://api.budget-dev.jdufty.com/merchants"
-
-const fetcher: Fetcher<MerchantInfo[]> = async (url: string) => {
-  const res = await fetch(url)
-  if (!res.ok) {
-    throw new Error('Error fetching data')
-  }
-  const data = await res.json() as MerchantInfo[]
-  return data
-};
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth',
 })<StyledListProps>(({theme}) => ({
   flexGrow: 1,
   padding: '0.2rem',
-
-
 }));
 
 interface StyledListProps {
@@ -57,15 +45,10 @@ interface StyledListProps {
 export function CategoryBar({ merchants, categories }: CategoryBarProps) {
   const theme = useTheme()
 
-  const { data, error } = useSWR(API_URL, fetcher);
-
-  if (error) return <h1>An error has occurred</h1>
-  if (!data) return <h4>Loading...;</h4>
-
   return (
     <StyledList theme={theme}>
-      {data.map((m: MerchantInfo) => {
-        return <CategoryBarItem merchant={m} categories={categories} />;
+      {merchants.map((m: MerchantInfo) => {
+        return <CategoryBarItem key={m.name} merchant={m} categories={categories} />;
       })}
     </StyledList>
   );
@@ -74,11 +57,12 @@ export function CategoryBar({ merchants, categories }: CategoryBarProps) {
 export function CategoryBarItem({
   merchant,
   categories,
+  key
 }: CategoryBarItemProps) {
   const [selected, setSelected] = useState(merchant.category);
 
   return (
-    <ListItem key={merchant.name}>
+    <ListItem key={key}>
       <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
         <Grid xs={3}>
           <Typography display="inline">{merchant.name}</Typography>

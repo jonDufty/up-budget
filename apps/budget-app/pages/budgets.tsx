@@ -1,3 +1,4 @@
+import { BudgetMenu } from "@up-budget/ui";
 import useSWR, { Fetcher } from "swr";
 
 interface BudgetInfo {
@@ -31,13 +32,7 @@ export function Budgets(props: BudgetsProps) {
   if (!budgets) return <h4>Loading...;</h4>
 
   return (
-    <div>
-      {
-        budgets.map((b, i) => {
-          return <div key={`${b.category}-${i}`}>{b.category}, {b.limit}</div>
-        })
-      }
-    </div>
+    <BudgetMenu budgets={budgets}/>
   );
 }
 
