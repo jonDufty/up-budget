@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
+import { Box, Button, IconButton } from '@mui/material';
 import { CategoryBar, MerchantInfo } from '@up-budget/ui';
 import { GetServerSideProps } from 'next';
+import { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
 
 const API_URL = "https://api.budget-dev.jdufty.com"

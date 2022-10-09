@@ -10,4 +10,6 @@ export default Story;
 const Template: ComponentStory<typeof CreateBudgetInput> = (args) => <CreateBudgetInput {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  submitHandler: (data:any) => console.log(data)
+};

@@ -28,7 +28,6 @@ interface BudgetInfo {
 
 interface BudgetMenuItemProps {
   budget: BudgetInfo;
-  key?: string;
 }
 
 const StyledList = styled(List, {
@@ -48,31 +47,31 @@ export function BudgetMenu({ budgets }: BudgetMenuProps) {
   return (
     <StyledList theme={theme}>
       {budgets.map((b: BudgetInfo) => {
-        return <BudgetMenuItem budget={b} />;
+        return <BudgetMenuItem key={b.category} budget={b} />;
       })}
     </StyledList>
   );
 }
 
-export function BudgetMenuItem({ budget, key }: BudgetMenuItemProps) {
+export function BudgetMenuItem({ budget }: BudgetMenuItemProps) {
   const [limit, setLimit] = useState(budget.limit);
+  const key = budget.category
 
   return (
-    <ListItem key={budget.category}>
-      <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
-        <Grid xs={3}>
-          <Typography display="inline">{captilise(budget.category)}</Typography>
+    <ListItem key={key}>
+      <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} key={`${key}-grid`}>
+        <Grid item xs={3}>
+          <Typography key={`${key}-text`} display="inline">{captilise(budget.category)}</Typography>
         </Grid>
 
-        <Grid xs={6} textAlign={'center'}>
-          <TextField
+        <Grid item xs={6} textAlign={'center'}>
+          <TextField key={`${key}-input`}
             fullWidth
             margin='normal'
             id={`${budget.category}-budget-limit`}
             label="Limit"
             variant="outlined"
             InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment>}}
-            // startAdornment=
             type="number"
             value={limit}
             onChange={(e) => {
@@ -80,8 +79,9 @@ export function BudgetMenuItem({ budget, key }: BudgetMenuItemProps) {
             }}
           />
         </Grid>
-        <Grid xs={3} textAlign={'center'}>
-          <Button variant="outlined" disabled={limit === budget.limit}>
+        <Grid item xs={3} textAlign={'center'}>
+          <Button key={`${key}-button`}
+            variant="outlined" disabled={limit === budget.limit}>
             Update
           </Button>
         </Grid>
