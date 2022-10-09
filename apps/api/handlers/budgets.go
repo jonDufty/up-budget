@@ -135,9 +135,6 @@ func (c *ApiClient) CreateBudgetHandler(ctx context.Context, event events.APIGat
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Headers: map[string]string{
-			"Content-Type": "application/json",
-		},
-		Body: "New budget successfully created",
+		Body:       "New budget successfully created",
 	}, nil
 }

@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material';
 import { BudgetMenu, CreateBudgetInput } from '@up-budget/ui';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import useSWR, { Fetcher } from 'swr';
+import useSWR, { Fetcher, MutatorCallback, mutate, useSWRConfig } from 'swr';
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
@@ -23,17 +23,35 @@ const budgetFetcher: Fetcher<BudgetInfo[]> = async (url: string) => {
   const budgets = (await res.json()) as BudgetInfo[];
   return budgets;
 };
-interface IFormInputs {
-  category: string;
-  limit: number;
-}
-const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
+
+const mutateBudgets = async (existingData: BudgetInfo[], newData: BudgetInfo): Promise<BudgetInfo[]> => {
+  const apiUrl = API_URL + '/budgets';
+  console.log(`Sending to ${apiUrl}`)
+  console.log(newData)
+  const res = await fetch(apiUrl, {
+    method: 'POST',
+    body: JSON.stringify(newData),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`error updating data ${res.statusText}`)
+  }
+
+  return [
+    ...existingData,
+    newData
+  ]
+};
 
 /* eslint-disable-next-line */
 export interface BudgetsProps {}
 
 export function Budgets(props: BudgetsProps) {
-  const { data: budgets, error } = useSWR('/budgets', budgetFetcher);
+  const { data, error } = useSWR('/budgets', budgetFetcher);
+  // const { mutate } = useSWRConfig();
 
   const [createNewMode, setCreateNewMode] = useState(false);
 
@@ -41,16 +59,25 @@ export function Budgets(props: BudgetsProps) {
     setCreateNewMode(!createNewMode);
   };
 
+  const onFormSubmit: SubmitHandler<BudgetInfo> = (newBudget) => {
+    console.log(newBudget);
+    setCreateNewMode(false)
+    // const updated = [ ...data, newBudget ];
+    mutateBudgets(data, newBudget)
+    mutate('/budgets');
+    mutate('/budgets', (data) => [...data, newBudget], false);
+  };
+
   if (error) {
     console.error(error);
     return <h1>An error has occurred</h1>;
   }
-  if (!budgets) return <h4>Loading...;</h4>;
+  if (!data) return <h4>Loading...;</h4>;
 
   return (
     <Box>
-      <BudgetMenu budgets={budgets} />
-      {createNewMode && <CreateBudgetInput submitHandler={onSubmit} />}
+      <BudgetMenu budgets={data} />
+      {createNewMode && <CreateBudgetInput submitHandler={onFormSubmit} />}
       <Button
         variant="text"
         size="large"
