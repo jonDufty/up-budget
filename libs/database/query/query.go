@@ -74,22 +74,24 @@ func MerchantExists(ctx context.Context, db *sql.DB, name string) (bool, error) 
 	return result > 0, nil
 }
 
-func GetAllMerchants(ctx context.Context, db *sql.DB) ([]*models.Merchant, error) {
+func GetAllMerchants(ctx context.Context, db *sql.DB, page int, pageSize int) ([]*models.Merchant, error) {
 	var merchants []*models.Merchant
-	query := "SELECT * FROM merchants"
+	cursor := pageSize * (page - 1)
+	query := "SELECT * FROM merchants LIMIT ?,? ORDER BY name"
 
-	err := meddler.QueryAll(db, &merchants, query)
+	err := meddler.QueryAll(db, &merchants, query, cursor, cursor+pageSize)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query merchants. %w", err)
 	}
 	return merchants, nil
 }
 
-func GetUncategorisedMerchants(ctx context.Context, db *sql.DB) ([]*models.Merchant, error) {
+func GetUncategorisedMerchants(ctx context.Context, db *sql.DB, page int, pageSize int) ([]*models.Merchant, error) {
 	var merchants []*models.Merchant
-	query := "SELECT * FROM merchants WHERE category = ?"
+	cursor := pageSize * (page - 1)
+	query := "SELECT * FROM merchants WHERE category = ? LIMIT ?,? ORDER BY name"
 
-	err := meddler.QueryAll(db, &merchants, query, "")
+	err := meddler.QueryAll(db, &merchants, query, "", cursor, cursor+pageSize)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query merchants. %w", err)
 	}
@@ -98,7 +100,7 @@ func GetUncategorisedMerchants(ctx context.Context, db *sql.DB) ([]*models.Merch
 
 func GetAllBudgets(ctx context.Context, db *sql.DB) ([]*models.Budget, error) {
 	var budgets []*models.Budget
-	query := "SELECT * FROM budgets"
+	query := "SELECT * FROM budgets ORDER BY category"
 
 	err := meddler.QueryAll(db, &budgets, query)
 	if err != nil {

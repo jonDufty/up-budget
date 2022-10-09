@@ -12,7 +12,13 @@ type Config struct {
 }
 
 type ApiClient struct {
-	DB *sql.DB
+	DB       *sql.DB
+	Settings Settings
+}
+
+type Settings struct {
+	PageSize    int
+	DefaultPage int
 }
 
 func NewApiClient(cfg Config) *ApiClient {

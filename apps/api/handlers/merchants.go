@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
+	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/jonDufty/budget/libs/database/models"
@@ -15,26 +15,42 @@ import (
 const filterUncategorisedKey = "filterUncategorised"
 
 type queryFunc = func(context.Context, *sql.DB) ([]*models.Merchant, error)
+type queryFuncPaged = func(context.Context, *sql.DB, int, int) ([]*models.Merchant, error)
 
 func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	filter, ok := event.QueryStringParameters[filterUncategorisedKey]
+	queryPage := c.Settings.DefaultPage
+	queryPageSize := c.Settings.PageSize
+
 	var merchants []*models.Merchant
-	var q queryFunc
+	var q queryFuncPaged
 	if ok && filter == "true" {
 		q = query.GetUncategorisedMerchants
 	} else {
 		q = query.GetAllMerchants
 	}
 
-	merchants, err := q(ctx, c.DB)
+	page, ok := event.QueryStringParameters["page"]
+	if ok {
+		p, err := strconv.Atoi(page)
+		if err == nil {
+			queryPage = p
+		}
+	}
+
+	pageSize, ok := event.QueryStringParameters["pageSize"]
+	if ok {
+		p, err := strconv.Atoi(pageSize)
+		if err == nil {
+			queryPageSize = p
+		}
+	}
+
+	merchants, err := q(ctx, c.DB, queryPage, queryPageSize)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 		}, fmt.Errorf("failed to fetch merchants. %w", err)
-	}
-
-	if len(merchants) > 10 {
-		merchants = merchants[0:10]
 	}
 
 	body, err := json.Marshal(merchants)
@@ -53,7 +69,7 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 }
 
 type UpdateMerchantBody struct {
-	Merchants []models.Merchant `json:"merchants"`
+	Category string `json:"category"`
 }
 
 func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -66,21 +82,28 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		}, fmt.Errorf("invalid body. %w", err)
 	}
 
-	if len(body.Merchants) == 0 {
+	queryId, ok := event.PathParameters["id"]
+	if !ok {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
-			Body:       "Invalid body type",
-		}, fmt.Errorf("no merchant field or array is empty")
+			Body:       "Missing field id",
+		}, fmt.Errorf("No merchant id provided")
+	}
+	id, _ := strconv.Atoi(queryId)
+	m := models.FindMerchantById(ctx, c.DB, id)
+	if m == nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Body:       "Bad Request",
+		}, fmt.Errorf("No merchant found with id %s", queryId)
 	}
 
-	for _, m := range body.Merchants {
-		log.Println(m)
-		err = query.UpdateMerchant(ctx, c.DB, m)
-		if err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: 500,
-			}, fmt.Errorf("failed to update merchant %s. %w", m.Name, err)
-		}
+	err = m.Update(ctx, c.DB)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "Failed to update merchant",
+		}, fmt.Errorf("failed to update merchant. %w", err)
 	}
 
 	return events.APIGatewayProxyResponse{

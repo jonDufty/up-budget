@@ -16,7 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to DB. %v", err)
 	}
-	lambda.Start(c.UpdateBudgetHandler)
+	lambda.Start(c.CreateBudgetHandler)
 }
 
 func MustLoadConfig() handlers.Config {
