@@ -35,6 +35,7 @@ export function BackendApiStack({ app, stack }: StackContext) {
       'GET /budgets': 'api/budgets/main.go',
       'POST /budgets': 'api/create-budget/main.go',
       'POST /budgets/{id}': 'api/update-budgets/main.go',
+      'DELETE /budgets/{id}': 'api/delete-budgets/main.go'
     },
     customDomain: {
       domainName: app.stage == "prod" ? "api.budget.jdufty.com" : `api.budget-${app.stage}.jdufty.com`,

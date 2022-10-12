@@ -9,7 +9,7 @@ import { SubmitHandler } from 'react-hook-form';
 interface BudgetInfo {
   category: string;
   limit?: number;
-  id?: number;
+  id: number;
 }
 
 const API_URL = 'https://api.budget-dev.jdufty.com';
@@ -21,13 +21,20 @@ const budgetFetcher: Fetcher<BudgetInfo[]> = async (url: string) => {
     throw new Error(`Error fetching data ${res.status} ${res.statusText}`);
   }
   const budgets = (await res.json()) as BudgetInfo[];
+  console.log(res)
   return budgets;
 };
+
+function normaliseCategory(text: string): string {
+  const words = text.split(' ').map((w) => w.toLowerCase());
+  return words.join('-')
+}
 
 const mutateBudgets = async (existingData: BudgetInfo[], newData: BudgetInfo): Promise<BudgetInfo[]> => {
   const apiUrl = API_URL + '/budgets';
   console.log(`Sending to ${apiUrl}`)
   console.log(newData)
+  newData.category = normaliseCategory(newData.category)
   const res = await fetch(apiUrl, {
     method: 'POST',
     body: JSON.stringify(newData),
@@ -50,7 +57,7 @@ const mutateBudgets = async (existingData: BudgetInfo[], newData: BudgetInfo): P
 export interface BudgetsProps {}
 
 export function Budgets(props: BudgetsProps) {
-  const { data, error } = useSWR('/budgets', budgetFetcher);
+  const { data, error, mutate } = useSWR('/budgets', budgetFetcher);
   // const { mutate } = useSWRConfig();
 
   const [createNewMode, setCreateNewMode] = useState(false);
@@ -64,15 +71,19 @@ export function Budgets(props: BudgetsProps) {
     setCreateNewMode(false)
     // const updated = [ ...data, newBudget ];
     mutateBudgets(data, newBudget)
-    mutate('/budgets');
-    mutate('/budgets', (data) => [...data, newBudget], false);
+    mutate((data) => [...data, newBudget], false);
   };
+
+  console.log(data)
 
   if (error) {
     console.error(error);
     return <h1>An error has occurred</h1>;
   }
-  if (!data) return <h4>Loading...;</h4>;
+  if (!data) {
+    console.log(data)
+    return <h4>Loading...;</h4>;
+  }
 
   return (
     <Box>

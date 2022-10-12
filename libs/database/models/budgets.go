@@ -43,3 +43,9 @@ func FindBudgetByCategory(ctx context.Context, db *sql.DB, cat string) *Budget {
 
 	return b
 }
+
+func (b *Budget) Delete(ctx context.Context, db *sql.DB) error {
+	query := "DELETE FROM budgets WHERE id = ?"
+	_, err := db.ExecContext(ctx, query, b.Id)
+	return err
+}

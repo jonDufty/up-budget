@@ -22,6 +22,15 @@ func (c *ApiClient) GetBudgetHandler(ctx context.Context, event events.APIGatewa
 	}
 
 	log.Println(budgets)
+	if len(budgets) == 0 {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 200,
+			Headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			Body: "[]",
+		}, nil
+	}
 
 	body, err := json.Marshal(budgets)
 	if err != nil {
@@ -105,6 +114,7 @@ type createBudgetResponse struct {
 
 func (c *ApiClient) CreateBudgetHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var body updateBudgetBody
+
 	err := json.Unmarshal([]byte(event.Body), &body)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -136,5 +146,45 @@ func (c *ApiClient) CreateBudgetHandler(ctx context.Context, event events.APIGat
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Body:       "New budget successfully created",
+	}, nil
+}
+
+func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	queryId, ok := event.PathParameters["id"]
+	if !ok {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Body:       "Missing field id",
+		}, fmt.Errorf("no budget id provided")
+	}
+	id, _ := strconv.Atoi(queryId)
+	b := models.FindBudgetById(ctx, c.DB, id)
+	log.Println(b)
+	if b == nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Body:       "Bad Request",
+		}, fmt.Errorf("no budget found with id %s", queryId)
+	}
+
+	err := query.RemoveBudgetsFromMerchants(ctx, c.DB, b.Category)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "Server error",
+		}, err
+	}
+
+	err = b.Delete(ctx, c.DB)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "Server error",
+		}, fmt.Errorf("failed to delete budgets id %s, %v", queryId, err)
+	}
+
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Body:       "New budget successfully deleted",
 	}, nil
 }

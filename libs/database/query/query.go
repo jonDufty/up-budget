@@ -109,5 +109,14 @@ func GetAllBudgets(ctx context.Context, db *sql.DB) ([]*models.Budget, error) {
 	return budgets, nil
 }
 
+func RemoveBudgetsFromMerchants(ctx context.Context, db *sql.DB, category string) error {
+	query := "UPDATE merchants SET category = '' WHERE category = ?"
+	_, err := db.Exec(query, category)
+	if err != nil {
+		return fmt.Errorf("failed to update category for merchants. %w", err)
+	}
+	return nil
+}
+
 // INSERT INTO table (id, name, age) VALUES(1, "A", 19) ON DUPLICATE KEY UPDATE
 // name="A", age=19

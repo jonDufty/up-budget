@@ -33,41 +33,6 @@ const budgetFetcher: Fetcher<BudgetInfo[]> = async (url: string) => {
   return budgets
 }
 
-
-const MERCHANTS: MerchantInfo[] = [
-  {
-    name: "Bunnings",
-    up_category: 'home-and-stuff',
-    category: null
-  },
-  {
-    name: "Coles",
-    up_category: 'home-and-stuff',
-    category: null
-  },
-  {
-    name: "Pub 1 defined",
-    up_category: 'bar-and-restaurant',
-    category: 'drinks'
-  },
-  {
-    name: "Pub 2",
-    up_category: 'bar-and-restaurant',
-    category: null
-  },
-  {
-    name: "Pub 3",
-    up_category: 'bar-and-restaurant',
-    category: null
-  },
-]
-
-const CATEGORIES = [
-  "drinks",
-  "groceries",
-  "home"
-]
-
 /* eslint-disable-next-line */
 export interface MerchantsProps {
 
@@ -77,6 +42,17 @@ export function Merchants(props) {
   const { data: merchants, error } = useSWR("/merchants", fetcher);
   const { data: budgets, error: errorBudgets } = useSWR("/budgets", budgetFetcher);
 
+  const updateLocalMerchant = (m: MerchantInfo) => {
+    const merchantsCopy = [...merchants];
+    const index = merchants.findIndex((v) => v.id === m.id);
+    if (index > -1) {
+      console.log(m, index)
+      merchantsCopy[index] = m;
+    }
+    console.log(merchantsCopy);
+    return merchantsCopy;
+  };
+
   if (error || errorBudgets) {
     console.error(error, errorBudgets)
     return <h1>An error has occurred</h1>
@@ -85,12 +61,17 @@ export function Merchants(props) {
 
   let categories: string[]
   if (budgets) {
-    categories = budgets.map((m) => m.category)
+    categories = budgets.map((m) => capitilise(m.category))
   }
 
   return (
-    <CategoryBar merchants={merchants} categories={categories} />
+    <CategoryBar onUpdate={updateLocalMerchant} merchants={merchants} categories={categories} />
   );
+}
+
+function capitilise(text: string): string {
+  const words = text.split('-');
+  return words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
 export default Merchants;

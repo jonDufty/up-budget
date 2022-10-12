@@ -98,6 +98,10 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		}, fmt.Errorf("no merchant found with id %s", queryId)
 	}
 
+	if body.Category != "" {
+		m.Category = body.Category
+	}
+
 	err = m.Update(ctx, c.DB)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
