@@ -53,7 +53,9 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         {providers && Object.values(providers).map((provider) => {
           return (
             <div key={provider.name}>
-              <GithubLoginButton onClick={() => signIn(provider.id)}/>
+              <Button onClick={() => signIn(provider.id)}>
+                Sign in with {provider.name}
+              </Button>
             </div>
           );
         })}
