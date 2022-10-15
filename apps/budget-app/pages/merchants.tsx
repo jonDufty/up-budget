@@ -1,65 +1,77 @@
 import styled from '@emotion/styled';
+import { Box, Button, IconButton } from '@mui/material';
 import { CategoryBar, MerchantInfo } from '@up-budget/ui';
 import { GetServerSideProps } from 'next';
+import { useState } from 'react';
+import useSWR, { Fetcher } from 'swr';
 
-const MERCHANTS: MerchantInfo[] = [
-  {
-    name: "Bunnings",
-    upCategory: 'home-and-stuff',
-    category: null
-  },
-  {
-    name: "Coles",
-    upCategory: 'home-and-stuff',
-    category: null
-  },
-  {
-    name: "Pub 1 defined",
-    upCategory: 'bar-and-restaurant',
-    category: 'drinks'
-  },
-  {
-    name: "Pub 2",
-    upCategory: 'bar-and-restaurant',
-    category: null
-  },
-  {
-    name: "Pub 3",
-    upCategory: 'bar-and-restaurant',
-    category: null
-  },
-]
+const API_URL = "https://api.budget-dev.jdufty.com"
 
-const CATEGORIES = [
-  "drinks",
-  "groceries",
-  "home"
-]
+const fetcher: Fetcher<MerchantInfo[]> = async (url: string) => {
+  const apiUrl = API_URL + url
+  const res = await fetch(apiUrl)
+  if (!res.ok) {
+    throw new Error(`Error fetching data ${res.status} ${res.statusText}`)
+  }
+  const merchants = await res.json() as MerchantInfo[]
+  return merchants
+};
+
+interface BudgetInfo {
+  category: string;
+  limit?: number;
+  id?: number
+}
+
+const budgetFetcher: Fetcher<BudgetInfo[]> = async (url: string) => {
+  const apiUrl = API_URL + url
+  const res = await fetch(apiUrl)
+  if (!res.ok) {
+    throw new Error(`Error fetching data ${res.status} ${res.statusText}`)
+  }
+  const budgets = await res.json() as BudgetInfo[]
+  return budgets
+}
 
 /* eslint-disable-next-line */
 export interface MerchantsProps {
-  merchants: MerchantInfo[]
-  categories: string[]
+
 }
 
-const StyledMerchants = styled.div`
-  color: red;
-`;
+export function Merchants(props) {
+  const { data: merchants, error } = useSWR("/merchants", fetcher);
+  const { data: budgets, error: errorBudgets } = useSWR("/budgets", budgetFetcher);
 
-export function Merchants({merchants, categories}: MerchantsProps) {
+  const updateLocalMerchant = (m: MerchantInfo) => {
+    const merchantsCopy = [...merchants];
+    const index = merchants.findIndex((v) => v.id === m.id);
+    if (index > -1) {
+      console.log(m, index)
+      merchantsCopy[index] = m;
+    }
+    console.log(merchantsCopy);
+    return merchantsCopy;
+  };
+
+  if (error || errorBudgets) {
+    console.error(error, errorBudgets)
+    return <h1>An error has occurred</h1>
+  }
+  if (!merchants) return <h4>Loading...;</h4>
+
+  let categories: string[]
+  if (budgets) {
+    categories = budgets.map((m) => capitilise(m.category))
+  }
+
   return (
-    <CategoryBar merchants={merchants} categories={categories} />
+    <CategoryBar onUpdate={updateLocalMerchant} merchants={merchants} categories={categories} />
   );
 }
 
-export default Merchants;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-
-  return {
-    props: {
-      merchants: MERCHANTS,
-      categories: CATEGORIES
-    }
-  }
+function capitilise(text: string): string {
+  const words = text.split('-');
+  return words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
+
+export default Merchants;

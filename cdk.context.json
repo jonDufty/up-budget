@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=573594494707:domainName=budget-dev.jdufty.com:region=ap-southeast-2": {
+    "Id": "/hostedzone/Z09004371BUIQKA35C1LI",
+    "Name": "budget-dev.jdufty.com."
+  },
+  "hosted-zone:account=573594494707:domainName=jdufty.com:region=ap-southeast-2": {
+    "Id": "/hostedzone/Z07557612G6E9BXR443IB",
+    "Name": "jdufty.com."
+  }
+}
