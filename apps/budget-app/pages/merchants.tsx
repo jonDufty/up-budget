@@ -1,71 +1,76 @@
 import styled from '@emotion/styled';
 import { Box, Button, IconButton } from '@mui/material';
-import { CategoryBar, MerchantInfo } from '@up-budget/ui';
+import { CategoryBar, MerchantInfo, SwitchButton } from '@up-budget/ui';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
 
-const API_URL = "https://api.budget-dev.jdufty.com"
+const API_URL = 'https://api.budget-dev.jdufty.com';
 
 const fetcher: Fetcher<MerchantInfo[]> = async (url: string) => {
-  const apiUrl = API_URL + url
-  const res = await fetch(apiUrl)
+  const apiUrl = API_URL + url;
+  const res = await fetch(apiUrl);
   if (!res.ok) {
-    throw new Error(`Error fetching data ${res.status} ${res.statusText}`)
+    throw new Error(`Error fetching data ${res.status} ${res.statusText}`);
   }
-  const merchants = await res.json() as MerchantInfo[]
-  return merchants
+  const merchants = (await res.json()) as MerchantInfo[];
+  return merchants;
 };
 
 interface BudgetInfo {
   category: string;
   limit?: number;
-  id?: number
+  id?: number;
 }
 
 const budgetFetcher: Fetcher<BudgetInfo[]> = async (url: string) => {
-  const apiUrl = API_URL + url
-  const res = await fetch(apiUrl)
+  const apiUrl = API_URL + url;
+  const res = await fetch(apiUrl);
   if (!res.ok) {
-    throw new Error(`Error fetching data ${res.status} ${res.statusText}`)
+    throw new Error(`Error fetching data ${res.status} ${res.statusText}`);
   }
-  const budgets = await res.json() as BudgetInfo[]
-  return budgets
-}
+  const budgets = (await res.json()) as BudgetInfo[];
+  return budgets;
+};
 
 /* eslint-disable-next-line */
-export interface MerchantsProps {
-
-}
+export interface MerchantsProps {}
 
 export function Merchants(props) {
-  const { data: merchants, error } = useSWR("/merchants", fetcher);
-  const { data: budgets, error: errorBudgets } = useSWR("/budgets", budgetFetcher);
+  const { data: merchants, error } = useSWR('/merchants', fetcher);
+  const { data: uncategorisedMerchants, error: uncatError } = useSWR('/merchants?filterUncategorised=true', fetcher);
+  const { data: budgets, error: errorBudgets } = useSWR('/budgets', budgetFetcher);
+
+  const [filtered, setFiltered] = useState(true)
 
   const updateLocalMerchant = (m: MerchantInfo) => {
     const merchantsCopy = [...merchants];
     const index = merchants.findIndex((v) => v.id === m.id);
     if (index > -1) {
-      console.log(m, index)
+      console.log(m, index);
       merchantsCopy[index] = m;
     }
     console.log(merchantsCopy);
     return merchantsCopy;
   };
 
-  if (error || errorBudgets) {
-    console.error(error, errorBudgets)
-    return <h1>An error has occurred</h1>
-  }
-  if (!merchants) return <h4>Loading...;</h4>
 
-  let categories: string[]
+  if (error || errorBudgets) {
+    console.error(error, errorBudgets);
+    return <h1>An error has occurred</h1>;
+  }
+  if (!merchants) return <h4>Loading...;</h4>;
+
+  let categories: string[];
   if (budgets) {
-    categories = budgets.map((m) => capitilise(m.category))
+    categories = budgets.map((m) => capitilise(m.category));
   }
 
   return (
-    <CategoryBar onUpdate={updateLocalMerchant} merchants={merchants} categories={categories} />
+    <Box>
+      <SwitchButton active='Uncategorised' inactive='All Merchants' onClick={setFiltered} />
+      <CategoryBar onUpdate={updateLocalMerchant} merchants={filtered ? uncategorisedMerchants : merchants} categories={categories} />
+    </Box>
   );
 }
 
