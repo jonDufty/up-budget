@@ -29,7 +29,6 @@ export function BackendApiStack({ app, stack }: StackContext) {
     routes: {
       // merchant routes
       'GET /merchants': 'api/merchants/main.go',
-      // 'POST /merchants': 'api/update-merchants/main.go',
       'POST /merchants/{id}': 'api/update-merchants/main.go',
       // budget routes
       'GET /budgets': 'api/budgets/main.go',
@@ -38,7 +37,7 @@ export function BackendApiStack({ app, stack }: StackContext) {
       'DELETE /budgets/{id}': 'api/delete-budgets/main.go'
     },
     customDomain: {
-      domainName: app.stage == "prod" ? "api.budget.jdufty.com" : `api.budget-${app.stage}.jdufty.com`,
+      domainName: `api.${zone.zoneName}`,
       hostedZone: zone.zoneName
     },
     defaults: {

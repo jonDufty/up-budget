@@ -6,6 +6,9 @@
     "budget-app": "apps/budget-app",
     "budget-app-e2e": "apps/budget-app-e2e",
     "database": "libs/database",
+    "feature-budgets": "libs/feature-budgets",
+    "feature-merchants": "libs/feature-merchants",
+    "frontend-api-client": "libs/frontend-api-client",
     "transactions": "apps/transactions",
     "ui": "libs/ui",
     "upbank": "libs/upbank"
