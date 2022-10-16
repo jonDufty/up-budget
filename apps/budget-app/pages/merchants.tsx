@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Button, IconButton } from '@mui/material';
+import { Box, Button, IconButton, Pagination } from '@mui/material';
 import { CategoryBar, MerchantInfo, SwitchButton } from '@up-budget/ui';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
@@ -37,11 +37,13 @@ const budgetFetcher: Fetcher<BudgetInfo[]> = async (url: string) => {
 export interface MerchantsProps {}
 
 export function Merchants(props) {
-  const { data: merchants, error } = useSWR('/merchants', fetcher);
-  const { data: uncategorisedMerchants, error: uncatError } = useSWR('/merchants?filterUncategorised=true', fetcher);
+  const [filtered, setFiltered] = useState(true)
+  const [page, setPage] = useState(1)
+
+  const { data: merchants, error } = useSWR(`/merchants?page=${page}${filtered ? "&filterUncategorised=true" : ""}`, fetcher);
+  // const { data: uncategorisedMerchants, error: uncatError } = useSWR(`/merchants?page=${page}&filterUncategorised=true`, fetcher);
   const { data: budgets, error: errorBudgets } = useSWR('/budgets', budgetFetcher);
 
-  const [filtered, setFiltered] = useState(true)
 
   const updateLocalMerchant = (m: MerchantInfo) => {
     const merchantsCopy = [...merchants];
@@ -53,7 +55,6 @@ export function Merchants(props) {
     console.log(merchantsCopy);
     return merchantsCopy;
   };
-
 
   if (error || errorBudgets) {
     console.error(error, errorBudgets);
@@ -69,7 +70,8 @@ export function Merchants(props) {
   return (
     <Box>
       <SwitchButton active='Uncategorised' inactive='All Merchants' onClick={setFiltered} />
-      <CategoryBar onUpdate={updateLocalMerchant} merchants={filtered ? uncategorisedMerchants : merchants} categories={categories} />
+      <CategoryBar onUpdate={updateLocalMerchant} merchants={merchants} categories={categories} />
+      <Pagination page={page} count={5} onChange={(e,p) => setPage(p)}/>
     </Box>
   );
 }
