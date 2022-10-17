@@ -6,3 +6,4 @@ export * from './lib/Menu/Menu';
 export * from './lib/Menu/MenuItem';
 export * from './lib/SwitchButton/SwitchButton'
 export * from './theme/DefaultTheme';
+export * from './lib/MonthlyGraph/MonthlyGraph'
