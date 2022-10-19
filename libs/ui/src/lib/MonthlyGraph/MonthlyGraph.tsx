@@ -74,7 +74,7 @@ export function MonthlyGraph({ chartData }: MonthlyGraphProps) {
         <Bar radius={10} dataKey="amount" fill="#8884d8" />
           <Bar dataKey="limit" fill="#82ca9d">
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fillOpacity={"20%"} radius={10} fill="inherit" stroke='#8884d8' strokeDasharray={"[-, -, -]"}/>
+              <Cell key={`cell-${index}`} fillOpacity={"20%"} radius={10} fill="inherit" stroke='#8884d8' strokeDasharray={"5 5"}/>
             ))}
         </Bar>
       </BarChart>
