@@ -1,6 +1,5 @@
 import {
   Button,
-  capitalize,
   Grid,
   List,
   ListItem,
