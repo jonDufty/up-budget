@@ -7,3 +7,4 @@ export * from './lib/SwitchButton/SwitchButton'
 export * from './theme/DefaultTheme';
 export * from './lib/Charts/MonthlyGraph/MonthlyGraph'
 export * from './lib/Charts/BudgetGraph/BudgetGraph'
+export * from './lib/Login/LoginModal'
