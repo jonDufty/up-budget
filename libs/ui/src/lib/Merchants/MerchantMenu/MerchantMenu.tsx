@@ -46,13 +46,13 @@ interface StyledListProps {
   name?: string;
 }
 
-export function CategoryBar({ merchants, categories, onUpdate }: CategoryBarProps) {
+export function MerchantMenu({ merchants, categories, onUpdate }: CategoryBarProps) {
   const theme = useTheme()
 
   return (
     <StyledList theme={theme}>
       {merchants.map((m: MerchantInfo) => {
-        return <CategoryBarItem onUpdate={onUpdate} key={m.name} merchant={m} categories={categories} />;
+        return <MerchantMenuItem onUpdate={onUpdate} key={m.name} merchant={m} categories={categories} />;
       })}
     </StyledList>
   );
@@ -77,7 +77,7 @@ const updateMerchant = async (merchant: MerchantInfo) => {
   }
 };
 
-export function CategoryBarItem({
+export function MerchantMenuItem({
   merchant,
   categories,
   key,
@@ -140,4 +140,4 @@ function capitalise(text: string): string {
 }
 
 
-export default CategoryBar;
+export default MerchantMenu;

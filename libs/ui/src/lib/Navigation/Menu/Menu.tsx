@@ -4,8 +4,17 @@ import {
   List,
 } from '@mui/material';
 import * as React from 'react';
-import { MenuItem, MenuItemProps } from './MenuItem';
 import { styled } from '@mui/material/styles';
+import {
+  ListItem,
+  ListItemBaseProps,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import Link from 'next/link';
 
 export interface MenuProps {
   items: MenuItemProps[];
@@ -39,6 +48,26 @@ export function Menu({ items, open, drawerWidth }: MenuProps) {
         })}
       </List>
     </StyledDrawer>
+  );
+}
+
+export interface MenuItemProps extends ListItemBaseProps {
+  linkTo: string;
+  name: string;
+}
+
+export const MenuItem = ({ linkTo, name }: MenuItemProps) => {
+  return (
+      <Link href={linkTo} passHref>
+        <ListItem key={name} disablePadding>
+          <ListItemButton>
+          <ListItemIcon>
+            <MenuIcon />
+            </ListItemIcon>
+            <ListItemText primary={name} />
+          </ListItemButton>
+        </ListItem>
+      </Link>
   );
 }
 
