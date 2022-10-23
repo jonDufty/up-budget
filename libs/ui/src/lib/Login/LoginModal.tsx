@@ -1,20 +1,6 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { BuiltInProviderType } from 'next-auth/providers';
-import {
-  ClientSafeProvider,
-  getCsrfToken,
-  getProviders,
-  LiteralUnion,
-  signIn,
-} from 'next-auth/react';
+import { ClientSafeProvider, getCsrfToken, getProviders, LiteralUnion, signIn } from 'next-auth/react';
 import { LoginButton } from './LoginButton';
 import { useEffect, useState } from 'react';
 
@@ -24,9 +10,10 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ open, onClose }: LoginModalProps) {
-  const [providers, setProviders] = useState<
-    Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null
-  >();
+  const [providers, setProviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null>();
 
   const handleClose = () => {
     onClose('Nothing selected');
@@ -48,13 +35,14 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Login Modal</DialogTitle>
       <DialogContent>
-        {providers && Object.values(providers).map((provider) => {
-          return (
-            <div key={provider.name}>
-              <LoginButton providerName={provider.name} onClick={() => signIn(provider.id)} />
-            </div>
-          );
-        })}
+        {providers &&
+          Object.values(providers).map((provider) => {
+            return (
+              <div key={provider.name}>
+                <LoginButton providerName={provider.name} onClick={() => signIn(provider.id)} />
+              </div>
+            );
+          })}
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>

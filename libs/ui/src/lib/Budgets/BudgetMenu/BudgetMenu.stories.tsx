@@ -6,22 +6,19 @@ export default {
   title: 'BudgetMenu',
 } as ComponentMeta<typeof BudgetMenu>;
 
-const Template: ComponentStory<typeof BudgetMenu> = (args) => (
-  <BudgetMenu {...args} />
-);
+const Template: ComponentStory<typeof BudgetMenu> = (args) => <BudgetMenu {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
   budgets: [
     {
-      category: "groceries",
+      category: 'groceries',
       limit: 100,
-      id: 1
+      id: 1,
     },
     {
-      category: "technology",
-      id: 2
-    }
-  ]
-
+      category: 'technology',
+      id: 2,
+    },
+  ],
 };

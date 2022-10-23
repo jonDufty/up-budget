@@ -11,5 +11,5 @@ const Template: ComponentStory<typeof CreateBudgetInput> = (args) => <CreateBudg
 
 export const Primary = Template.bind({});
 Primary.args = {
-  submitHandler: (data:any) => console.log(data)
+  submitHandler: (data: any) => console.log(data),
 };

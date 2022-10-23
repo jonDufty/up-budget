@@ -1,28 +1,19 @@
-import {
-  Button,
-  Grid,
-  List,
-  ListItem,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, List, ListItem, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { styled, useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
-import useSWR, { Fetcher, KeyedMutator } from 'swr'
-import {  postMutation, updateLocalData } from '@up-budget/frontend-api-client'
+import useSWR, { Fetcher, KeyedMutator } from 'swr';
+import { postMutation, updateLocalData } from '@up-budget/frontend-api-client';
 
 /* eslint-disable-next-line */
 export interface MerchantMenuProps {
   merchants: MerchantInfo[];
   categories: string[];
-  mutator: KeyedMutator<MerchantInfo[]>
+  mutator: KeyedMutator<MerchantInfo[]>;
 }
 
 export type MerchantInfo = {
-  id: number
+  id: number;
   name: string;
   up_category: string;
   category: string;
@@ -30,9 +21,9 @@ export type MerchantInfo = {
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth',
-})<StyledListProps>(({theme}) => ({
+})<StyledListProps>(({ theme }) => ({
   flexGrow: 1,
-  padding: '0.2rem'
+  padding: '0.2rem',
 }));
 
 interface StyledListProps {
@@ -43,14 +34,22 @@ export function MerchantMenu({ merchants, categories, mutator }: MerchantMenuPro
   const theme = useTheme();
 
   const updateLocalMerchant = (m: MerchantInfo) => {
-    const updated = updateLocalData<MerchantInfo>(merchants, m, "id") || []
+    const updated = updateLocalData<MerchantInfo>(merchants, m, 'id') || [];
     return updated;
   };
 
   return (
     <StyledList theme={theme}>
       {merchants.map((m: MerchantInfo) => {
-        return <MerchantMenuItem onUpdate={updateLocalMerchant} key={m.name} merchant={m} categories={categories} mutate={mutator} />;
+        return (
+          <MerchantMenuItem
+            onUpdate={updateLocalMerchant}
+            key={m.name}
+            merchant={m}
+            categories={categories}
+            mutate={mutator}
+          />
+        );
       })}
     </StyledList>
   );
@@ -59,20 +58,15 @@ export function MerchantMenu({ merchants, categories, mutator }: MerchantMenuPro
 interface MerchantMenuItemProps {
   merchant: MerchantInfo;
   categories: string[];
-  onUpdate: (m: MerchantInfo) => MerchantInfo[]
-  mutate: KeyedMutator<MerchantInfo[]>
+  onUpdate: (m: MerchantInfo) => MerchantInfo[];
+  mutate: KeyedMutator<MerchantInfo[]>;
 }
 
-export function MerchantMenuItem({
-  merchant,
-  categories,
-  onUpdate,
-  mutate
-}: MerchantMenuItemProps) {
+export function MerchantMenuItem({ merchant, categories, onUpdate, mutate }: MerchantMenuItemProps) {
   const [selected, setSelected] = useState(merchant.category);
 
   const handleUpdate: MouseEventHandler = (event) => {
-    const m: MerchantInfo = { ...merchant, category: selected }
+    const m: MerchantInfo = { ...merchant, category: selected };
     postMutation<MerchantInfo>(`/merchants/${merchant.id}`, m);
     mutate(onUpdate(m), false);
   };
@@ -89,9 +83,7 @@ export function MerchantMenuItem({
             fullWidth
             id={`${merchant.name}-selection`}
             value={selected}
-            onChange={(event: SelectChangeEvent<string>) =>
-              setSelected(event.target.value)
-            }
+            onChange={(event: SelectChangeEvent<string>) => setSelected(event.target.value)}
           >
             {categories.map((category, idx) => {
               return (
@@ -100,17 +92,13 @@ export function MerchantMenuItem({
                 </MenuItem>
               );
             })}
-            <MenuItem value={""}></MenuItem>
+            <MenuItem value={''}></MenuItem>
           </Select>
         </Grid>
         <Grid item xs={3} textAlign={'center'}>
-            <Button
-              variant="outlined"
-            disabled={selected === merchant.category}
-            onClick={handleUpdate}
-            >
-              Update
-            </Button>
+          <Button variant="outlined" disabled={selected === merchant.category} onClick={handleUpdate}>
+            Update
+          </Button>
         </Grid>
       </Grid>
     </ListItem>

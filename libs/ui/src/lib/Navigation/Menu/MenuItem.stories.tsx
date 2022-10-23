@@ -6,9 +6,7 @@ export default {
   title: 'MenuItem',
 } as ComponentMeta<typeof MenuItem>;
 
-const Template: ComponentStory<typeof MenuItem> = (args) => (
-  <MenuItem {...args} />
-);
+const Template: ComponentStory<typeof MenuItem> = (args) => <MenuItem {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {};

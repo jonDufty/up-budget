@@ -13,5 +13,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   inactive: 'All Merchants',
   active: 'Uncategorised',
-  onClick: () => {return}
+  onClick: () => {
+    return;
+  },
 };

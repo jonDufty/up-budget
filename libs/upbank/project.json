@@ -3,13 +3,6 @@
   "sourceRoot": "libs/upbank/upbank/src",
   "projectType": "library",
   "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/upbank/upbank/**/*.ts"]
-      }
-    },
     "download": {
       "executor": "nx:run-commands",
       "options": {

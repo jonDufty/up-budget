@@ -2,9 +2,8 @@ import { Box } from '@mui/material';
 import { Menu, MenuItemProps, NavBar } from '@up-budget/ui';
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { useSession, signIn, signOut } from "next-auth/react"
-import { LoginModal } from '@up-budget/ui'
-
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { LoginModal } from '@up-budget/ui';
 
 export interface AppMenuProps {
   menuItems: MenuItemProps[];
@@ -13,7 +12,7 @@ export interface AppMenuProps {
 
 const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
-})<{  open?: boolean; }>(({ theme, open }) => ({
+})<{ open?: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(1),
   transition: theme.transitions.create('margin', {
@@ -31,12 +30,10 @@ const Main = styled('main', {
   }),
 }));
 
-
-
 export function AppMenu({ menuItems, children }: AppMenuProps) {
   const [open, setOpen] = React.useState(false);
-  const [ openModal, setOpenModal] = React.useState(false)
-  const { data: session } = useSession()
+  const [openModal, setOpenModal] = React.useState(false);
+  const { data: session } = useSession();
   const theme = useTheme();
 
   const handleToggleDrawer = () => {
@@ -48,8 +45,8 @@ export function AppMenu({ menuItems, children }: AppMenuProps) {
   };
 
   const handleModalClose = () => {
-    setOpenModal(false)
-  }
+    setOpenModal(false);
+  };
 
   return (
     <Box>
@@ -61,9 +58,7 @@ export function AppMenu({ menuItems, children }: AppMenuProps) {
         handleModal={handleModalOpen}
       ></NavBar>
       <Menu open={open} items={menuItems} drawerWidth={theme.appMenu.drawerWidth}></Menu>
-      <Main open={open}>
-        {children}
-      </Main>
+      <Main open={open}>{children}</Main>
       <LoginModal open={openModal} onClose={handleModalClose} />
     </Box>
   );

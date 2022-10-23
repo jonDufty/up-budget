@@ -13,16 +13,16 @@ export const Primary = Template.bind({});
 Primary.args = {
   items: [
     {
-    linkTo: "",
-      name: "item1"
+      linkTo: '',
+      name: 'item1',
     },
     {
-      linkTo: "",
-        name: "item2"
+      linkTo: '',
+      name: 'item2',
     },
     {
-      linkTo: "",
-        name: "item3"
-      },
-  ]
+      linkTo: '',
+      name: 'item3',
+    },
+  ],
 };

@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { convertToApiString, fetcher, postMutation } from '@up-budget/frontend-api-client';
 
-
 /* eslint-disable-next-line */
 export interface BudgetsProps {}
 
@@ -21,8 +20,8 @@ export function Budgets(props: BudgetsProps) {
   };
 
   const createNewBudget: SubmitHandler<BudgetInfo> = (b: BudgetInfo) => {
-    setCreateNewMode(false)
-    postMutation<BudgetInfo>('/budgets', { ...b, category: convertToApiString(b.category) })
+    setCreateNewMode(false);
+    postMutation<BudgetInfo>('/budgets', { ...b, category: convertToApiString(b.category) });
     mutate((data) => [...data, b], false);
   };
 
@@ -31,7 +30,7 @@ export function Budgets(props: BudgetsProps) {
     return <h1>An error has occurred</h1>;
   }
   if (!data) {
-    console.log(data)
+    console.log(data);
     return <h4>Loading...;</h4>;
   }
 
