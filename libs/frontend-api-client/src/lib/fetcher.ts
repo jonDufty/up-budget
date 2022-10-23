@@ -4,7 +4,7 @@ import {API_BASE_URL} from './api'
 
 type PayloadType = Record<string, any> | any[]
 
-export async function budgetFetcher<T extends PayloadType>(url: string) {
+export async function fetcher<T extends PayloadType>(url: string) {
   const apiUrl = API_BASE_URL + url;
   const res = await fetch(apiUrl);
   if (!res.ok) {
