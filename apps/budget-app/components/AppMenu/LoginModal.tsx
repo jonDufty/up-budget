@@ -1,21 +1,6 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { BuiltInProviderType } from 'next-auth/providers';
-import {
-  ClientSafeProvider,
-  getCsrfToken,
-  getProviders,
-  LiteralUnion,
-  signIn,
-} from 'next-auth/react';
-import { GithubLoginButton } from './GithubLoginButton';
+import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 interface LoginModalProps {
@@ -24,16 +9,10 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ open, onClose }: LoginModalProps) {
-  const [providers, setProviders] = useState<
-    Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>
-  >();
+  const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>>();
 
   const handleClose = () => {
     onClose('Nothing selected');
-  };
-
-  const handleListItemClick = (value: string) => {
-    onClose(value);
   };
 
   useEffect(() => {
@@ -47,18 +26,15 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Login Modal</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Login via Github is the only supported option
-        </DialogContentText>
-        {providers && Object.values(providers).map((provider) => {
-          return (
-            <div key={provider.name}>
-              <Button onClick={() => signIn(provider.id)}>
-                Sign in with {provider.name}
-              </Button>
-            </div>
-          );
-        })}
+        <DialogContentText>Login via Github is the only supported option</DialogContentText>
+        {providers &&
+          Object.values(providers).map((provider) => {
+            return (
+              <div key={provider.name}>
+                <Button onClick={() => signIn(provider.id)}>Sign in with {provider.name}</Button>
+              </div>
+            );
+          })}
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>

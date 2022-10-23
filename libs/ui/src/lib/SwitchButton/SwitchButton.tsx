@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, RadioGroup } from '@mui/material';
 import { Container } from '@mui/system';
-import { Dispatch, MouseEventHandler, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 interface SwitchButtonProps {
   active: string;

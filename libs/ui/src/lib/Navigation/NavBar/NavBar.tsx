@@ -2,8 +2,7 @@ import * as React from 'react';
 import { AppBar, AppBarProps, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
-import { Session } from 'next-auth';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',

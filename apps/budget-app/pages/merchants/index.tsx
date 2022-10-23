@@ -1,10 +1,8 @@
-import styled from '@emotion/styled';
-import { Box, Button, IconButton, Pagination } from '@mui/material';
+import { Box, Pagination } from '@mui/material';
 import { MerchantMenu, MerchantInfo, SwitchButton } from '@up-budget/ui';
-import { GetServerSideProps } from 'next';
 import { useState } from 'react';
-import useSWR, { Fetcher } from 'swr';
-import { fetcher, postMutation, updateLocalData, capitaliseApiString } from '@up-budget/frontend-api-client';
+import useSWR from 'swr';
+import { fetcher, capitaliseApiString } from '@up-budget/frontend-api-client';
 import { BudgetInfo } from '@up-budget/ui';
 
 /* eslint-disable-next-line */
