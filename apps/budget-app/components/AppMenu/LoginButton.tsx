@@ -33,14 +33,3 @@ export const LoginButton = ({ csrfToken, providers }: LoginProps) => {
 };
 
 export default LoginButton;
-
-// export async function getServerSideProps(context) {
-//   const providers = await getProviders();
-//   const csrfToken = await getCsrfToken(context);
-//   return {
-//     props: {
-//       providers,
-//       csrfToken,
-//     },
-//   };
-// }

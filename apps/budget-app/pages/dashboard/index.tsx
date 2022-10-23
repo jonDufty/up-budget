@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { GithubLoginButton } from '../components/AppMenu/GithubLoginButton';
+import { GithubLoginButton } from '../../components/AppMenu/GithubLoginButton';
 import { MonthlyGraph } from '@up-budget/ui';
 /* eslint-disable-next-line */
 export interface DashboardProps {}
