@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { Menu, MenuItemProps, NavBar } from '@up-budget/ui';
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { LoginModal } from '@up-budget/ui';
 
 export interface AppMenuProps {

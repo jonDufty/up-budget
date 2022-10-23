@@ -17,6 +17,7 @@
   "files": ["../../libs/ui/src/types.d.ts"],
   "exclude": [
     "node_modules",
+    ".next",
     "jest.config.ts",
     "**/*.stories.ts",
     "**/*.stories.js",

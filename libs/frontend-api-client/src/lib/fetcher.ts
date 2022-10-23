@@ -1,5 +1,3 @@
-import { Fetcher } from 'swr';
-
 import { API_BASE_URL } from './api';
 
 type PayloadType = Record<string, any> | any[];

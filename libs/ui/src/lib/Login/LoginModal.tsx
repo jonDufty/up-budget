@@ -1,6 +1,6 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { BuiltInProviderType } from 'next-auth/providers';
-import { ClientSafeProvider, getCsrfToken, getProviders, LiteralUnion, signIn } from 'next-auth/react';
+import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from 'next-auth/react';
 import { LoginButton } from './LoginButton';
 import { useEffect, useState } from 'react';
 

@@ -1,10 +1,7 @@
 import { Box } from '@mui/material';
 import {
-  Area,
   Bar,
-  BarChart,
   CartesianGrid,
-  Cell,
   ComposedChart,
   Legend,
   Line,

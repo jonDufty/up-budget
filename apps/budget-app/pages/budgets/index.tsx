@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material';
 import { BudgetInfo, BudgetMenu, CreateBudgetInput } from '@up-budget/ui';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import useSWR, { Fetcher, MutatorCallback, mutate, useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { convertToApiString, fetcher, postMutation } from '@up-budget/frontend-api-client';

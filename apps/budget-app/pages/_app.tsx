@@ -1,9 +1,9 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Menu, NavBar, DefaultTheme } from '@up-budget/ui';
+import { DefaultTheme } from '@up-budget/ui';
 import { Box } from '@mui/system';
-import { styled, ThemeProvider } from '@mui/material/styles';
-import { getCsrfToken, getProviders, SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from '@mui/material/styles';
+import { SessionProvider } from 'next-auth/react';
 import { AppMenu } from '../components/AppMenu/AppMenu';
 import { Session } from 'next-auth';
 
@@ -22,7 +22,7 @@ const MenuItems = [
   },
 ];
 
-function CustomApp({ Component, pageProps }: AppProps<{session: Session}>) {
+function CustomApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <>
       <Head>

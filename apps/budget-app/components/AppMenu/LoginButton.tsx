@@ -1,8 +1,6 @@
 import { Box } from '@mui/material';
 import { BuiltInProviderType } from 'next-auth/providers';
-import { signIn, getCsrfToken, getProviders, LiteralUnion, ClientSafeProvider } from 'next-auth/react';
-import Image from 'next/image';
-import styles from '../../styles/Signin.module.css';
+import { signIn, LiteralUnion, ClientSafeProvider } from 'next-auth/react';
 
 interface LoginProps {
   csrfToken?: string;

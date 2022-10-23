@@ -1,8 +1,7 @@
 import { Button, Grid, List, ListItem, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
-import { Container } from '@mui/system';
 import { styled, useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
-import useSWR, { Fetcher, KeyedMutator } from 'swr';
+import { KeyedMutator } from 'swr';
 import { postMutation, updateLocalData } from '@up-budget/frontend-api-client';
 
 /* eslint-disable-next-line */
