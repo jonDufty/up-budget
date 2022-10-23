@@ -11,28 +11,27 @@ const Template: ComponentStory<typeof MonthlyGraph> = (args) => <MonthlyGraph {.
 
 export const Primary = Template.bind({});
 
-
 Primary.args = {
   chartData: [
     {
-      category: "rent",
+      category: 'rent',
       amount: 2000,
-      limit: 2000
+      limit: 2000,
     },
     {
-      category: "utilities",
+      category: 'utilities',
       amount: 600,
-      limit: 500
+      limit: 500,
     },
     {
-      category: "groceries",
+      category: 'groceries',
       amount: 500,
-      limit: 700
+      limit: 700,
     },
     {
-      category: "other",
+      category: 'other',
       amount: 200,
-      limit: 1000
-    }
-  ]
+      limit: 1000,
+    },
+  ],
 };

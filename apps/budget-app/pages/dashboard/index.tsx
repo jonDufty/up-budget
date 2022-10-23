@@ -12,36 +12,34 @@ const StyledDashboard = styled.div`
 
 const chartData = [
   {
-    category: "rent",
+    category: 'rent',
     amount: 2000,
-    limit: 2000
+    limit: 2000,
   },
   {
-    category: "utilities",
+    category: 'utilities',
     amount: 600,
-    limit: 500
+    limit: 500,
   },
   {
-    category: "groceries",
+    category: 'groceries',
     amount: 500,
-    limit: 700
+    limit: 700,
   },
   {
-    category: "other",
+    category: 'other',
     amount: 200,
-    limit: 1000
-  }
-]
+    limit: 1000,
+  },
+];
 
 export function Dashboard(props: DashboardProps) {
-  const { data: session} = useSession()
+  const { data: session } = useSession();
 
   return (
     <StyledDashboard>
-      <h1>{session ? `Logged in as ${session.user.name}` : "Welcome to Dashboard!"} </h1>
-      {session &&
-        <Image src={session.user.image} alt="No image" width={200} height={200} />
-      }
+      <h1>{session ? `Logged in as ${session.user.name}` : 'Welcome to Dashboard!'} </h1>
+      {session && <Image src={session.user.image} alt="No image" width={200} height={200} />}
       <MonthlyGraph chartData={chartData} />
     </StyledDashboard>
   );

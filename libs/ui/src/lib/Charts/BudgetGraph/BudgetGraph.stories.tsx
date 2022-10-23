@@ -11,30 +11,29 @@ const Template: ComponentStory<typeof BudgetGraph> = (args) => <BudgetGraph {...
 
 export const Primary = Template.bind({});
 
-
 Primary.args = {
   chartData: [
     {
-      month: "2022-02",
+      month: '2022-02',
       amount: 550,
-      limit: 600
+      limit: 600,
     },
     {
-      month: "2022-03",
+      month: '2022-03',
       amount: 800,
-      limit: 600
+      limit: 600,
     },
     {
-      month: "2022-04",
+      month: '2022-04',
       amount: 500,
-      limit: 600
+      limit: 600,
     },
     {
-      month: "2022-05",
+      month: '2022-05',
       amount: 450,
-      limit: 600
+      limit: 600,
     },
   ],
   limit: 600,
-  category: 'rent'
+  category: 'rent',
 };

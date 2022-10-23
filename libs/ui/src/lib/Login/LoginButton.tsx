@@ -1,9 +1,9 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
 import GoogleIcon from '@mui/icons-material/Google';
 import LoginIcon from '@mui/icons-material/Login';
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 import { Container } from '@mui/system';
-import React from "react";
+import React from 'react';
 
 interface LoginButtonProps {
   onClick: React.MouseEventHandler;
@@ -11,35 +11,33 @@ interface LoginButtonProps {
 }
 
 interface ProviderInfo {
-  icon: JSX.Element
-  colour: string
+  icon: JSX.Element;
+  colour: string;
 }
 
 const icons: Record<string, ProviderInfo> = {
-  "google": {
-    icon: < GoogleIcon />,
-    colour: 'white'
+  google: {
+    icon: <GoogleIcon />,
+    colour: 'white',
   },
-  "github": {
-    icon: < GitHubIcon />,
-    colour: "black"
+  github: {
+    icon: <GitHubIcon />,
+    colour: 'black',
   },
-  "default": {
+  default: {
     icon: <LoginIcon />,
-    colour: "white"
-  }
-}
-
+    colour: 'white',
+  },
+};
 
 export const LoginButton = ({ onClick, providerName }: LoginButtonProps) => {
-
-  const icon = icons[providerName] || icons["default"]
+  const icon = icons[providerName] || icons['default'];
 
   return (
-    <Container sx={{width:'100%', padding:'1rem'}}>
-      <Button fullWidth={true} variant='outlined' onClick={onClick} startIcon={icon.icon}
-      sx={{color:icon.colour}}
-      >Login with {providerName}</Button>
+    <Container sx={{ width: '100%', padding: '1rem' }}>
+      <Button fullWidth={true} variant="outlined" onClick={onClick} startIcon={icon.icon} sx={{ color: icon.colour }}>
+        Login with {providerName}
+      </Button>
     </Container>
-  )
-}
+  );
+};

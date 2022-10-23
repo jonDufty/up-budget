@@ -20,7 +20,7 @@ import { capitaliseApiString, postMutation, updateLocalData, UpdateLocalOptions 
 
 export interface BudgetMenuProps {
   budgets: BudgetInfo[];
-  mutate: KeyedMutator<BudgetInfo[]>
+  mutate: KeyedMutator<BudgetInfo[]>;
 }
 
 export interface BudgetInfo {
@@ -49,8 +49,8 @@ export function BudgetMenu({ budgets }: BudgetMenuProps) {
   const theme = useTheme();
 
   const updateLocalBudget = (b: BudgetInfo, options?: UpdateLocalOptions) => {
-    return updateLocalData<BudgetInfo>(budgets, b, "category", options)
-  }
+    return updateLocalData<BudgetInfo>(budgets, b, 'category', options);
+  };
 
   return (
     <StyledList theme={theme}>
@@ -68,12 +68,12 @@ export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
   const { mutate, error } = useSWR('/budgets');
 
   const handleDelete: MouseEventHandler = (event) => {
-    postMutation<BudgetInfo>(`/budgets/${budget.id}`, budget, {method: 'DELETE'})
-    mutate(onUpdate(budget, {delete: true}), false);
+    postMutation<BudgetInfo>(`/budgets/${budget.id}`, budget, { method: 'DELETE' });
+    mutate(onUpdate(budget, { delete: true }), false);
   };
 
   const handleUpdate: MouseEventHandler = (event) => {
-    postMutation<BudgetInfo>(`/budgets/${budget.id}`, budget)
+    postMutation<BudgetInfo>(`/budgets/${budget.id}`, budget);
     mutate(onUpdate(budget), false);
   };
 

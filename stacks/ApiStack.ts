@@ -1,29 +1,28 @@
 import { Api, StackContext, use } from '@serverless-stack/resources';
-import { aws_route53 as route53 } from 'aws-cdk-lib'
+import { aws_route53 as route53 } from 'aws-cdk-lib';
 
 export function DnsStack({ app, stack }: StackContext) {
-  const zone = new route53.PublicHostedZone(stack, "ApplicationHostedZone", {
-    zoneName: app.stage === "prod" ? "budget.jdufty.com" : `budget-${app.stage}.jdufty.com`,
-  })
+  const zone = new route53.PublicHostedZone(stack, 'ApplicationHostedZone', {
+    zoneName: app.stage === 'prod' ? 'budget.jdufty.com' : `budget-${app.stage}.jdufty.com`,
+  });
 
   if (zone.hostedZoneNameServers) {
-    new route53.NsRecord(stack, "ApplicationHostedZoneDelegation", {
-      zone: route53.HostedZone.fromLookup(stack, "BaseHostedZone", {
-        domainName: "jdufty.com"
+    new route53.NsRecord(stack, 'ApplicationHostedZoneDelegation', {
+      zone: route53.HostedZone.fromLookup(stack, 'BaseHostedZone', {
+        domainName: 'jdufty.com',
       }),
       recordName: zone.zoneName,
       values: zone.hostedZoneNameServers,
-    })
+    });
   }
 
   return {
-    zone
-  }
+    zone,
+  };
 }
 
 export function BackendApiStack({ app, stack }: StackContext) {
-
-  const { zone } = use(DnsStack)
+  const { zone } = use(DnsStack);
 
   new Api(stack, 'BackendApi', {
     routes: {
@@ -34,11 +33,11 @@ export function BackendApiStack({ app, stack }: StackContext) {
       'GET /budgets': 'api/budgets/main.go',
       'POST /budgets': 'api/create-budget/main.go',
       'POST /budgets/{id}': 'api/update-budgets/main.go',
-      'DELETE /budgets/{id}': 'api/delete-budgets/main.go'
+      'DELETE /budgets/{id}': 'api/delete-budgets/main.go',
     },
     customDomain: {
       domainName: `api.${zone.zoneName}`,
-      hostedZone: zone.zoneName
+      hostedZone: zone.zoneName,
     },
     defaults: {
       function: {

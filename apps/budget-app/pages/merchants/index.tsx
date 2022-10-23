@@ -4,17 +4,21 @@ import { MerchantMenu, MerchantInfo, SwitchButton } from '@up-budget/ui';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
-import { fetcher, postMutation, updateLocalData, capitaliseApiString } from '@up-budget/frontend-api-client'
+import { fetcher, postMutation, updateLocalData, capitaliseApiString } from '@up-budget/frontend-api-client';
 import { BudgetInfo } from '@up-budget/ui';
 
 /* eslint-disable-next-line */
 export interface MerchantsProps {}
 
 export function Merchants(props) {
-  const [filtered, setFiltered] = useState(true)
-  const [page, setPage] = useState(1)
+  const [filtered, setFiltered] = useState(true);
+  const [page, setPage] = useState(1);
 
-  const { data: merchants, error , mutate } = useSWR(`/merchants?page=${page}${filtered ? "&filterUncategorised=true" : ""}`, fetcher<MerchantInfo[]>);
+  const {
+    data: merchants,
+    error,
+    mutate,
+  } = useSWR(`/merchants?page=${page}${filtered ? '&filterUncategorised=true' : ''}`, fetcher<MerchantInfo[]>);
   const { data: budgets, error: errorBudgets } = useSWR('/budgets', fetcher<BudgetInfo[]>);
 
   if (error || errorBudgets) {
@@ -31,9 +35,9 @@ export function Merchants(props) {
 
   return (
     <Box>
-      <SwitchButton active='Uncategorised' inactive='All Merchants' onClick={setFiltered} />
+      <SwitchButton active="Uncategorised" inactive="All Merchants" onClick={setFiltered} />
       <MerchantMenu merchants={merchants} categories={categories} mutator={mutate} />
-      <Pagination page={page} count={5} onChange={(e,p) => setPage(p)}/>
+      <Pagination page={page} count={5} onChange={(e, p) => setPage(p)} />
     </Box>
   );
 }

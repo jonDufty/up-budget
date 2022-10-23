@@ -1,8 +1,8 @@
-import { Fetcher } from "swr";
+import { Fetcher } from 'swr';
 
-import {API_BASE_URL} from './api'
+import { API_BASE_URL } from './api';
 
-type PayloadType = Record<string, any> | any[]
+type PayloadType = Record<string, any> | any[];
 
 export async function fetcher<T extends PayloadType>(url: string) {
   const apiUrl = API_BASE_URL + url;
@@ -12,4 +12,4 @@ export async function fetcher<T extends PayloadType>(url: string) {
   }
   const data = (await res.json()) as T;
   return data;
-};
+}

@@ -57,28 +57,31 @@ const data = [
 ];
 
 export function MonthlyGraph({ chartData }: MonthlyGraphProps) {
-  const barWidth = 100
+  const barWidth = 100;
   return (
     <Box width={500} height={300}>
-
-    <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={chartData}
-          barGap={"-80%"}
-        >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="category" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar radius={10} dataKey="amount" fill="#8884d8" />
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={chartData} barGap={'-80%'}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="category" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar radius={10} dataKey="amount" fill="#8884d8" />
           <Bar dataKey="limit" fill="#82ca9d">
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fillOpacity={"20%"} radius={10} fill="inherit" stroke='#8884d8' strokeDasharray={"5 5"}/>
+              <Cell
+                key={`cell-${index}`}
+                fillOpacity={'20%'}
+                radius={10}
+                fill="inherit"
+                stroke="#8884d8"
+                strokeDasharray={'5 5'}
+              />
             ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     </Box>
     // <BarChart
     //   width={500}
