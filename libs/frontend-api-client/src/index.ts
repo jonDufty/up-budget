@@ -1,1 +1,2 @@
-export * from './lib/frontend-api-client';
+export * from './lib';
+export * from './lib/utils'

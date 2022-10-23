@@ -11,13 +11,14 @@ import {
 import { Container } from '@mui/system';
 import { styled, useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
-import useSWR, { Fetcher } from 'swr'
+import useSWR, { Fetcher, KeyedMutator } from 'swr'
+import {  postMutation, updateLocalData } from '@up-budget/frontend-api-client'
 
 /* eslint-disable-next-line */
-export interface CategoryBarProps {
+export interface MerchantMenuProps {
   merchants: MerchantInfo[];
   categories: string[];
-  onUpdate: (m: MerchantInfo) => MerchantInfo[];
+  mutator: KeyedMutator<MerchantInfo[]>
 }
 
 export type MerchantInfo = {
@@ -27,74 +28,57 @@ export type MerchantInfo = {
   category: string;
 };
 
-interface CategoryBarItemProps {
-  merchant: MerchantInfo;
-  categories: string[];
-  key?: string
-  onUpdate: (m: MerchantInfo) => MerchantInfo[]
-}
-
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth',
 })<StyledListProps>(({theme}) => ({
   flexGrow: 1,
-  padding: '0.2rem',
+  padding: '0.2rem'
 }));
 
 interface StyledListProps {
   name?: string;
 }
 
-export function MerchantMenu({ merchants, categories, onUpdate }: CategoryBarProps) {
-  const theme = useTheme()
+export function MerchantMenu({ merchants, categories, mutator }: MerchantMenuProps) {
+  const theme = useTheme();
+
+  const updateLocalMerchant = (m: MerchantInfo) => {
+    const updated = updateLocalData<MerchantInfo>(merchants, m, "id") || []
+    return updated;
+  };
 
   return (
     <StyledList theme={theme}>
       {merchants.map((m: MerchantInfo) => {
-        return <MerchantMenuItem onUpdate={onUpdate} key={m.name} merchant={m} categories={categories} />;
+        return <MerchantMenuItem onUpdate={updateLocalMerchant} key={m.name} merchant={m} categories={categories} mutate={mutator} />;
       })}
     </StyledList>
   );
 }
 
-const API_URL = 'https://api.budget-dev.jdufty.com';
-
-const updateMerchant = async (merchant: MerchantInfo) => {
-  const apiUrl = `${API_URL}/merchants/${merchant.id}`;
-  console.log(`Sending to ${apiUrl}`);
-  const res = await fetch(apiUrl, {
-    method: 'POST',
-    body: JSON.stringify({
-      category: merchant.category,
-    }),
-  });
-
-  console.log('Updating ...');
-
-  if (!res.ok) {
-    throw new Error(`error updating data ${res.statusText}`);
-  }
-};
+interface MerchantMenuItemProps {
+  merchant: MerchantInfo;
+  categories: string[];
+  onUpdate: (m: MerchantInfo) => MerchantInfo[]
+  mutate: KeyedMutator<MerchantInfo[]>
+}
 
 export function MerchantMenuItem({
   merchant,
   categories,
-  key,
-  onUpdate
-}: CategoryBarItemProps) {
+  onUpdate,
+  mutate
+}: MerchantMenuItemProps) {
   const [selected, setSelected] = useState(merchant.category);
-  const { mutate, error } = useSWR('/merchants')
 
   const handleUpdate: MouseEventHandler = (event) => {
     const m: MerchantInfo = { ...merchant, category: selected }
-    updateMerchant(m);
-    const newMerchants = onUpdate(m)
-    console.log(newMerchants);
-    mutate(newMerchants, false);
+    postMutation<MerchantInfo>(`/merchants/${merchant.id}`, m);
+    mutate(onUpdate(m), false);
   };
 
   return (
-    <ListItem key={key}>
+    <ListItem>
       <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
         <Grid item xs={3}>
           <Typography display="inline">{merchant.name}</Typography>
@@ -104,7 +88,7 @@ export function MerchantMenuItem({
           <Select
             fullWidth
             id={`${merchant.name}-selection`}
-            value={capitalise(selected)}
+            value={selected}
             onChange={(event: SelectChangeEvent<string>) =>
               setSelected(event.target.value)
             }
@@ -132,11 +116,5 @@ export function MerchantMenuItem({
     </ListItem>
   );
 }
-
-function capitalise(text: string): string {
-  const words = text.split('-');
-  return words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-}
-
 
 export default MerchantMenu;
