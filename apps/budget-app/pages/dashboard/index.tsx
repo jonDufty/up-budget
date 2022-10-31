@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { MonthlyGraph } from '@up-budget/ui';
+import { BudgetGraph, MonthlyGraph, SwitchButton } from '@up-budget/ui';
 import { MonthlyGraphData } from '../../fixtures/ChartData'
 import { useEffect, useState } from 'react';
 /* eslint-disable-next-line */
@@ -10,6 +10,8 @@ const chartData = MonthlyGraphData
 export function Dashboard(props: DashboardProps) {
   const { data: session } = useSession();
   const [width, setWidth] = useState(0)
+
+  const [showMonthly, setShowMonthly] = useState(true)
 
 
   useEffect(() => {
@@ -31,9 +33,14 @@ export function Dashboard(props: DashboardProps) {
   }
 
   return (
-    <div>
-      <MonthlyGraph chartProps={{ width: 0.8 * width, height: Math.min(window.innerHeight, 400) }} chartData={chartData} />
-    </div>
+    <>
+      <SwitchButton active='Monthly Graph' inactive='Budget History' onClick={()=> setShowMonthly(!showMonthly)} />
+      {
+        showMonthly ?
+          <MonthlyGraph chartProps={{ width: 0.8 * width, height: Math.min(window.innerHeight, 400) }} chartData={chartData} /> :
+          <div>Insert graph here</div>
+      }
+    </>
   );
 }
 
