@@ -16,17 +16,17 @@ interface ProviderInfo {
 }
 
 const icons: Record<string, ProviderInfo> = {
-  google: {
+  Google: {
     icon: <GoogleIcon />,
-    colour: 'white',
+    colour: 'black',
   },
-  github: {
+  GitHub: {
     icon: <GitHubIcon />,
     colour: 'black',
   },
   default: {
     icon: <LoginIcon />,
-    colour: 'white',
+    colour: 'black',
   },
 };
 
