@@ -1,9 +1,10 @@
-import { Button, Grid, IconButton, InputAdornment, List, ListItem, TextField, Typography } from '@mui/material';
+import { Button, Grid, IconButton, InputAdornment, ListItem, TextField, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
 import useSWR, { KeyedMutator } from 'swr';
 import { capitaliseApiString, postMutation, updateLocalData, UpdateLocalOptions } from '@up-budget/frontend-api-client';
+import { Stack } from '@mui/system';
 
 export interface BudgetMenuProps {
   budgets: BudgetInfo[];
@@ -21,17 +22,6 @@ interface BudgetMenuItemProps {
   onUpdate: (b: BudgetInfo, options?: UpdateLocalOptions) => BudgetInfo[] | undefined;
 }
 
-const StyledList = styled(List, {
-  shouldForwardProp: (prop) => prop !== 'drawerWidth',
-})<StyledListProps>(({ theme }) => ({
-  flexGrow: 1,
-  padding: '0.2rem',
-}));
-
-interface StyledListProps {
-  name?: string;
-}
-
 export function BudgetMenu({ budgets }: BudgetMenuProps) {
   const theme = useTheme();
 
@@ -40,11 +30,11 @@ export function BudgetMenu({ budgets }: BudgetMenuProps) {
   };
 
   return (
-    <StyledList theme={theme}>
+    <Stack direction='column' spacing={1}>
       {budgets.map((b: BudgetInfo) => {
         return <BudgetMenuItem onUpdate={updateLocalBudget} key={b.category} budget={b} />;
       })}
-    </StyledList>
+    </Stack>
   );
 }
 
