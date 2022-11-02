@@ -8,28 +8,29 @@ export interface MenuSelectorProps {
 }
 
 export function MenuSelector({ options, maxSelected }: MenuSelectorProps) {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [selectedItems, setSelectedItems] = useState<boolean[]>(Array(options.length).fill(false));
   const [showMaxError, setShowMaxError] = useState(false);
 
   const canSelect = () => {
-    return maxSelected ? selectedItems.length < maxSelected : true;
+    const numSelected = selectedItems.filter((e)=> e === true).length
+    return maxSelected ? numSelected < maxSelected : true;
   };
 
-  const handleSelect = (idx: number, select?:boolean) => {
-    if (select) {
-      canSelect() ?
-        setSelectedItems([...selectedItems, idx]) :
-        setShowMaxError(true)
-    } else {
-      setSelectedItems(selectedItems.splice(idx, 1))
+  const handleSelect = (idx: number) => {
+    const newSelected = [...selectedItems]
+    newSelected[idx] = !selectedItems[idx]
+    if (!selectedItems[idx] && !canSelect()) {
+      setShowMaxError(true)
+      return
     }
+    setSelectedItems(newSelected)
   };
 
   return (
     <Box>
       <ButtonGroup fullWidth size="small" orientation="vertical" variant="outlined">
         {options.map((item, idx) => (
-          <MenuSelectorButton canSelect={canSelect} size="small" key={item}>
+          <MenuSelectorButton onClick={() => handleSelect(idx)} canSelect={canSelect} size="small" key={item}>
             {item}
           </MenuSelectorButton>
         ))}
@@ -52,11 +53,10 @@ function MenuSelectorButton({ children, onClick, size, canSelect }: ButtonSelect
   const [selected, setSelected] = useState(false);
 
   const toggleSelected: MouseEventHandler = (e) => {
-    if (!selected && !canSelect()) {
-      return;
+    if (selected || canSelect()) {
+      setSelected(!selected);
     }
-    // onClick && onClick()
-    setSelected(!selected);
+    onClick && onClick()
   };
   return (
     <Button onClick={toggleSelected} variant={selected ? 'contained' : 'outlined'} size={size}>
