@@ -1,9 +1,8 @@
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import {
   Bar,
   CartesianGrid,
   ComposedChart,
-  Legend,
   Line,
   ReferenceLine,
   ResponsiveContainer,
@@ -11,27 +10,30 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { ChartProps } from '../MonthlyGraph/MonthlyGraph'
 
 interface BudgetGraphProps {
   chartData: BudgetGraphData[];
   limit: number;
   category: string;
+  chartProps: ChartProps
 }
 
-interface BudgetGraphData {
+export interface BudgetGraphData {
   month: string;
   amount: number;
   limit: number;
 }
 
-export function BudgetGraph({ chartData, limit, category }: BudgetGraphProps) {
+export function BudgetGraph({ chartData, limit, category, chartProps }: BudgetGraphProps) {
+  const theme = useTheme()
   const avg = chartData.map((e) => e.amount).reduce((a, x) => a + x, 0) / chartData.length;
   const data = chartData.map((e) => {
     return { ...e, average: avg };
   });
 
   return (
-    <Box width={500} height={300}>
+    <Box width={chartProps.width} height={chartProps.height}>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={data}
@@ -43,11 +45,10 @@ export function BudgetGraph({ chartData, limit, category }: BudgetGraphProps) {
           <XAxis dataKey="month" />
           <YAxis />
           <Tooltip />
-          <Legend />
-          <Bar dataKey="amount" fill="#8884d8" opacity={'50%'} />
+          <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill={theme.palette.primary.main} opacity={'80%'} />
           <Line dataKey="limit" type="monotone" />
-          <ReferenceLine label="average" y={avg} type="monotone" stroke="#8884d8" strokeDasharray="5 5" />
-          {/* <Line dataKey="average" type="monotone" stroke="#8884d8" strokeDasharray="5 5" /> */}
+          <ReferenceLine label="average" y={avg} type="monotone" stroke={theme.palette.secondary.main} strokeDasharray="5 5" />
+          <ReferenceLine label="limit" y={limit} type="monotone" stroke={theme.palette.info.dark} />
         </ComposedChart>
       </ResponsiveContainer>
     </Box>

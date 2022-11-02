@@ -4,11 +4,13 @@ import { useState } from 'react';
 import useSWR from 'swr';
 import { fetcher, capitaliseApiString } from '@up-budget/frontend-api-client';
 import { BudgetInfo } from '@up-budget/ui';
+import { useSession } from 'next-auth/react';
 
 /* eslint-disable-next-line */
 export interface MerchantsProps {}
 
 export function Merchants(props) {
+  const { data: session } = useSession();
   const [filtered, setFiltered] = useState(true);
   const [page, setPage] = useState(1);
 
@@ -18,6 +20,10 @@ export function Merchants(props) {
     mutate,
   } = useSWR(`/merchants?page=${page}${filtered ? '&filterUncategorised=true' : ''}`, fetcher<MerchantInfo[]>);
   const { data: budgets, error: errorBudgets } = useSWR('/budgets', fetcher<BudgetInfo[]>);
+
+  if (!session) {
+    return <div>Unauthenticated. Please log in</div>
+  }
 
   if (error || errorBudgets) {
     console.error(error, errorBudgets);

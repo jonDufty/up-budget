@@ -6,14 +6,24 @@ export function DnsStack({ app, stack }: StackContext) {
     zoneName: app.stage === 'prod' ? 'budget.jdufty.com' : `budget-${app.stage}.jdufty.com`,
   });
 
+  const mainZone = route53.HostedZone.fromLookup(stack, 'BaseHostedZone', {
+    domainName: 'jdufty.com',
+  })
+
   if (zone.hostedZoneNameServers) {
     new route53.NsRecord(stack, 'ApplicationHostedZoneDelegation', {
-      zone: route53.HostedZone.fromLookup(stack, 'BaseHostedZone', {
-        domainName: 'jdufty.com',
-      }),
+      zone: mainZone,
       recordName: zone.zoneName,
       values: zone.hostedZoneNameServers,
     });
+  }
+
+  if (app.stage === "prod") {
+    new route53.CnameRecord(stack, 'MainAppRecord', {
+      zone: mainZone,
+      recordName: 'budget-app',
+      domainName: 'cname.vercel-dns.com'
+    })
   }
 
   return {

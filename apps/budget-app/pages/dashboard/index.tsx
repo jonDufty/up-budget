@@ -1,46 +1,53 @@
-import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import { MonthlyGraph } from '@up-budget/ui';
+import { MonthlyGraph, SwitchButton } from '@up-budget/ui';
+import { MonthlyGraphData } from '../../fixtures/ChartData'
+import { useEffect, useState } from 'react';
+import { Paper } from '@mui/material';
+import { MonthlyGraphView } from './MonthlyGraphView';
 /* eslint-disable-next-line */
 export interface DashboardProps {}
 
-const StyledDashboard = styled.div`
-  color: pink;
-`;
-
-const chartData = [
-  {
-    category: 'rent',
-    amount: 2000,
-    limit: 2000,
-  },
-  {
-    category: 'utilities',
-    amount: 600,
-    limit: 500,
-  },
-  {
-    category: 'groceries',
-    amount: 500,
-    limit: 700,
-  },
-  {
-    category: 'other',
-    amount: 200,
-    limit: 1000,
-  },
-];
+const chartData = MonthlyGraphData
 
 export function Dashboard(props: DashboardProps) {
   const { data: session } = useSession();
+  const [width, setWidth] = useState(0)
+
+  const [showMonthly, setShowMonthly] = useState(true)
+
+
+  useEffect(() => {
+
+    const handleResize = () => setWidth(window.innerWidth)
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    if (width === 0 && window) {
+      setWidth(window.innerWidth)
+    }
+  }, [])
+
+  if (!session) {
+    return <div>Unauthenticated. Please log in</div>
+  }
+
+  const chartProps={ width: 0.8 * width, height: Math.min(window.innerHeight, 500) }
 
   return (
-    <StyledDashboard>
-      <h1>{session ? `Logged in as ${session.user.name}` : 'Welcome to Dashboard!'} </h1>
-      {session && <Image src={session.user.image} alt="No image" width={200} height={200} />}
-      <MonthlyGraph chartData={chartData} />
-    </StyledDashboard>
+    <>
+      <SwitchButton active='Monthly Graph' inactive='Budget History' onClick={()=> setShowMonthly(!showMonthly)} />
+      {
+        showMonthly ?
+          <Paper variant='elevation' elevation={4}>
+            <MonthlyGraph chartProps={chartProps} chartData={chartData} />
+          </Paper>
+          :
+          <MonthlyGraphView chartProps={chartProps} />
+      }
+    </>
   );
 }
 

@@ -6,11 +6,13 @@ import useSWR from 'swr';
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { convertToApiString, fetcher, postMutation } from '@up-budget/frontend-api-client';
+import { useSession } from 'next-auth/react';
 
 /* eslint-disable-next-line */
 export interface BudgetsProps {}
 
 export function Budgets(props: BudgetsProps) {
+  const { data: session } = useSession();
   const { data, error, mutate } = useSWR('/budgets', fetcher<BudgetInfo[]>);
 
   const [createNewMode, setCreateNewMode] = useState(false);
@@ -25,6 +27,10 @@ export function Budgets(props: BudgetsProps) {
     mutate((data) => [...data, b], false);
   };
 
+  if (!session) {
+    return <div>Unauthenticated. Please log in</div>
+  }
+
   if (error) {
     console.error(error);
     return <h1>An error has occurred</h1>;
@@ -33,6 +39,7 @@ export function Budgets(props: BudgetsProps) {
     console.log(data);
     return <h4>Loading...;</h4>;
   }
+
 
   return (
     <Box>
