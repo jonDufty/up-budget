@@ -19,7 +19,7 @@ interface BudgetGraphProps {
   chartProps: ChartProps
 }
 
-interface BudgetGraphData {
+export interface BudgetGraphData {
   month: string;
   amount: number;
   limit: number;

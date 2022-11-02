@@ -1,4 +1,4 @@
-import { BudgetChartData } from '@up-budget/ui';
+import { BudgetChartData, BudgetGraphData } from '@up-budget/ui';
 
 export const MonthlyGraphData: BudgetChartData[] = [
   {
@@ -42,3 +42,36 @@ export const MonthlyGraphData: BudgetChartData[] = [
     amount: 60,
   },
 ];
+
+export const DataBudgetGraph: BudgetGraphData[] = [
+  {
+    month: '2022-02',
+    amount: 550,
+    limit: 600,
+  },
+  {
+    month: '2022-03',
+    amount: 800,
+    limit: 600,
+  },
+  {
+    month: '2022-04',
+    amount: 500,
+    limit: 600,
+  },
+  {
+    month: '2022-05',
+    amount: 450,
+    limit: 600,
+  },
+  {
+    month: '2022-06',
+    amount: 300,
+    limit: 600,
+  },
+  {
+    month: '2022-07',
+    amount: 480,
+    limit: 600,
+  },
+]
