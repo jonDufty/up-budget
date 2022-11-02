@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export interface MonthlyGraphProps {
@@ -6,7 +6,7 @@ export interface MonthlyGraphProps {
   chartProps: ChartProps;
 }
 
-interface ChartProps {
+export interface ChartProps {
   width: number | string;
   height: number | string;
 }
@@ -19,6 +19,7 @@ export interface BudgetChartData {
 
 export function MonthlyGraph({ chartData, chartProps }: MonthlyGraphProps) {
   const barWidth = 100;
+  const theme = useTheme()
   return (
     <Box width={chartProps.width} height={chartProps.height}>
       <ResponsiveContainer width="100%" height="100%">
@@ -28,20 +29,19 @@ export function MonthlyGraph({ chartData, chartProps }: MonthlyGraphProps) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar radius={[10, 10, 0, 0]} dataKey="amount" fill="#8884d8">
+          <Bar radius={[10, 10, 0, 0]} dataKey="amount" >
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-amount-${index}`}
-                // fill={entry.amount > entry.limit ? 'red' : '#8884d8'}
-                fill='#8884d8'
-                stroke={entry.amount > entry.limit ? 'red' : 'inherit'}
+                fill={theme.palette.primary.main}
+                stroke={entry.amount > entry.limit ? 'red' : theme.palette.primary.dark}
                 strokeWidth={2}
               />
             ))}
           </Bar>
           <Bar radius={[10, 10, 0, 0]} dataKey="limit" fill="#82ca9d">
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fillOpacity={'20%'} fill={entry.amount > entry.limit ? 'red' : 'inherit'} stroke="inherit" strokeDasharray={'5 5'} />
+              <Cell key={`cell-${index}`} fillOpacity={'20%'} fill={entry.amount > entry.limit ? 'red' : theme.palette.primary.light} stroke="inherit" strokeDasharray={'5 5'} />
             ))}
           </Bar>
         </BarChart>

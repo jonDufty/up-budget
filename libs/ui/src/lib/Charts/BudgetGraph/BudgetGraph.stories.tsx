@@ -36,4 +36,8 @@ Primary.args = {
   ],
   limit: 600,
   category: 'rent',
+  chartProps: {
+    width: 500,
+    height: 300
+  }
 };
