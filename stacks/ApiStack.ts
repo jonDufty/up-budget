@@ -16,6 +16,14 @@ export function DnsStack({ app, stack }: StackContext) {
     });
   }
 
+  if (app.stage === "prod") {
+    new route53.CnameRecord(stack, 'MainAppRecord', {
+      zone,
+      recordName: 'budget.jdufty.com',
+      domainName: 'up-budget.vercel.app'
+    })
+  }
+
   return {
     zone,
   };
