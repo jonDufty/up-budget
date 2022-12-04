@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
-import { Menu, MenuItemProps, NavBar } from '@up-budget/ui';
+import { MenuItemProps, NavBar } from '@up-budget/ui';
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles';
 import { useSession } from 'next-auth/react';
 import { LoginModal } from '@up-budget/ui';
 
@@ -52,12 +52,10 @@ export function AppMenu({ menuItems, children }: AppMenuProps) {
     <Box>
       <NavBar
         handleClick={handleToggleDrawer}
-        position="fixed"
-        open={open}
-        drawerWidth={theme.appMenu.drawerWidth}
         handleModal={handleModalOpen}
+        menuItems={menuItems}
+        session={session}
       ></NavBar>
-      <Menu open={open} items={menuItems} drawerWidth={theme.appMenu.drawerWidth}></Menu>
       <Main open={open}>{children}</Main>
       <LoginModal open={openModal} onClose={handleModalClose} />
     </Box>
