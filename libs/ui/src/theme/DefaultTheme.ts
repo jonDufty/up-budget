@@ -4,7 +4,7 @@ import "@fontsource/open-sans"
 export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
-      main: '#3f51b5',
+      main: '#64b5f6',
     },
     secondary: {
       main: '#f50057',
@@ -12,11 +12,24 @@ export const themeOptions: ThemeOptions = {
   },
   typography: {
     fontFamily: 'Open Sans',
+    button: {
+      textTransform: 'none'
+    }
   },
   appMenu: {
     drawerWidth: 240,
     navBarHeight: 70,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        textPrimary: {
+          fontFamily: 'Open Sans'
+        },
+      }
+    }
   }
+
 };
 
 export const DefaultTheme = createTheme(themeOptions);
