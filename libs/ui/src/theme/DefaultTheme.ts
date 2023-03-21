@@ -1,20 +1,14 @@
 import { createTheme, ThemeOptions } from '@mui/material/styles';
-import "@fontsource/open-sans"
+import '@fontsource/open-sans';
+import { colors } from '../lib/settings/colors';
 
 export const themeOptions: ThemeOptions = {
-  palette: {
-    primary: {
-      main: '#64b5f6',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-  },
+  palette: colors,
   typography: {
     fontFamily: 'Open Sans',
     button: {
-      textTransform: 'none'
-    }
+      textTransform: 'none',
+    },
   },
   appMenu: {
     drawerWidth: 240,
@@ -24,12 +18,11 @@ export const themeOptions: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         textPrimary: {
-          fontFamily: 'Open Sans'
+          fontFamily: 'Open Sans',
         },
-      }
-    }
-  }
-
+      },
+    },
+  },
 };
 
 export const DefaultTheme = createTheme(themeOptions);
