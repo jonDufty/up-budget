@@ -14,7 +14,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/frontend-api-client"],
+      "outputs": ["{workspaceRoot}/coverage/libs/frontend-api-client"],
       "options": {
         "jestConfig": "libs/frontend-api-client/jest.config.ts",
         "passWithNoTests": true
