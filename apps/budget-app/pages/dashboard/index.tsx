@@ -38,7 +38,7 @@ export function Dashboard(props: DashboardProps) {
 
   return (
     <>
-      <SwitchButton active='Monthly Graph' inactive='Budget History' onClick={()=> setShowMonthly(!showMonthly)} />
+      <SwitchButton size='medium' active='Monthly Graph' inactive='Budget History' onClick={()=> setShowMonthly(!showMonthly)} />
       {
         showMonthly ?
           <Paper variant='elevation' elevation={4}>

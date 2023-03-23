@@ -19,19 +19,20 @@ export interface BudgetChartData {
 
 export function MonthlyGraph({ chartData, chartProps }: MonthlyGraphProps) {
   const barWidth = 100;
-  const theme = useTheme()
+  const theme = useTheme();
   return (
     <Box width={chartProps.width} height={chartProps.height}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} barGap={'-80%'}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="category" />
-          <YAxis />
+          <XAxis dataKey="category" fontFamily="Open Sans" />
+          <YAxis fontFamily="Open Sans" />
           <Tooltip />
           <Legend />
-          <Bar radius={[10, 10, 0, 0]} dataKey="amount" >
+          <Bar radius={[10, 10, 0, 0]} dataKey="amount">
             {chartData.map((entry, index) => (
               <Cell
+                width={40}
                 key={`cell-amount-${index}`}
                 fill={theme.palette.primary.main}
                 stroke={entry.amount > entry.limit ? 'red' : theme.palette.primary.dark}
@@ -41,7 +42,14 @@ export function MonthlyGraph({ chartData, chartProps }: MonthlyGraphProps) {
           </Bar>
           <Bar radius={[10, 10, 0, 0]} dataKey="limit" fill="#82ca9d">
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fillOpacity={'20%'} fill={entry.amount > entry.limit ? 'red' : theme.palette.primary.light} stroke="inherit" strokeDasharray={'5 5'} />
+              <Cell
+                width={40}
+                key={`cell-${index}`}
+                fillOpacity={'20%'}
+                fill={entry.amount > entry.limit ? 'red' : theme.palette.primary.light}
+                stroke="inherit"
+                strokeDasharray={'5 5'}
+              />
             ))}
           </Bar>
         </BarChart>

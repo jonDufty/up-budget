@@ -17,9 +17,9 @@ export const themeOptions: ThemeOptions = {
   components: {
     MuiButton: {
       styleOverrides: {
-        textPrimary: {
-          fontFamily: 'Open Sans',
-        },
+        // textPrimary: {
+        //   fontFamily: 'Open Sans',
+        // },
       },
     },
   },

@@ -39,7 +39,7 @@ export function Merchants(props) {
 
   return (
     <Box>
-      <SwitchButton active="Uncategorised" inactive="All Merchants" onClick={setFiltered} />
+      <SwitchButton size='medium' active="Uncategorised" inactive="All Merchants" onClick={setFiltered} />
       <MerchantMenu merchants={merchants} categories={categories} mutator={mutate} />
       <Pagination page={page} count={5} onChange={(e, p) => setPage(p)} />
     </Box>

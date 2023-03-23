@@ -1,30 +1,7 @@
 import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { colors } from '../settings/colors';
-
-const borderRadius = {
-  small: '10px',
-  medium: '12px',
-  large: '14px',
-};
-
-const buttonWidths = {
-  small: '100px',
-  medium: '200px',
-  large: '300px',
-};
-
-const buttonHeights = {
-  small: '30px',
-  medium: '40px',
-  large: '50px',
-};
-
-const fontSize = {
-  small: '14px',
-  medium: '16px',
-  large: '20px',
-};
+import { borderRadius, buttonHeights, fontSize } from '../settings/sizes';
 
 export interface ButtonProps extends MuiButtonProps {
   appearance?: 'primary' | 'secondary' | 'transparent' | 'error';

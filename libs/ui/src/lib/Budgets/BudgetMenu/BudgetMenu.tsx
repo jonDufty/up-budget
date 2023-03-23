@@ -1,10 +1,11 @@
-import { Button, Grid, IconButton, InputAdornment, ListItem, TextField, Typography } from '@mui/material';
+import { Grid, IconButton, InputAdornment, ListItem, TextField, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
 import useSWR, { KeyedMutator } from 'swr';
 import { capitaliseApiString, postMutation, updateLocalData, UpdateLocalOptions } from '@up-budget/frontend-api-client';
 import { Stack } from '@mui/system';
+import Button from '../../Button/Button';
 
 export interface BudgetMenuProps {
   budgets: BudgetInfo[];
@@ -56,14 +57,14 @@ export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
 
   return (
     <ListItem key={key}>
-      <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} key={`${key}-grid`}>
-        <Grid item xs={3}>
+      <Grid maxWidth={800} container spacing={2} justifyContent={'flex-start'} alignItems={'center'} key={`${key}-grid`}>
+        <Grid item xs>
           <Typography key={`${key}-text`} display="inline">
             {capitaliseApiString(budget.category)}
           </Typography>
         </Grid>
 
-        <Grid item xs={5} textAlign={'center'}>
+        <Grid item xs={6} textAlign={'center'}>
           <TextField
             key={`${key}-input`}
             fullWidth
@@ -79,12 +80,12 @@ export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
             }}
           />
         </Grid>
-        <Grid item xs={3} textAlign={'center'}>
-          <Button key={`${key}-button`} variant="outlined" onClick={handleUpdate} disabled={limit === budget.limit}>
+        <Grid item xs textAlign={'center'}>
+          <Button key={`${key}-button`} appearance="secondary" onClick={handleUpdate} disabled={limit === budget.limit}>
             Update {error && 'ERROR'}
           </Button>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs>
           <IconButton onClick={handleDelete} color="error">
             <DeleteIcon />
           </IconButton>
