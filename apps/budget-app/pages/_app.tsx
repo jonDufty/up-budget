@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { SessionProvider } from 'next-auth/react';
 import { AppMenu } from '../components/AppMenu/AppMenu';
 import { Session } from 'next-auth';
+import { Roboto } from '@next/font/google';
 
 const MenuItems = [
   {
@@ -22,21 +23,28 @@ const MenuItems = [
   },
 ];
 
+const roboto = Roboto({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+});
+
 function CustomApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <>
       <Head>
         <title>Welcome to budget-app!</title>
       </Head>
-      <SessionProvider session={pageProps.session}>
-        <ThemeProvider theme={DefaultTheme}>
-          <Box>
-            <AppMenu menuItems={MenuItems}>
-              <Component {...pageProps} />
-            </AppMenu>
-          </Box>
-        </ThemeProvider>
-      </SessionProvider>
+      <main className={roboto.className}>
+        <SessionProvider session={pageProps.session}>
+          <ThemeProvider theme={DefaultTheme}>
+            <Box>
+              <AppMenu menuItems={MenuItems}>
+                <Component {...pageProps} />
+              </AppMenu>
+            </Box>
+          </ThemeProvider>
+        </SessionProvider>
+      </main>
     </>
   );
 }

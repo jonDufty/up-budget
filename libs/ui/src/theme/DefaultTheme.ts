@@ -1,11 +1,10 @@
 import { createTheme, ThemeOptions } from '@mui/material/styles';
-import '@fontsource/open-sans';
+// import '@fontsource/open-sans';
 import { colors } from '../lib/settings/colors';
 
 export const themeOptions: ThemeOptions = {
   palette: colors,
   typography: {
-    fontFamily: 'Open Sans',
     button: {
       textTransform: 'none',
     },

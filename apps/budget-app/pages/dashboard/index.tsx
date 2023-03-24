@@ -3,7 +3,7 @@ import { MonthlyGraph, SwitchButton } from '@up-budget/ui';
 import { MonthlyGraphData } from '../../fixtures/ChartData'
 import { useEffect, useState } from 'react';
 import { Paper } from '@mui/material';
-import { MonthlyGraphView } from './MonthlyGraphView';
+import { MonthlyGraphView } from '../../components/MonthlyGraph/MonthlyGraphView';
 /* eslint-disable-next-line */
 export interface DashboardProps {}
 
