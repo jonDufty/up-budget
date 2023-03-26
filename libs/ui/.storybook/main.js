@@ -1,5 +1,6 @@
 const rootMain = require('../../../.storybook/main');
-
+rootMain.stories = rootMain.stories || [];
+rootMain.addons = rootMain.addons || [];
 module.exports = {
   ...rootMain,
 
