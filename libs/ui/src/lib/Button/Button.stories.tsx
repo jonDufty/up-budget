@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Button, ButtonToggle, ButtonProps } from './Button';
+import { Button, ButtonProps } from './Button';
 
 const Story: ComponentMeta<typeof Button> = {
   component: Button,
@@ -42,9 +42,9 @@ const StatesStory: ComponentStory<typeof Button> = (args) => (
           <Button appearance={appearance} disabled>
             Disabled
           </Button>
-          <ButtonToggle value={'selected'} selected appearance={appearance}>
+          <Button selected appearance={appearance}>
             Selected
-          </ButtonToggle>
+          </Button>
         </Stack>
       </>
     ))}
