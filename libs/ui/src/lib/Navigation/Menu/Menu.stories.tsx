@@ -1,6 +1,6 @@
 import { Box, Divider, ThemeProvider } from '@mui/material';
 import { Meta, Story } from '@storybook/react';
-import { Menu, MenuItemProps, MenuProps } from './Menu';
+import { Menu, MenuItem, MenuItemProps, MenuProps } from './Menu';
 import { DefaultTheme } from '../../../theme/DefaultTheme';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
@@ -50,12 +50,26 @@ const items = [
 
 export const Open = Template.bind({});
 Open.args = {
-  compact: true,
+  open: true,
   items
 };
 
 export const Closed = Template.bind({});
 Closed.args = {
-  compact: false,
+  open: false,
   items
+};
+
+const ItemTemplate: Story<MenuItemProps>= (args) => (
+  <ThemeProvider theme={DefaultTheme}>
+    <MenuItem {...args} />
+    <MenuItem {...args} selected />
+  </ThemeProvider>
+);
+
+export const Item = ItemTemplate.bind({});
+Item.args = {
+  linkTo: '/',
+  name: 'Dashboard',
+  icon: <DashboardIcon />,
 };
