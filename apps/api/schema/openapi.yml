@@ -1,0 +1,108 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.jdufty.com/v1
+paths:
+  /budgets:
+    get:
+      responses:
+        '200':
+          description: OK
+    post:
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: OK
+  /merchants:
+    get:
+      description: 'Get all merchants'
+      parameters:
+        - name: filterUncategorised
+          in: query
+          schema:
+            type: boolean
+          required: false
+      responses:
+        '200':
+          description: OK
+  /merchant/{id}:
+    post:
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/merchant'
+      responses:
+        '200':
+          description: OK
+  /budgets/{id}:
+    get:
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+    post:
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+    delete:
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/budget'
+
+components:
+  schemas:
+    merchant:
+      type: object
+      properties:
+        category:
+          type: string
+    budget:
+      type: object
+      properties:
+        category:
+          type: string
+        limit:
+          type: integer
+        id:
+          type: integer
+      required:
+        - category
+        - limit
