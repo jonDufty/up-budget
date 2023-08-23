@@ -45,7 +45,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/budget-app"],
+      "outputs": ["{workspaceRoot}/coverage/apps/budget-app"],
       "options": {
         "jestConfig": "apps/budget-app/jest.config.ts",
         "passWithNoTests": true

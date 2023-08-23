@@ -14,7 +14,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/feature-budgets"],
+      "outputs": ["{workspaceRoot}/coverage/libs/feature-budgets"],
       "options": {
         "jestConfig": "libs/feature-budgets/jest.config.ts",
         "passWithNoTests": true

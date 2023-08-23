@@ -14,7 +14,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/feature-merchants"],
+      "outputs": ["{workspaceRoot}/coverage/libs/feature-merchants"],
       "options": {
         "jestConfig": "libs/feature-merchants/jest.config.ts",
         "passWithNoTests": true
