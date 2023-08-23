@@ -33,5 +33,6 @@
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }
-  ]
+  ],
+  "extends": ["plugin:storybook/recommended"]
 }
