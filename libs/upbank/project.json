@@ -17,7 +17,7 @@
       "dependsOn": [
         {
           "targets": "download",
-          "projects": "dependencies"
+          "dependencies": true
         }
       ],
       "options": {
