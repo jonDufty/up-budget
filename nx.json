@@ -6,17 +6,27 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
         "accessToken": "NjkxMmM3ZmEtNWZmZC00ODQyLTk5NzQtZjJjZmQyMTE5NWUzfHJlYWQtd3JpdGU="
       }
     }
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "generators": {
@@ -33,10 +43,19 @@
     }
   },
   "defaultProject": "budget-app",
-  "plugins": ["@nx-go/nx-go"],
+  "plugins": [
+    "@nx-go/nx-go"
+  ],
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "sharedGlobals": ["{workspaceRoot}/go.mod"],
-    "production": ["default"]
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/go.mod"
+    ],
+    "production": [
+      "default"
+    ]
   }
 }
