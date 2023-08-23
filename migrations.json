@@ -117,7 +117,7 @@
       "version": "15.4.6-beta.0",
       "description": "Refactor the Storybook target options",
       "factory": "./src/migrations/update-15-4-6/refactor-executor-options",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-15.4.6"
     },
     {
@@ -125,7 +125,7 @@
       "version": "15.5.3-beta.0",
       "description": "Add @nrwl/webpack if it is missing and is used.",
       "factory": "./src/migrations/update-15-5-3/ensure-webpack-package",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-15-5-3"
     },
     {
@@ -133,15 +133,15 @@
       "version": "15.7.0-beta.0",
       "description": "Add @storybook/addon-essentials to all project-level configs and attempt to remove root config.",
       "factory": "./src/migrations/update-15-7-0/add-addon-essentials-to-all",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-15-7-0"
     },
     {
       "cli": "nx",
       "version": "16.0.0-beta.1",
-      "description": "Replace @nrwl/storybook with @nx/storybook",
+      "description": "Replace @nx/storybook with @nx/storybook",
       "implementation": "./src/migrations/update-16-0-0-add-nx-packages/update-16-0-0-add-nx-packages",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-16-0-0-add-nx-packages"
     },
     {
@@ -149,7 +149,7 @@
       "version": "16.0.0-beta.1",
       "description": "Update workspace to use Storybook v7",
       "implementation": "./src/migrations/update-16-0-0/update-sb-7",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-16-0-0-migrate-7"
     },
     {
@@ -157,7 +157,7 @@
       "version": "16.1.0-beta.0",
       "description": "Ignore @nx/react/plugins/storybook in Storybook eslint rules.",
       "factory": "./src/migrations/update-16-1-0/eslint-ignore-react-plugin",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-16-1-0"
     },
     {
@@ -165,7 +165,7 @@
       "version": "16.5.0-beta.0",
       "description": "Move .storybook/tsconfig.json to tsconfig.storybook.json for non-Angular projects.",
       "factory": "./src/migrations/update-16-5-0/move-storybook-tsconfig",
-      "package": "@nrwl/storybook",
+      "package": "@nx/storybook",
       "name": "update-16-5-0"
     },
     {
