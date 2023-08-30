@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import useSWR from 'swr';
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { convertToApiString, fetcher, postMutation } from '@up-budget/frontend-api-client';
+import { convertToApiString, fetcher, postMutation } from '@up-budget/api-schema';
 import { useSession } from 'next-auth/react';
 
 /* eslint-disable-next-line */
@@ -28,7 +28,7 @@ export function Budgets(props: BudgetsProps) {
   };
 
   if (!session) {
-    return <div>Unauthenticated. Please log in</div>
+    return <div>Unauthenticated. Please log in</div>;
   }
 
   if (error) {
@@ -39,7 +39,6 @@ export function Budgets(props: BudgetsProps) {
     console.log(data);
     return <h4>Loading...;</h4>;
   }
-
 
   return (
     <Box>

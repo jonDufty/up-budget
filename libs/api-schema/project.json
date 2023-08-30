@@ -1,7 +1,7 @@
 {
-  "name": "feature-merchants",
+  "name": "api-schema",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/feature-merchants/src",
+  "sourceRoot": "libs/api-schema/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,14 +9,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/feature-merchants/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/api-schema/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/feature-merchants"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api-schema"],
       "options": {
-        "jestConfig": "libs/feature-merchants/jest.config.ts",
+        "jestConfig": "libs/api-schema/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -2,7 +2,7 @@ import { Button, Grid, List, ListItem, MenuItem, Select, SelectChangeEvent, Typo
 import { styled, useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
 import { KeyedMutator } from 'swr';
-import { postMutation, updateLocalData } from '@up-budget/frontend-api-client';
+import { postMutation, updateLocalData } from '@up-budget/api-schema';
 
 /* eslint-disable-next-line */
 export interface MerchantMenuProps {

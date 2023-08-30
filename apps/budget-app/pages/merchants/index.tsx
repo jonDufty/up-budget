@@ -2,7 +2,7 @@ import { Box, Pagination } from '@mui/material';
 import { MerchantMenu, MerchantInfo, SwitchButton } from '@up-budget/ui';
 import { useState } from 'react';
 import useSWR from 'swr';
-import { fetcher, capitaliseApiString } from '@up-budget/frontend-api-client';
+import { fetcher, capitaliseApiString } from '@up-budget/api-schema';
 import { BudgetInfo } from '@up-budget/ui';
 import { useSession } from 'next-auth/react';
 
@@ -22,7 +22,7 @@ export function Merchants(props) {
   const { data: budgets, error: errorBudgets } = useSWR('/budgets', fetcher<BudgetInfo[]>);
 
   if (!session) {
-    return <div>Unauthenticated. Please log in</div>
+    return <div>Unauthenticated. Please log in</div>;
   }
 
   if (error || errorBudgets) {

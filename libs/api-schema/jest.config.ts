@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'feature-merchants',
+  displayName: 'api-schema',
   preset: '../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': ['@swc/jest', { jsc: { transform: { react: { runtime: 'automatic' } } } }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/feature-merchants',
+  coverageDirectory: '../../coverage/libs/api-schema',
 };
