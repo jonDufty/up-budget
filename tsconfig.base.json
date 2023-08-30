@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@up-budget/api-schema": ["libs/api-schema/src/index.ts"],
+      "@up-budget/graph-schema": ["libs/graph-schema/src/index.ts"],
       "@up-budget/ui": ["libs/ui/src/index.ts"]
     }
   },
