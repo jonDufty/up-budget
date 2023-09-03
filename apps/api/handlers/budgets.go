@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
+	schema "github.com/jonDufty/budget/libs/api-schema/types/go"
 	"github.com/jonDufty/budget/libs/database/models"
 	"github.com/jonDufty/budget/libs/database/query"
 )
@@ -48,13 +49,8 @@ func (c *ApiClient) GetBudgetHandler(ctx context.Context, event events.APIGatewa
 	}, nil
 }
 
-type updateBudgetBody struct {
-	Category string `json:"category"`
-	Limit    int    `json:"limit"`
-}
-
 func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var body updateBudgetBody
+	var body schema.Budget
 	err := json.Unmarshal([]byte(event.Body), &body)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -101,19 +97,8 @@ func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGat
 	}, nil
 }
 
-type createBudgetBody struct {
-	Category string `json:"category"`
-	Limit    int    `json:"limit"`
-}
-
-type createBudgetResponse struct {
-	Category string `json:"category"`
-	Limit    int    `json:"limit"`
-	Id       int    `json:"id"`
-}
-
 func (c *ApiClient) CreateBudgetHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var body updateBudgetBody
+	var body schema.Budget
 
 	err := json.Unmarshal([]byte(event.Body), &body)
 	if err != nil {
