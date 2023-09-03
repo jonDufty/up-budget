@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
+	schema "github.com/jonDufty/budget/libs/api-schema/types/go"
 	"github.com/jonDufty/budget/libs/database/models"
 	"github.com/jonDufty/budget/libs/database/query"
 )
@@ -68,12 +69,8 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 	}, nil
 }
 
-type UpdateMerchantBody struct {
-	Category string `json:"category"`
-}
-
 func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var body UpdateMerchantBody
+	var body schema.PostMerchantIdJSONRequestBody
 	err := json.Unmarshal([]byte(event.Body), &body)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -98,8 +95,8 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		}, fmt.Errorf("no merchant found with id %s", queryId)
 	}
 
-	if body.Category != "" {
-		m.Category = body.Category
+	if body.Category != nil {
+		m.Category = *body.Category
 	}
 
 	err = m.Update(ctx, c.DB)

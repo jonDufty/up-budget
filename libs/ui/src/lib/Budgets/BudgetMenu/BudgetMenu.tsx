@@ -3,7 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
 import useSWR, { KeyedMutator } from 'swr';
-import { capitaliseApiString, postMutation, updateLocalData, UpdateLocalOptions } from '@up-budget/frontend-api-client';
+import { capitaliseApiString, postMutation, updateLocalData, UpdateLocalOptions } from '@up-budget/api-schema';
 import { Stack } from '@mui/system';
 
 export interface BudgetMenuProps {
@@ -30,7 +30,7 @@ export function BudgetMenu({ budgets }: BudgetMenuProps) {
   };
 
   return (
-    <Stack direction='column' spacing={1}>
+    <Stack direction="column" spacing={1}>
       {budgets.map((b: BudgetInfo) => {
         return <BudgetMenuItem onUpdate={updateLocalBudget} key={b.category} budget={b} />;
       })}

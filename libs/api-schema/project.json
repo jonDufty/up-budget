@@ -1,0 +1,40 @@
+{
+  "name": "api-schema",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api-schema/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api-schema/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/api-schema"],
+      "options": {
+        "jestConfig": "libs/api-schema/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx nx run api-schema:generate-typescript",
+          "npx nx run api-schema:generate-go"
+        ]
+      }
+
+    },
+    "generate-typescript": {
+      "command": "npx openapi-typescript libs/api-schema/schema/openapi.yml -o libs/api-schema/types/typescript/types.ts"
+    },
+    "generate-go": {
+      "command": "go run github.com/deepmap/oapi-codegen/cmd/oapi-codegen -old-config-style -o libs/api-schema/types/go/types.generated.go -package types -generate types libs/api-schema/schema/openapi.yml"
+    }
+  }
+}

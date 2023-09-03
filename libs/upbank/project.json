@@ -1,4 +1,5 @@
 {
+  "name": "upbank",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/upbank/upbank/src",
   "projectType": "library",
@@ -16,7 +17,7 @@
       "dependsOn": [
         {
           "targets": "download",
-          "projects": "dependencies"
+          "dependencies": true
         }
       ],
       "options": {

@@ -1,4 +1,5 @@
 {
+  "name": "budget-app",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/budget-app",
   "projectType": "application",
@@ -44,7 +45,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/budget-app"],
+      "outputs": ["{workspaceRoot}/coverage/apps/budget-app"],
       "options": {
         "jestConfig": "apps/budget-app/jest.config.ts",
         "passWithNoTests": true
@@ -55,37 +56,6 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/budget-app/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
-    "storybook": {
-      "executor": "@nrwl/storybook:storybook",
-      "options": {
-        "uiFramework": "@storybook/react",
-        "port": 4400,
-        "config": {
-          "configFolder": "apps/budget-app/.storybook"
-        }
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "build-storybook": {
-      "executor": "@nrwl/storybook:build",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "uiFramework": "@storybook/react",
-        "outputPath": "dist/storybook/budget-app",
-        "config": {
-          "configFolder": "apps/budget-app/.storybook"
-        }
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
       }
     }
   },

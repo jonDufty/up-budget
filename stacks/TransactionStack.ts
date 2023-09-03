@@ -1,4 +1,4 @@
-import { Api, Cron, Function, StackContext } from '@serverless-stack/resources';
+import { Api, Cron, Function, StackContext } from 'sst/constructs';
 
 export function TransactionStack({ app, stack }: StackContext) {
   const cron = new Cron(stack, 'ScheduledTransactionLambda', {
@@ -6,7 +6,7 @@ export function TransactionStack({ app, stack }: StackContext) {
     enabled: app.local ? false : true,
     job: {
       function: {
-        handler: 'transactions/main.go',
+        handler: 'apps/transactions/main.go',
         environment: {
           TRANSACTION_UPBANK_API_KEY: process.env.UP_API_KEY!,
           TRANSACTION_UPBANK_ENDPOINT: 'https://api.up.com.au/api/v1',
@@ -35,7 +35,7 @@ export function BackfillStack({ app, stack }: StackContext) {
       "GET /backfill": {
         function: {
           timeout: 90,
-          handler: 'transactions/main.go',
+          handler: 'apps/transactions/main.go',
           environment: {
             TRANSACTION_UPBANK_API_KEY: process.env.UP_API_KEY!,
             TRANSACTION_UPBANK_ENDPOINT: 'https://api.up.com.au/api/v1',

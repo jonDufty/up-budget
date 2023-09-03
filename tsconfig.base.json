@@ -15,9 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@up-budget/feature-budgets": ["libs/feature-budgets/src/index.ts"],
-      "@up-budget/feature-merchants": ["libs/feature-merchants/src/index.ts"],
-      "@up-budget/frontend-api-client": ["libs/frontend-api-client/src/index.ts"],
+      "@up-budget/api-schema": ["libs/api-schema/src/index.ts"],
+      "@up-budget/graph-schema": ["libs/graph-schema/src/index.ts"],
       "@up-budget/ui": ["libs/ui/src/index.ts"]
     }
   },

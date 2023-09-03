@@ -1,4 +1,4 @@
-import { Api, StackContext, use } from '@serverless-stack/resources';
+import { Api, StackContext, use } from 'sst/constructs';
 import { aws_route53 as route53 } from 'aws-cdk-lib';
 
 export function DnsStack({ app, stack }: StackContext) {
@@ -37,13 +37,13 @@ export function BackendApiStack({ app, stack }: StackContext) {
   new Api(stack, 'BackendApi', {
     routes: {
       // merchant routes
-      'GET /merchants': 'api/merchants/main.go',
-      'POST /merchants/{id}': 'api/update-merchants/main.go',
+      'GET /merchants': 'apps/api/merchants/main.go',
+      'POST /merchants/{id}': 'apps/api/update-merchants/main.go',
       // budget routes
-      'GET /budgets': 'api/budgets/main.go',
-      'POST /budgets': 'api/create-budget/main.go',
-      'POST /budgets/{id}': 'api/update-budgets/main.go',
-      'DELETE /budgets/{id}': 'api/delete-budgets/main.go',
+      'GET /budgets': 'apps/api/budgets/main.go',
+      'POST /budgets': 'apps/api/create-budget/main.go',
+      'POST /budgets/{id}': 'apps/api/update-budgets/main.go',
+      'DELETE /budgets/{id}': 'apps/api/delete-budgets/main.go',
     },
     customDomain: {
       domainName: `api.${zone.zoneName}`,
