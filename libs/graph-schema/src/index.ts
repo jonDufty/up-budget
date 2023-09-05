@@ -1,1 +1,1 @@
-export * from './lib/graph-schema';
+export { schema } from './schema';

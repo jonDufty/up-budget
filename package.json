@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.7",
     "@nrwl/next": "16.7.3",
+    "@pothos/core": "^3.33.1",
     "aws-cdk-lib": "2.91.0",
     "core-js": "^3.6.5",
     "esbuild": "^0.15.10",
