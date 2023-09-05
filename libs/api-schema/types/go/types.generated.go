@@ -10,6 +10,9 @@ type Budget struct {
 	Limit    int    `json:"limit"`
 }
 
+// BudgetList defines model for budgetList.
+type BudgetList = []Budget
+
 // Merchant defines model for merchant.
 type Merchant struct {
 	Category *string `json:"category,omitempty"`

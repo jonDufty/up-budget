@@ -10,6 +10,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/budgetList'
     post:
       description: ''
       parameters: []
@@ -106,3 +110,7 @@ components:
       required:
         - category
         - limit
+    budgetList:
+      type: array
+      items:
+        $ref: '#/components/schemas/budget'

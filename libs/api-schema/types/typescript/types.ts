@@ -10,7 +10,9 @@ export interface paths {
       responses: {
         /** @description OK */
         200: {
-          content: never;
+          content: {
+            "application/json": components["schemas"]["budgetList"];
+          };
         };
       };
     };
@@ -119,6 +121,7 @@ export interface components {
       limit: number;
       id?: number;
     };
+    budgetList: components["schemas"]["budget"][];
   };
   responses: never;
   parameters: never;

@@ -1,5 +1,14 @@
+import { GraphQLSchema } from 'graphql';
 import { builder } from './builder';
 import { BudgetRef as Budget } from './types/budgets';
+import createClient from 'openapi-fetch';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { paths } from '@up-budget/api-schema/types';
+
+const { GET } = createClient<paths>({
+  baseUrl: 'https://api.budget.jdufty.com',
+});
+
 builder.queryType({
   fields: (t) => ({
     hello: t.string({
@@ -25,19 +34,24 @@ builder.queryFields((t) => ({
     resolve: (parent, { name }) => `hello, ${name || 'World'}`,
   }),
   budget: t.field({
-    type: Budget,
+    type: [Budget],
     args: {
-      amount: t.arg.int(),
+      amount: t.arg({ type: 'Int', required: false }),
     },
-    resolve: (parent, { amount }) => {
-      return {
-        limit: amount || 100,
-        category: 'food',
-      };
+    resolve: async (parent, { amount }) => {
+      const { data, error } = await GET('/budgets', {});
+      // const data = await resp.json();
+      const result = data?.map((d) => {
+        return {
+          limit: d.limit,
+          category: d.category,
+        };
+      });
+      return result || [];
     },
   }),
 }));
 
-const schema = builder.toSchema();
+const schema: GraphQLSchema = builder.toSchema();
 
 export { schema };
