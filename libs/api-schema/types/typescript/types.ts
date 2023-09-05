@@ -3,14 +3,15 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
-  '/budgets': {
+  "/budgets": {
     get: {
       responses: {
         /** @description OK */
         200: {
           content: {
-            'application/json': components['schemas']['budgetList'];
+            "application/json": components["schemas"]["budgetList"];
           };
         };
       };
@@ -24,7 +25,7 @@ export interface paths {
       };
     };
   };
-  '/merchants': {
+  "/merchants": {
     /** @description Get all merchants */
     get: {
       parameters: {
@@ -35,12 +36,14 @@ export interface paths {
       responses: {
         /** @description OK */
         200: {
-          content: never;
+          content: {
+            "application/json": components["schemas"]["merchantList"];
+          };
         };
       };
     };
   };
-  '/merchant/{id}': {
+  "/merchant/{id}": {
     post: {
       parameters: {
         path: {
@@ -49,7 +52,7 @@ export interface paths {
       };
       requestBody: {
         content: {
-          'application/json': components['schemas']['merchant'];
+          "application/json": components["schemas"]["merchant"];
         };
       };
       responses: {
@@ -60,7 +63,7 @@ export interface paths {
       };
     };
   };
-  '/budgets/{id}': {
+  "/budgets/{id}": {
     get: {
       parameters: {
         path: {
@@ -78,6 +81,11 @@ export interface paths {
       parameters: {
         path: {
           id: number;
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["budget"];
         };
       };
       responses: {
@@ -91,11 +99,6 @@ export interface paths {
       parameters: {
         path: {
           id: number;
-        };
-      };
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['budget'];
         };
       };
       responses: {
@@ -115,12 +118,13 @@ export interface components {
     merchant: {
       category?: string;
     };
+    merchantList: components["schemas"]["merchant"][];
     budget: {
       category: string;
       limit: number;
       id?: number;
     };
-    budgetList: components['schemas']['budget'][];
+    budgetList: components["schemas"]["budget"][];
   };
   responses: never;
   parameters: never;

@@ -18,13 +18,16 @@ type Merchant struct {
 	Category *string `json:"category,omitempty"`
 }
 
+// MerchantList defines model for merchantList.
+type MerchantList = []Merchant
+
 // GetMerchantsParams defines parameters for GetMerchants.
 type GetMerchantsParams struct {
 	FilterUncategorised *bool `form:"filterUncategorised,omitempty" json:"filterUncategorised,omitempty"`
 }
 
-// DeleteBudgetsIdJSONRequestBody defines body for DeleteBudgetsId for application/json ContentType.
-type DeleteBudgetsIdJSONRequestBody = Budget
+// PostBudgetsIdJSONRequestBody defines body for PostBudgetsId for application/json ContentType.
+type PostBudgetsIdJSONRequestBody = Budget
 
 // PostMerchantIdJSONRequestBody defines body for PostMerchantId for application/json ContentType.
 type PostMerchantIdJSONRequestBody = Merchant

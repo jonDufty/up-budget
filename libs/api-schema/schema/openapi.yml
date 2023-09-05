@@ -32,6 +32,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchantList'
   /merchant/{id}:
     post:
       description: ''
@@ -73,6 +77,12 @@ paths:
       responses:
         '200':
           description: OK
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/budget'
     delete:
       description: ''
       parameters:
@@ -84,12 +94,6 @@ paths:
       responses:
         '200':
           description: OK
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/budget'
 
 components:
   schemas:
@@ -98,6 +102,10 @@ components:
       properties:
         category:
           type: string
+    merchantList:
+      type: array
+      items:
+        $ref: '#/components/schemas/merchant'
     budget:
       type: object
       properties:
