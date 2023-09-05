@@ -15,13 +15,8 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "production",
-        "^production"
-      ]
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
@@ -38,19 +33,10 @@
     }
   },
   "defaultProject": "budget-app",
-  "plugins": [
-    "@nx-go/nx-go"
-  ],
+  "plugins": ["@nx-go/nx-go"],
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
-    "sharedGlobals": [
-      "{workspaceRoot}/go.mod"
-    ],
-    "production": [
-      "default"
-    ]
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": ["{workspaceRoot}/go.mod"],
+    "production": ["default"]
   }
 }
