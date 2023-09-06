@@ -1,0 +1,3 @@
+query TestBudgets {
+  helloAgain(name: "World")
+}

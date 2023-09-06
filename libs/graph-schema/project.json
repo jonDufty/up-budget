@@ -34,6 +34,12 @@
           "codeCoverage": true
         }
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graphql-code-generator --config libs/graph-schema/schema/codegen.ts"
+      }
     }
   },
   "tags": []

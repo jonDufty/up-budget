@@ -57,6 +57,10 @@
       "options": {
         "lintFilePatterns": ["apps/budget-app/**/*.{ts,tsx,js,jsx}"]
       }
+    },
+    "generate": {
+      "command": "npx graphql-code-generator --config apps/budget-app/codegen.ts",
+      "dependsOn": ["^generate"]
     }
   },
   "tags": []

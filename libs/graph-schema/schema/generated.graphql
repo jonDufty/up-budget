@@ -1,0 +1,21 @@
+"""
+Budgets with a specific category
+"""
+type Budget {
+  """
+  The category of the budget
+  """
+  category: String!
+
+  """
+  The amount of money you want to spend
+  """
+  limit: Int!
+}
+
+type Query {
+  budget(amount: Int): [Budget!]!
+  greetings(name: String): String!
+  hello(name: String): String!
+  helloAgain(name: String): String!
+}

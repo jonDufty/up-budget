@@ -52,6 +52,6 @@ builder.queryFields((t) => ({
   }),
 }));
 
-const schema: GraphQLSchema = builder.toSchema();
+export const schema: GraphQLSchema = builder.toSchema();
 
-export { schema };
+export default schema;
