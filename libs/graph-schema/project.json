@@ -4,16 +4,6 @@
   "sourceRoot": "libs/graph-schema/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/graph-schema",
-        "main": "libs/graph-schema/src/index.ts",
-        "tsConfig": "libs/graph-schema/tsconfig.lib.json",
-        "assets": ["libs/graph-schema/*.md"]
-      }
-    },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],

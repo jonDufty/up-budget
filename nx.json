@@ -33,7 +33,6 @@
     }
   },
   "defaultProject": "budget-app",
-  "plugins": ["@nx-go/nx-go"],
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": ["{workspaceRoot}/go.mod"],

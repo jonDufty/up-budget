@@ -4,12 +4,7 @@
   "projectType": "library",
   "sourceRoot": "libs/database/mols",
   "targets": {
-    "test": {
-      "executor": "@nx-go/nx-go:test"
-    },
-    "lint": {
-      "executor": "@nx-go/nx-go:lint"
-    }
+
   },
   "tags": []
 }

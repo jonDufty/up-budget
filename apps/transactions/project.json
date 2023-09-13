@@ -4,25 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/transactions",
   "targets": {
-    "build": {
-      "executor": "@nx-go/nx-go:build",
-      "options": {
-        "outputPath": "dist/apps/transactions",
-        "main": "apps/transactions/main.go"
-      }
-    },
-    "serve": {
-      "executor": "@nx-go/nx-go:serve",
-      "options": {
-        "main": "apps/transactions/main.go"
-      }
-    },
-    "test": {
-      "executor": "@nx-go/nx-go:test"
-    },
-    "lint": {
-      "executor": "@nx-go/nx-go:lint"
-    }
+
   },
   "tags": []
 }

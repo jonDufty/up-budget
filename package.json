@@ -61,7 +61,6 @@
     "@nrwl/react": "16.7.3",
     "@nrwl/web": "16.7.3",
     "@nrwl/webpack": "16.7.3",
-    "@nx-go/nx-go": "^2.6.0",
     "@nx/jest": "16.7.3",
     "@nx/js": "16.7.3",
     "@nx/storybook": "16.7.4",
