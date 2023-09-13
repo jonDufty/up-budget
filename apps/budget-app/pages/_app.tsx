@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { SessionProvider } from 'next-auth/react';
 import { AppMenu } from '../components/AppMenu/AppMenu';
 import { Session } from 'next-auth';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const MenuItems = [
   {
@@ -22,6 +23,11 @@ const MenuItems = [
   },
 ];
 
+const client = new ApolloClient({
+  uri: '/api/graphql',
+  cache: new InMemoryCache(),
+});
+
 function CustomApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <>
@@ -30,11 +36,13 @@ function CustomApp({ Component, pageProps }: AppProps<{ session: Session }>) {
       </Head>
       <SessionProvider session={pageProps.session}>
         <ThemeProvider theme={DefaultTheme}>
-          <Box>
-            <AppMenu menuItems={MenuItems}>
-              <Component {...pageProps} />
-            </AppMenu>
-          </Box>
+          <ApolloProvider client={client}>
+            <Box>
+              <AppMenu menuItems={MenuItems}>
+                <Component {...pageProps} />
+              </AppMenu>
+            </Box>
+          </ApolloProvider>
         </ThemeProvider>
       </SessionProvider>
     </>

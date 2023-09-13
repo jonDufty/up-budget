@@ -50,6 +50,10 @@ builder.queryFields((t) => ({
       return result || [];
     },
   }),
+  getTime: t.field({
+    type: 'String',
+    resolve: () => new Date().toISOString(),
+  }),
 }));
 
 export const schema: GraphQLSchema = builder.toSchema();

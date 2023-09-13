@@ -12,11 +12,11 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
 };
 
 /** Budgets with a specific category */
@@ -31,85 +31,63 @@ export type Budget = {
 export type Query = {
   __typename?: 'Query';
   budget: Array<Budget>;
+  getTime: Scalars['String']['output'];
   greetings: Scalars['String']['output'];
   hello: Scalars['String']['output'];
   helloAgain: Scalars['String']['output'];
 };
 
+
 export type QueryBudgetArgs = {
   amount?: InputMaybe<Scalars['Int']['input']>;
 };
+
 
 export type QueryGreetingsArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type QueryHelloArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type QueryHelloAgainArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type TestBudgetsQueryVariables = Types.Exact<{ [key: string]: never }>;
+export type TestTimeQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
-export type TestBudgetsQuery = { __typename?: 'Query'; helloAgain: string };
 
-export const TestBudgetsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'TestBudgets' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'helloAgain' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'name' },
-                value: { kind: 'StringValue', value: 'World', block: false },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode;
+export type TestTimeQuery = { __typename?: 'Query', getTime: string };
+
+
+export const TestTimeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TestTime"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getTime"}}]}}]} as unknown as DocumentNode;
 
 /**
- * __useTestBudgetsQuery__
+ * __useTestTimeQuery__
  *
- * To run a query within a React component, call `useTestBudgetsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTestBudgetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTestTimeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTestTimeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTestBudgetsQuery({
+ * const { data, loading, error } = useTestTimeQuery({
  *   variables: {
  *   },
  * });
  */
-export function useTestBudgetsQuery(
-  baseOptions?: Apollo.QueryHookOptions<TestBudgetsQuery, TestBudgetsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TestBudgetsQuery, TestBudgetsQueryVariables>(TestBudgetsDocument, options);
-}
-export function useTestBudgetsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TestBudgetsQuery, TestBudgetsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TestBudgetsQuery, TestBudgetsQueryVariables>(TestBudgetsDocument, options);
-}
-export type TestBudgetsQueryHookResult = ReturnType<typeof useTestBudgetsQuery>;
-export type TestBudgetsLazyQueryHookResult = ReturnType<typeof useTestBudgetsLazyQuery>;
-export type TestBudgetsQueryResult = Apollo.QueryResult<TestBudgetsQuery, TestBudgetsQueryVariables>;
+export function useTestTimeQuery(baseOptions?: Apollo.QueryHookOptions<TestTimeQuery, TestTimeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TestTimeQuery, TestTimeQueryVariables>(TestTimeDocument, options);
+      }
+export function useTestTimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestTimeQuery, TestTimeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TestTimeQuery, TestTimeQueryVariables>(TestTimeDocument, options);
+        }
+export type TestTimeQueryHookResult = ReturnType<typeof useTestTimeQuery>;
+export type TestTimeLazyQueryHookResult = ReturnType<typeof useTestTimeLazyQuery>;
+export type TestTimeQueryResult = Apollo.QueryResult<TestTimeQuery, TestTimeQueryVariables>;
