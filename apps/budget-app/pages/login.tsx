@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { CtxOrReq } from 'next-auth/client/_utils';
 import { BuiltInProviderType } from 'next-auth/providers';
 import { signIn, getCsrfToken, getProviders, LiteralUnion, ClientSafeProvider } from 'next-auth/react';
 
@@ -21,7 +22,7 @@ const Login = ({ csrfToken, providers }: LoginProps) => {
 
 export default Login;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: CtxOrReq) {
   const providers = await getProviders();
   const csrfToken = await getCsrfToken(context);
   return {

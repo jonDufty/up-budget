@@ -9,16 +9,16 @@ const { GET } = createClient<paths>({
   baseUrl: 'https://api.budget.jdufty.com',
 });
 
-builder.queryType({
-  fields: (t) => ({
-    hello: t.string({
-      args: {
-        name: t.arg.string(),
-      },
-      resolve: (parent, { name }) => `hello, ${name || 'World'}`,
-    }),
-  }),
-});
+// builder.queryType({
+//   fields: (t) => ({
+//     hello: t.string({
+//       args: {
+//         name: t.arg.string(),
+//       },
+//       resolve: (parent, { name }) => `hello, ${name || 'World'}`,
+//     }),
+//   }),
+// });
 
 builder.queryFields((t) => ({
   helloAgain: t.string({

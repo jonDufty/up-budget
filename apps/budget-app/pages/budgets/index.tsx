@@ -24,7 +24,9 @@ export function Budgets(props: BudgetsProps) {
   const createNewBudget: SubmitHandler<BudgetInfo> = (b: BudgetInfo) => {
     setCreateNewMode(false);
     postMutation<BudgetInfo>('/budgets', { ...b, category: convertToApiString(b.category) });
-    mutate((data) => [...data, b], false);
+    mutate((data) => {
+      return data ? [...data, b] : [b];
+    }, false);
   };
 
   if (!session) {

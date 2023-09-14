@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 /* eslint-disable-next-line */
 export interface MerchantsProps {}
 
-export function Merchants(props) {
+export function Merchants(props: MerchantsProps) {
   const { data: session } = useSession();
   const [filtered, setFiltered] = useState(true);
   const [page, setPage] = useState(1);
@@ -32,7 +32,7 @@ export function Merchants(props) {
 
   if (!merchants) return <h4>Loading...;</h4>;
 
-  let categories: string[];
+  let categories: string[] = [];
   if (budgets) {
     categories = budgets.map((m) => capitaliseApiString(m.category));
   }

@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export interface NavBarProps extends AppBarProps {
   handleClick: React.MouseEventHandler;
-  session?: Session;
+  session: Session | null;
   menuItems?: MenuItemProps[];
   handleModal: React.MouseEventHandler;
 }

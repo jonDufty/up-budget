@@ -1,12 +1,12 @@
 import { Grid } from '@mui/material';
 import { BudgetGraph, ChartProps, MenuSelector } from '@up-budget/ui';
-import { DataBudgetGraph, MonthlyGraphData } from '../../fixtures/ChartData';
+import { DataBudgetGraph, MonthlyGraphData } from '../fixtures/ChartData';
 
 interface MonthlyGraphProps {
   chartProps: ChartProps;
 }
 
-export function MonthlyGraphView({ chartProps }: MonthlyGraphProps) {
+export default function MonthlyGraphView({ chartProps }: MonthlyGraphProps) {
   const categories = MonthlyGraphData.map((e) => e.category);
   return (
     <Grid container>
