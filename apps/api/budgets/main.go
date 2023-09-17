@@ -13,6 +13,7 @@ func main() {
 	cfg := MustLoadConfig()
 	c := handlers.NewApiClient(cfg)
 	err := database.TestPing(c.DB)
+	err = database.TestPingX(c.DBX)
 	if err != nil {
 		log.Fatalf("Failed to connect to DB. %v", err)
 	}

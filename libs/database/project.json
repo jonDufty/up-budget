@@ -2,9 +2,7 @@
   "name": "database",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/database/mols",
-  "targets": {
-
-  },
+  "sourceRoot": "libs/database",
+  "targets": {},
   "tags": []
 }

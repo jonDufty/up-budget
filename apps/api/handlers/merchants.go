@@ -2,21 +2,20 @@ package handlers
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/jmoiron/sqlx"
 	schema "github.com/jonDufty/budget/libs/api-schema/types/go"
 	"github.com/jonDufty/budget/libs/database/models"
-	"github.com/jonDufty/budget/libs/database/query"
 )
 
 const filterUncategorisedKey = "filterUncategorised"
 
-type queryFunc = func(context.Context, *sql.DB) ([]*models.Merchant, error)
-type queryFuncPaged = func(context.Context, *sql.DB, int, int) ([]*models.Merchant, error)
+type queryFunc = func(context.Context, *sqlx.DB) ([]*models.Merchant, error)
+type queryFuncPaged = func(context.Context, *sqlx.DB, int, int) ([]*models.Merchant, error)
 
 func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	filter, ok := event.QueryStringParameters[filterUncategorisedKey]
@@ -26,9 +25,9 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 	var merchants []*models.Merchant
 	var q queryFuncPaged
 	if ok && filter == "true" {
-		q = query.GetUncategorisedMerchants
+		q = models.GetUncategorisedMerchants
 	} else {
-		q = query.GetAllMerchants
+		q = models.GetAllMerchants
 	}
 
 	page, ok := event.QueryStringParameters["page"]
@@ -47,7 +46,7 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 		}
 	}
 
-	merchants, err := q(ctx, c.DB, queryPage, queryPageSize)
+	merchants, err := q(ctx, c.DBX, queryPage, queryPageSize)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -87,7 +86,7 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		}, fmt.Errorf("no merchant id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
-	m := models.FindMerchantById(ctx, c.DB, id)
+	m := models.FindMerchantById(ctx, c.DBX, id)
 	if m == nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
@@ -99,7 +98,7 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		m.Category = *body.Category
 	}
 
-	err = m.Update(ctx, c.DB)
+	err = m.Update(ctx, c.DBX)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,

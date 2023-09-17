@@ -10,19 +10,17 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	schema "github.com/jonDufty/budget/libs/api-schema/types/go"
 	"github.com/jonDufty/budget/libs/database/models"
-	"github.com/jonDufty/budget/libs/database/query"
 )
 
 func (c *ApiClient) GetBudgetHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	budgets, err := query.GetAllBudgets(ctx, c.DB)
+	budgets, err := models.GetAllBudgets(ctx, c.DBX)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 		}, fmt.Errorf("failed to fetch budgets. %w", err)
 	}
 
-	log.Println(budgets)
 	if len(budgets) == 0 {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 200,
@@ -67,7 +65,7 @@ func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGat
 		}, fmt.Errorf("No budget id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
-	b := models.FindBudgetById(ctx, c.DB, id)
+	b := models.FindBudgetById(ctx, c.DBX, id)
 	log.Println(b)
 	if b == nil {
 		return events.APIGatewayProxyResponse{
@@ -84,7 +82,7 @@ func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGat
 		b.Limit = body.Limit
 	}
 
-	err = b.Update(ctx, c.DB)
+	err = b.Update(ctx, c.DBX)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -120,12 +118,12 @@ func (c *ApiClient) CreateBudgetHandler(ctx context.Context, event events.APIGat
 		Limit:    body.Limit,
 	}
 
-	err = b.Insert(ctx, c.DB)
+	err = b.Insert(ctx, c.DBX)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
-			Body:       "Failed to create merchant",
-		}, fmt.Errorf("failed to create merchant. %w", err)
+			Body:       "Failed to create budget",
+		}, fmt.Errorf("failed to create budget. %w", err)
 	}
 
 	return events.APIGatewayProxyResponse{
@@ -143,7 +141,7 @@ func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGat
 		}, fmt.Errorf("no budget id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
-	b := models.FindBudgetById(ctx, c.DB, id)
+	b := models.FindBudgetById(ctx, c.DBX, id)
 	log.Println(b)
 	if b == nil {
 		return events.APIGatewayProxyResponse{
@@ -152,7 +150,7 @@ func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGat
 		}, fmt.Errorf("no budget found with id %s", queryId)
 	}
 
-	err := query.RemoveBudgetsFromMerchants(ctx, c.DB, b.Category)
+	err := models.RemoveBudgetsFromMerchants(ctx, c.DBX, b.Category)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -160,7 +158,7 @@ func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGat
 		}, err
 	}
 
-	err = b.Delete(ctx, c.DB)
+	err = b.Delete(ctx, c.DBX)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
