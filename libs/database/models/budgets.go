@@ -10,9 +10,9 @@ import (
 )
 
 type Budget struct {
-	Id       int    `meddler:"id,pk" db:"id" json:"id"`
-	Category string `meddler:"category" db:"category" json:"category"`
-	Limit    int    `meddler:"limit" db:"limit" json:"limit"`
+	Id       int    `db:"id" json:"id"`
+	Category string `db:"category" json:"category"`
+	Limit    int    `db:"limit" json:"limit"`
 }
 
 func (b *Budget) Insert(ctx context.Context, db *sqlx.DB) error {

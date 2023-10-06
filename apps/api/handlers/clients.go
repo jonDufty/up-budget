@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"log"
 
 	"github.com/jmoiron/sqlx"
@@ -13,8 +12,7 @@ type Config struct {
 }
 
 type ApiClient struct {
-	DB       *sql.DB
-	DBX      *sqlx.DB
+	DB       *sqlx.DB
 	Settings Settings
 }
 
@@ -30,14 +28,8 @@ func NewApiClient(cfg Config) *ApiClient {
 		log.Fatalf("db connection failed. %v", err)
 	}
 
-	dbx, err := database.ConnectX(cfg.Database, map[string]string{"parseTime": "true"})
-	if err != nil {
-		log.Fatalf("db connection failed. %v", err)
-	}
-
 	return &ApiClient{
-		DB:  db,
-		DBX: dbx,
+		DB: db,
 		Settings: Settings{
 			PageSize:    25,
 			DefaultPage: 1,

@@ -11,10 +11,10 @@ import (
 )
 
 type Merchant struct {
-	Id         int    `meddler:"id,pk" db:"id" json:"id"`
-	Name       string `meddler:"name" db:"name" json:"name"`
-	Category   string `meddler:"category" db:"category" json:"category"`
-	UpCategory string `meddler:"up_category" db:"up_category" json:"up_category"`
+	Id         int    `db:"id" json:"id"`
+	Name       string `db:"name" json:"name"`
+	Category   string `db:"category" json:"category"`
+	UpCategory string `db:"up_category" json:"up_category"`
 }
 
 func NewMerchantFromApi(r client.TransactionResource) *Merchant {

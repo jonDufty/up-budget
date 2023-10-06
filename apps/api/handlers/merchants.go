@@ -46,7 +46,7 @@ func (c *ApiClient) GetMerchantHandler(ctx context.Context, event events.APIGate
 		}
 	}
 
-	merchants, err := q(ctx, c.DBX, queryPage, queryPageSize)
+	merchants, err := q(ctx, c.DB, queryPage, queryPageSize)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -86,7 +86,7 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		}, fmt.Errorf("no merchant id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
-	m := models.FindMerchantById(ctx, c.DBX, id)
+	m := models.FindMerchantById(ctx, c.DB, id)
 	if m == nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
@@ -98,7 +98,7 @@ func (c *ApiClient) UpdateMerchantHandler(ctx context.Context, event events.APIG
 		m.Category = *body.Category
 	}
 
-	err = m.Update(ctx, c.DBX)
+	err = m.Update(ctx, c.DB)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,

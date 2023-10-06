@@ -2,7 +2,6 @@ package query
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"time"
 
@@ -35,7 +34,7 @@ func ExecInsert(ctx context.Context, db *sqlx.DB, action string, query string, a
 	return nil
 }
 
-func InsertIgnoreTransaction(ctx context.Context, db *sql.DB, args ...any) error {
+func InsertIgnoreTransaction(ctx context.Context, db *sqlx.DB, args ...any) error {
 	query := `
   INSERT IGNORE INTO transactions (id, amount, account_id, created_at, merchant)
   VALUES (?, ?, ?, ?, ?);

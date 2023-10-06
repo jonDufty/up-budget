@@ -14,7 +14,7 @@ import (
 
 func (c *ApiClient) GetBudgetHandler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	budgets, err := models.GetAllBudgets(ctx, c.DBX)
+	budgets, err := models.GetAllBudgets(ctx, c.DB)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -65,7 +65,7 @@ func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGat
 		}, fmt.Errorf("No budget id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
-	b := models.FindBudgetById(ctx, c.DBX, id)
+	b := models.FindBudgetById(ctx, c.DB, id)
 	log.Println(b)
 	if b == nil {
 		return events.APIGatewayProxyResponse{
@@ -82,7 +82,7 @@ func (c *ApiClient) UpdateBudgetHandler(ctx context.Context, event events.APIGat
 		b.Limit = body.Limit
 	}
 
-	err = b.Update(ctx, c.DBX)
+	err = b.Update(ctx, c.DB)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -118,7 +118,7 @@ func (c *ApiClient) CreateBudgetHandler(ctx context.Context, event events.APIGat
 		Limit:    body.Limit,
 	}
 
-	err = b.Insert(ctx, c.DBX)
+	err = b.Insert(ctx, c.DB)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -141,7 +141,7 @@ func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGat
 		}, fmt.Errorf("no budget id provided")
 	}
 	id, _ := strconv.Atoi(queryId)
-	b := models.FindBudgetById(ctx, c.DBX, id)
+	b := models.FindBudgetById(ctx, c.DB, id)
 	log.Println(b)
 	if b == nil {
 		return events.APIGatewayProxyResponse{
@@ -150,7 +150,7 @@ func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGat
 		}, fmt.Errorf("no budget found with id %s", queryId)
 	}
 
-	err := models.RemoveBudgetsFromMerchants(ctx, c.DBX, b.Category)
+	err := models.RemoveBudgetsFromMerchants(ctx, c.DB, b.Category)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -158,7 +158,7 @@ func (c *ApiClient) DeleteBudgetHandler(ctx context.Context, event events.APIGat
 		}, err
 	}
 
-	err = b.Delete(ctx, c.DBX)
+	err = b.Delete(ctx, c.DB)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
