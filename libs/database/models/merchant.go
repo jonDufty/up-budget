@@ -8,14 +8,13 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/jonDufty/budget/libs/database/query"
 	"github.com/jonDufty/budget/libs/upbank/client"
-	"github.com/russross/meddler"
 )
 
 type Merchant struct {
-	Id         int    `meddler:"id,pk" json:"id"`
-	Name       string `meddler:"name" json:"name"`
-	Category   string `meddler:"category" json:"category"`
-	UpCategory string `meddler:"up_category" json:"up_category"`
+	Id         int    `meddler:"id,pk" db:"id" json:"id"`
+	Name       string `meddler:"name" db:"name" json:"name"`
+	Category   string `meddler:"category" db:"category" json:"category"`
+	UpCategory string `meddler:"up_category" db:"up_category" json:"up_category"`
 }
 
 func NewMerchantFromApi(r client.TransactionResource) *Merchant {
@@ -45,9 +44,9 @@ func (m *Merchant) Update(ctx context.Context, db *sqlx.DB) error {
 	stmt := `
   UPDATE merchants
   SET category = ?, up_category = ?, name = ?
-  WHERE id = ?
+  WHERE id = ?;
   `
-	return query.ExecInsert(ctx, db, "update merchant", stmt, m.Category, m.UpCategory, m.Name)
+	return query.ExecInsert(ctx, db, "update merchant", stmt, m.Category, m.UpCategory, m.Name, m.Id)
 }
 
 func FindMerchantById(ctx context.Context, db *sqlx.DB, id int) *Merchant {
@@ -76,7 +75,7 @@ func UpdateMerchant(ctx context.Context, db *sqlx.DB, merchant Merchant) error {
 	stmt := `
   UPDATE merchants
   SET category = ?
-  WHERE name = ?
+  WHERE name = ?;
   `
 	return query.ExecInsert(ctx, db, "update merchant", stmt, merchant.Category, merchant.Name)
 }
@@ -86,7 +85,8 @@ func GetAllMerchants(ctx context.Context, db *sqlx.DB, page int, pageSize int) (
 	cursor := pageSize * (page - 1)
 	query := "SELECT * FROM merchants ORDER BY name LIMIT ?,?"
 
-	err := meddler.QueryAll(db, &merchants, query, cursor, cursor+pageSize)
+	err := db.Select(&merchants, query, cursor, cursor+pageSize)
+	fmt.Println("Fetching all merchants")
 	if err != nil {
 		return nil, fmt.Errorf("failed to query merchants. %w", err)
 	}
@@ -98,7 +98,7 @@ func GetUncategorisedMerchants(ctx context.Context, db *sqlx.DB, page int, pageS
 	cursor := pageSize * (page - 1)
 	query := "SELECT * FROM merchants WHERE category = ? ORDER BY name LIMIT ?,?"
 
-	err := meddler.QueryAll(db, &merchants, query, "", cursor, cursor+pageSize)
+	err := db.Select(&merchants, query, "", cursor, cursor+pageSize)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query merchants. %w", err)
 	}

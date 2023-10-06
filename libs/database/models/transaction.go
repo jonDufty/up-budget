@@ -2,19 +2,19 @@ package models
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
+	"github.com/jmoiron/sqlx"
+	"github.com/jonDufty/budget/libs/database/query"
 	"github.com/jonDufty/budget/libs/upbank/client"
-	"github.com/russross/meddler"
 )
 
 type Transaction struct {
-	Id        string    `meddler:"id"`
-	AccountId string    `meddler:"account_id"`
-	Amount    int       `meddler:"amount"`
-	CreatedAt time.Time `meddler:"created_at"`
-	Merchant  string    `meddler:"merchant"`
+	Id        string    `db:"id"`
+	AccountId string    `db:"account_id"`
+	Amount    int       `db:"amount"`
+	CreatedAt time.Time `db:"created_at"`
+	Merchant  string    `db:"merchant"`
 }
 
 func NewTransactionFromApi(r client.TransactionResource) *Transaction {
@@ -29,6 +29,10 @@ func NewTransactionFromApi(r client.TransactionResource) *Transaction {
 	return t
 }
 
-func (t *Transaction) Insert(ctx context.Context, db *sql.DB) error {
-	return meddler.Insert(db, "transactions", t)
+func (t *Transaction) Insert(ctx context.Context, db *sqlx.DB) error {
+	stmt := `
+  INSERT INTO transactions (id, amount, account_id, created_at, merchant)
+  VALUES (?, ?, ?, ?, ?);
+  `
+	return query.ExecInsert(ctx, db, "insert transaction", stmt, t.Id, t.Amount, t.AccountId, t.CreatedAt, t.Merchant)
 }

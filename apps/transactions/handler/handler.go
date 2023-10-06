@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/jmoiron/sqlx"
 	"github.com/jonDufty/budget/libs/database"
 	"github.com/jonDufty/budget/libs/database/models"
 	"github.com/jonDufty/budget/libs/database/query"
@@ -18,6 +19,7 @@ import (
 type TransactionClient struct {
 	Upbank *upclient.UpbankClient
 	DB     *sql.DB
+	DBX    *sqlx.DB
 }
 
 type Config struct {
@@ -33,9 +35,15 @@ func NewTransactionClient(cfg Config) *TransactionClient {
 		log.Fatalf("db connection failed. %v", err)
 	}
 
+	dbx, err := database.ConnectX(cfg.Database, map[string]string{"parseTime": "true"})
+	if err != nil {
+		log.Fatalf("db connection failed. %v", err)
+	}
+
 	return &TransactionClient{
 		Upbank: client,
 		DB:     db,
+		DBX:    dbx,
 	}
 }
 
@@ -48,6 +56,11 @@ func (c *TransactionClient) MustPing() {
 	err = database.TestPing(c.DB)
 	if err != nil {
 		log.Fatalf("Failed to connect to DB. %v", err)
+	}
+
+	err = database.TestPingX(c.DBX)
+	if err != nil {
+		log.Fatalf("Failed to connect to DBX. %v", err)
 	}
 }
 
@@ -119,7 +132,7 @@ func (c *TransactionClient) insertTransactions(ctx context.Context, transactions
 }
 
 func (c *TransactionClient) addTransactionMerchant(ctx context.Context, merchant *models.Merchant) error {
-	exists, err := query.MerchantExists(ctx, c.DB, merchant.Name)
+	exists, err := query.MerchantExists(ctx, c.DBX, merchant.Name)
 
 	if err != nil {
 		return fmt.Errorf("error looking up merchant table. %w", err)
@@ -130,7 +143,7 @@ func (c *TransactionClient) addTransactionMerchant(ctx context.Context, merchant
 		return nil
 	}
 
-	err = merchant.Insert(ctx, c.DB)
+	err = merchant.Insert(ctx, c.DBX)
 	if err != nil {
 		return fmt.Errorf("error fetching merchant %s. %v", merchant.Name, err)
 	}
@@ -140,7 +153,7 @@ func (c *TransactionClient) addTransactionMerchant(ctx context.Context, merchant
 
 func (c *TransactionClient) getTimeFrom(ctx context.Context) *time.Time {
 
-	latestDate, err := query.GetLatestTransactionDate(ctx, c.DB)
+	latestDate, err := query.GetLatestTransactionDate(ctx, c.DBX)
 	if err != nil {
 		log.Println("Error getting latest date")
 		return nil

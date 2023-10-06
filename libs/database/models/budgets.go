@@ -24,18 +24,18 @@ func (b *Budget) Insert(ctx context.Context, db *sqlx.DB) error {
 }
 
 func (b *Budget) Update(ctx context.Context, db *sqlx.DB) error {
-	stmt := `
+	stmt := fmt.Sprintf(`
   UPDATE budgets
-  SET limit = ?, category = ?
-  WHERE id = ?
-  `
-	return query.ExecInsert(ctx, db, "update budget", stmt, b.Category, b.Limit, b.Id)
+  SET %s = ?, category = ?
+  WHERE id = ?;
+  `, "`limit`")
+
+	return query.ExecInsert(ctx, db, "update budget", stmt, b.Limit, b.Category, b.Id)
 }
 
 func FindBudgetById(ctx context.Context, db *sqlx.DB, id int) *Budget {
 	b := &Budget{}
 	err := sqlx.Get(db, b, "SELECT * FROM budgets WHERE id = ?", id)
-	// Convert to sqlx
 
 	if err != nil {
 		log.Printf("Couldn't find category with id %d", id)

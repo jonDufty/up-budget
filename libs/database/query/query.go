@@ -9,10 +9,10 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func GetLatestTransactionDate(ctx context.Context, db *sql.DB) (*time.Time, error) {
+func GetLatestTransactionDate(ctx context.Context, db *sqlx.DB) (*time.Time, error) {
 	var result time.Time
-	query := "SELECT MAX(created_at) FROM transactions"
-	err := db.QueryRow(query).Scan(&result)
+	query := "SELECT MAX(created_at) FROM transactions;"
+	err := db.Get(&result, query)
 	if err != nil {
 		return nil, err
 	}
@@ -53,10 +53,10 @@ func InsertIgnoreTransaction(ctx context.Context, db *sql.DB, args ...any) error
 	return nil
 }
 
-func MerchantExists(ctx context.Context, db *sql.DB, name string) (bool, error) {
+func MerchantExists(ctx context.Context, db *sqlx.DB, name string) (bool, error) {
 	var result int
 	query := "SELECT EXISTS(SELECT * FROM merchants WHERE name = ?)"
-	err := db.QueryRow(query, name).Scan(&result)
+	err := db.Get(&result, query, name)
 	if err != nil {
 		return false, err
 	}
