@@ -19,7 +19,8 @@
       "@up-budget/api-schema/types": ["libs/api-schema/types/typescript/types.ts"],
       "@up-budget/graph-schema": ["libs/graph-schema/src/index.ts"],
       "@up-budget/graph-schema/types": ["libs/graph-schema/schema/types.generated.ts"],
-      "@up-budget/ui": ["libs/ui/src/index.ts"]
+      "@up-budget/ui": ["libs/ui/src/index.ts"],
+      "@up-budget/ui-tailwind": ["libs/ui-tailwind/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

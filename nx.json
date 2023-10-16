@@ -8,7 +8,7 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": [],
+        "cacheableOperations": ["build-storybook"],
         "accessToken": "NjkxMmM3ZmEtNWZmZC00ODQyLTk5NzQtZjJjZmQyMTE5NWUzfHJlYWQtd3JpdGU="
       }
     }
@@ -17,15 +17,24 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "build-storybook": {
+      "inputs": ["default", "^production", "{projectRoot}/.storybook/**/*", "{projectRoot}/tsconfig.storybook.json"]
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
     }
   },
   "generators": {
-    "@nrwl/react": {
+    "@nx/react": {
       "application": {
         "babel": true
+      },
+      "library": {
+        "unitTestRunner": "jest"
       }
     },
-    "@nrwl/next": {
+    "@nx/next": {
       "application": {
         "style": "styled-components",
         "linter": "eslint"
@@ -36,6 +45,12 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": ["{workspaceRoot}/go.mod"],
-    "production": ["default"]
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+      "!{projectRoot}/.storybook/**/*",
+      "!{projectRoot}/tsconfig.storybook.json",
+      "!{projectRoot}/src/test-setup.[jt]s"
+    ]
   }
 }

@@ -8,3 +8,4 @@ export * from './lib/Charts/MonthlyGraph/MonthlyGraph';
 export * from './lib/Charts/BudgetGraph/BudgetGraph';
 export * from './lib/Login/LoginModal';
 export * from './lib/Charts/MenuSelector/MenuSelector';
+export * from './lib/Tailwind/Tailwind';

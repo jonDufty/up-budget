@@ -1,4 +1,5 @@
 import { Button, Grid, IconButton, InputAdornment, ListItem, TextField, Typography } from '@mui/material';
+import { Button as ButtonBase } from '@mui/base/Button'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from '@mui/material/styles';
 import { MouseEventHandler, useState } from 'react';
@@ -80,7 +81,7 @@ export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
           />
         </Grid>
         <Grid item xs={3} textAlign={'center'}>
-          <Button key={`${key}-button`} variant="outlined" onClick={handleUpdate} disabled={limit === budget.limit}>
+          <Button className='bg-red-700' key={`${key}-button`} variant="outlined" onClick={handleUpdate} disabled={limit === budget.limit}>
             Update {error && 'ERROR'}
           </Button>
         </Grid>

@@ -1,5 +1,5 @@
 import { builder } from '../builder';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import type { components } from '@up-budget/api-schema/types';
 
 type BudgetT = components['schemas']['budget'];

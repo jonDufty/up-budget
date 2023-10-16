@@ -2,7 +2,7 @@ import { GraphQLSchema } from 'graphql';
 import { builder } from './builder';
 import { BudgetRef as Budget } from './types/budgets';
 import createClient from 'openapi-fetch';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { paths } from '@up-budget/api-schema/types';
 
 const { GET } = createClient<paths>({

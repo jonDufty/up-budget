@@ -7,6 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import { AppMenu } from '../components/AppMenu/AppMenu';
 import { Session } from 'next-auth';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import 'tailwindcss/tailwind.css';
 
 const MenuItems = [
   {
