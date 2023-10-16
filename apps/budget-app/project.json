@@ -6,9 +6,7 @@
   "targets": {
     "build": {
       "executor": "@nx/next:build",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/budget-app"
@@ -46,9 +44,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/budget-app"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/budget-app"],
       "options": {
         "jestConfig": "apps/budget-app/jest.config.ts",
         "passWithNoTests": true
@@ -56,20 +52,45 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/budget-app/**/*.{ts,tsx,js,jsx}"
-        ]
+        "lintFilePatterns": ["apps/budget-app/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "generate": {
       "command": "npx graphql-code-generator --config apps/budget-app/codegen.ts",
-      "dependsOn": [
-        "^generate"
-      ]
+      "dependsOn": ["^generate"]
+    },
+    "storybook": {
+      "executor": "@nx/storybook:storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/budget-app/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nx/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/budget-app",
+        "configDir": "apps/budget-app/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c apps/budget-app/.storybook --url=http://localhost:4400"
+      }
     }
   },
   "tags": []
