@@ -1,12 +1,12 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { BudgetMenu } from './BudgetMenu';
 
 export default {
   component: BudgetMenu,
   title: 'BudgetMenu',
-} as ComponentMeta<typeof BudgetMenu>;
+} as Meta<typeof BudgetMenu>;
 
-const Template: ComponentStory<typeof BudgetMenu> = (args) => <BudgetMenu {...args} />;
+const Template: StoryFn<typeof BudgetMenu> = (args) => <BudgetMenu {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
