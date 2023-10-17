@@ -55,35 +55,51 @@ export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
       <Typography key={`${key}-text`} display="inline">
         {capitaliseApiString(budget.category)}
       </Typography>
-      <div className='flex-shrink'>
-
-      <TextField
-        key={`${key}-input`}
-        fullWidth
-        margin="normal"
-        id={`${budget.category}-budget-limit`}
-        label="Limit"
-        variant="outlined"
-        InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-        type="number"
-        value={limit}
-        onChange={(e) => {
-          setLimit(+e.target.value);
-        }}
+      <div className="flex-shrink">
+        <TextField
+          key={`${key}-input`}
+          fullWidth
+          margin="normal"
+          id={`${budget.category}-budget-limit`}
+          label="Limit"
+          variant="outlined"
+          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          type="number"
+          value={limit}
+          onChange={(e) => {
+            setLimit(+e.target.value);
+          }}
         />
-        </div>
+      </div>
 
-      <NewButton size='small' className="border-2 rounded-lg" key={`${key}-button`} variant="primary" onClick={handleUpdate}>
+      <NewButton
+        size="small"
+        className="border-2 rounded-lg"
+        key={`${key}-button`}
+        variant="primary"
+        onClick={handleUpdate}
+      >
         Update {error && 'ERROR'}
       </NewButton>
     </Container>
   );
 }
 
-export function Container({ children }: { children: React.ReactNode }) {
+export function Container({ children, edit }: { children: React.ReactNode; edit?: boolean }) {
+  const [isEditing, setIsEditing] = useState(edit);
+
   return (
-    <div className="flex flex-row gap-4 content-center items-center justify-between border-1 border-gray-500 px-4 py-2 shadow-md rounded-md hover:bg-gray-100/60">
-      {children}
+    <div
+      onClick={() => setIsEditing(!isEditing)}
+      className={`delay-250 ease-in-out flex flex-col gap-2 border-1 border-gray-500 px-4 py-2 shadow-md rounded-md hover:bg-gray-100/60`}
+    >
+      <div
+        onClick={() => setIsEditing(true)}
+        className="flex flex-row h-24 gap-4 content-center items-center justify-between"
+      >
+        {children}
+      </div>
+      {isEditing && <div className="h-8">Some span</div>}
     </div>
   );
 }
