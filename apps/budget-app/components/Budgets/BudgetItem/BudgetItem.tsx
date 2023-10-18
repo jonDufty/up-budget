@@ -17,24 +17,10 @@ export interface BudgetInfo {
 
 interface BudgetMenuItemProps {
   budget: BudgetInfo;
-  onUpdate: (b: BudgetInfo, options?: UpdateLocalOptions) => BudgetInfo[] | undefined;
+  onUpdate: any;
 }
 
-export function BudgetMenu({ budgets }: BudgetMenuProps) {
-  const updateLocalBudget = (b: BudgetInfo, options?: UpdateLocalOptions) => {
-    return updateLocalData<BudgetInfo>(budgets, b, 'category', options);
-  };
-
-  return (
-    <div className="flex-col gap-8">
-      {budgets.map((b: BudgetInfo) => {
-        return <BudgetMenuItem onUpdate={updateLocalBudget} key={b.category} budget={b} />;
-      })}
-    </div>
-  );
-}
-
-export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
+export function BudgetItem({ budget, onUpdate }: BudgetMenuItemProps) {
   const [limit, setLimit] = useState(budget.limit);
   const [id, setId] = useState(budget.id);
   const key = budget.category;
@@ -52,36 +38,48 @@ export function BudgetMenuItem({ budget, onUpdate }: BudgetMenuItemProps) {
 
   return (
     <Container>
-      <Typography key={`${key}-text`} display="inline">
-        {capitaliseApiString(budget.category)}
-      </Typography>
-      <div className="flex-shrink">
-        <TextField
-          key={`${key}-input`}
-          fullWidth
-          margin="normal"
-          id={`${budget.category}-budget-limit`}
-          label="Limit"
-          variant="outlined"
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-          type="number"
-          value={limit}
-          onChange={(e) => {
-            setLimit(+e.target.value);
-          }}
-        />
-      </div>
-
-      <NewButton
-        size="small"
-        className="border-2 rounded-lg"
-        key={`${key}-button`}
-        variant="primary"
-        onClick={handleUpdate}
-      >
-        Update {error && 'ERROR'}
-      </NewButton>
+      <NameDisplay name={capitaliseApiString(budget.category)} secondary={'pubs and bars'} />
+      <PriceDisplay price={budget.limit} />
     </Container>
+  );
+}
+
+function EmojiDisplay({ emoji, altText }: { emoji: string; altText?: string }) {
+  return (
+    <span role="img" aria-label={altText} className="font-sans font-bold text-gray-900 text-lg">
+      {emoji}
+    </span>
+  );
+}
+
+function NameDisplay({ name, secondary }: { name: string; secondary?: string }) {
+  return (
+    <div className="p-1 flex flex-row gap-2 items-center">
+      <EmojiDisplay emoji={'😊'} />
+      <div className="flex flex-col justify-between">
+        <div className="font-sans font-bold text-gray-900 text-lg">{name}</div>
+        <div className="font-sans text-gray-500 text-sm">{secondary ?? 'UP category: nothing'}</div>
+      </div>
+    </div>
+  );
+}
+
+function PriceDisplay({ price }: { price?: number }) {
+  return (
+    <div className="p-2 flex flex-col justify-between">
+      <div className="font-sans font-bold text-gray-900 text-lg">{price ? `$${price}` : '-'}</div>
+    </div>
+  );
+}
+
+function PriceInput(value: number, onChange: (value: number) => void) {
+  return (
+    <input
+      type="number"
+      className="w-full px-3 py-2 placeholder-gray-400 border border-gray-400 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+      value={value}
+      onChange={(e) => onChange(+e.target.value)}
+    />
   );
 }
 
@@ -104,4 +102,4 @@ export function Container({ children, edit }: { children: React.ReactNode; edit?
   );
 }
 
-export default BudgetMenu;
+export default BudgetItem;
