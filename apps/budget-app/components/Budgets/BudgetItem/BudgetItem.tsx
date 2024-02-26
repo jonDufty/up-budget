@@ -1,8 +1,20 @@
 import { Button, Grid, IconButton, InputAdornment, ListItem, TextField, Typography } from '@mui/material';
 import { Button as NewButton, IconButton as NewIconButton } from '@up-budget/ui-tailwind';
+import { Cross2Icon } from '@radix-ui/react-icons';
+
+function MyComponent() {
+  return (
+    <div>
+      <FaceIcon />
+      <SunIcon />
+      <ImageIcon />
+    </div>
+  );
+}
 import React, { MouseEventHandler, useState } from 'react';
 import useSWR, { KeyedMutator } from 'swr';
 import { capitaliseApiString, postMutation, updateLocalData, UpdateLocalOptions } from '@up-budget/api-schema';
+import { Input } from '@up-budget/ui-tailwind';
 
 export interface BudgetMenuProps {
   budgets: BudgetInfo[];
@@ -25,6 +37,7 @@ export function BudgetItem({ budget, onUpdate }: BudgetMenuItemProps) {
   const [id, setId] = useState(budget.id);
   const key = budget.category;
   const { mutate, error } = useSWR('/budgets');
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete: MouseEventHandler = (event) => {
     postMutation<BudgetInfo>(`/budgets/${budget.id}`, budget, { method: 'DELETE' });
@@ -37,9 +50,48 @@ export function BudgetItem({ budget, onUpdate }: BudgetMenuItemProps) {
   };
 
   return (
-    <Container>
-      <NameDisplay name={capitaliseApiString(budget.category)} secondary={'pubs and bars'} />
-      <PriceDisplay price={budget.limit} />
+    <Container onClick={() => setIsEditing(!isEditing)}>
+      {isEditing && (
+        <div className="absolute top-3 right-3 pr-3 pt-3">
+          <NewIconButton icon={<Cross2Icon />} />
+        </div>
+      )}
+      <div className="flex flex-row h-24 gap-4 content-center items-center justify-between ">
+        {!isEditing ? (
+          <NameDisplay name={capitaliseApiString(budget.category)} secondary={'pubs and bars'} />
+        ) : (
+          <Input
+            label="Name"
+            id="name"
+            placeholder={capitaliseApiString(budget.category)}
+            onChange={() => null}
+            type="text"
+          />
+        )}
+
+        {!isEditing ? (
+          <PriceDisplay price={budget.limit} />
+        ) : (
+          <Input
+            label="Price"
+            id="price"
+            placeholder={budget.limit?.toString()}
+            onChange={() => null}
+            type="number"
+            prefix="$"
+          />
+        )}
+      </div>
+      {isEditing && (
+        <div className="flex flex-row gap-6 content-center items-center justify-center">
+          <NewButton variant="primary" size="small" onClick={() => null}>
+            Update
+          </NewButton>
+          <NewButton variant="secondary" size="small" onClick={() => null}>
+            Delete
+          </NewButton>
+        </div>
+      )}
     </Container>
   );
 }
@@ -52,7 +104,7 @@ function EmojiDisplay({ emoji, altText }: { emoji: string; altText?: string }) {
   );
 }
 
-function NameDisplay({ name, secondary }: { name: string; secondary?: string }) {
+function NameDisplay({ name, secondary, edit }: { name: string; secondary?: string; edit?: boolean }) {
   return (
     <div className="p-1 flex flex-row gap-2 items-center">
       <EmojiDisplay emoji={'😊'} />
@@ -64,7 +116,7 @@ function NameDisplay({ name, secondary }: { name: string; secondary?: string }) 
   );
 }
 
-function PriceDisplay({ price }: { price?: number }) {
+function PriceDisplay({ price, edit }: { price?: number; edit?: boolean }) {
   return (
     <div className="p-2 flex flex-col justify-between">
       <div className="font-sans font-bold text-gray-900 text-lg">{price ? `$${price}` : '-'}</div>
@@ -72,32 +124,17 @@ function PriceDisplay({ price }: { price?: number }) {
   );
 }
 
-function PriceInput(value: number, onChange: (value: number) => void) {
-  return (
-    <input
-      type="number"
-      className="w-full px-3 py-2 placeholder-gray-400 border border-gray-400 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-      value={value}
-      onChange={(e) => onChange(+e.target.value)}
-    />
-  );
-}
-
-export function Container({ children, edit }: { children: React.ReactNode; edit?: boolean }) {
-  const [isEditing, setIsEditing] = useState(edit);
-
+export function Container({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <div
-      onClick={() => setIsEditing(!isEditing)}
-      className={`delay-250 ease-in-out flex flex-col gap-2 border-1 border-gray-500 px-4 py-2 shadow-md rounded-md hover:bg-gray-100/60`}
+      onClick={() => {
+        setIsEditing(!isEditing);
+        onClick();
+      }}
+      className={`flex flex-col gap-2 border-1 border-gray-500 px-4 py-2 shadow-md rounded-md hover:bg-gray-100/60`}
     >
-      <div
-        onClick={() => setIsEditing(true)}
-        className="flex flex-row h-24 gap-4 content-center items-center justify-between "
-      >
-        {children}
-      </div>
-      {isEditing && <div className="h-8">Some span</div>}
+      {children}
     </div>
   );
 }
